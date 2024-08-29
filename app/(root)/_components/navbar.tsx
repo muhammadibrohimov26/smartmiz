@@ -6,8 +6,9 @@ import Link from "next/link"
 // import GlobalSearch from "./global-search"
 import {  usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { navLink } from "../(home)/constants"
+import { navLink } from "../../../constants"
 import ModeToogle from "@/components/shared/mode-toggle"
+import Mobile from "./mobile"
 // import Mobile from "./mobile"
 
 const Navbar = () => {
@@ -34,8 +35,7 @@ const Navbar = () => {
             <div className="flex items-center gap-1">
               <ModeToogle/>
             
-        {/* <GlobalSearch/>
-        <Mobile/> */}
+        <Mobile/>
             </div>
     </div>
 
