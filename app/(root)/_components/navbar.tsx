@@ -13,7 +13,7 @@ import Mobile from "./mobile"
 
 const Navbar = () => {
     const pathName = usePathname()
-
+ 
     
   return (
     <div className='h-[10vh] backdrop:blur-sm border-b fixed z-40 inset-0 bg-background'>
