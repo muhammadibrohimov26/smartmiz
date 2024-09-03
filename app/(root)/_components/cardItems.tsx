@@ -12,7 +12,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
       <div className="mt-20 container cardContent">
         {prices.map((price, index) => (
           <div key={index}>
-            <div className="card dark:bg-gray-400/40 bg-rose-300">
+            <div className="card dark:bg-yellow-400 bg-rose-300 text-slate-950">
                 <div className="img">
                    <img src={price.image} alt={price.courseName} />
                 </div>

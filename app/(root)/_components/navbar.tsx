@@ -7,7 +7,7 @@ import Link from "next/link"
 import {  usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navLink } from "../../../constants"
-import ModeToogle from "@/components/shared/mode-toggle"
+// import ModeToogle from "@/components/shared/mode-toggle"
 import Mobile from "./mobile"
 // import Mobile from "./mobile"
 
@@ -33,7 +33,7 @@ const Navbar = () => {
        ))}
        </div>
             <div className="flex items-center gap-1">
-              <ModeToogle/>
+              {/* <ModeToogle/> */}
             
         <Mobile/>
             </div>
