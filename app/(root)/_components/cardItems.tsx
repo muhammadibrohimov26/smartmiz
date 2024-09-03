@@ -31,7 +31,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
               </div>
             </div>
             <div className="mt-4">
-              <Link className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-center transition-colors duration-300 w-full inline-block" href={'/contact'}>
+              <Link className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-center transition-colors duration-300 w-full inline-block" key={'/contact'} href={'/contact'}>
                 &#9742; Bog&apos;lanish
               </Link>
             </div>
