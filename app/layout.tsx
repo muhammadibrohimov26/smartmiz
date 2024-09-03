@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     <html lang="en" suppressHydrationWarning>
     <body className={` owerflow-x-hidden`  }>
       <ThemeProvider attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange>
+          defaultTheme="dark" // Boshqacha rejimda ishga tushirilmasligi uchun dark qilib qo'ying
+          forcedTheme="dark"  // Dark mode-ni majburlash
+          disableTransitionOnChange >
             {children}
       </ThemeProvider>
      </body>
