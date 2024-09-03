@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 function ContactPage() {
 	return (
-		<div className='max-w-6xl mx-auto'>
+		<div className='max-w-6xl mx-auto mb-3'>
 			<div className='relative min-h-[40vh] flex items-center justify-end flex-col'>
 				<h2 className='text-center text-4xl section-title font-creteRound mt-2'>
 					<span>Contact</span>
