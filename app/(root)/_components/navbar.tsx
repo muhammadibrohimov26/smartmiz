@@ -1,15 +1,12 @@
 'use client'
-
-// import ModeToogle from "@/components/shared/mode-toogle"
-// import { navLink } from "@/constants"
 import Link from "next/link"
-// import GlobalSearch from "./global-search"
+
 import {  usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navLink } from "../../../constants"
-// import ModeToogle from "@/components/shared/mode-toggle"
+
 import Mobile from "./mobile"
-// import Mobile from "./mobile"
+
 
 const Navbar = () => {
     const pathName = usePathname()

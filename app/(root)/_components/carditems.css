@@ -51,4 +51,11 @@ img {
 }
 
 
-
+@media only screen and (max-width:768px){
+  .card {
+    width: 300px;
+    padding: 10px 10px;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+}
