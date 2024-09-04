@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ChildProps } from "@/types";
 import { ThemeProvider } from "@/components/providers/theme-providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
           forcedTheme="dark"  // Dark mode-ni majburlash
           disableTransitionOnChange >
             {children}
+            <Toaster position="top-center" />
       </ThemeProvider>
      </body>
   </html>

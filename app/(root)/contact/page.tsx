@@ -1,3 +1,4 @@
+import FormContact from '@/components/form/formContact'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -39,21 +40,13 @@ function ContactPage() {
 					</div>
 					<div className='flex items-center gap-3 mt-2'>
 						<Phone className='w-4 h-4' />
-						<p className='text-sm'>+998 91 147 78 25</p>
+						<p className='text-sm'> <a href="tel:+998732440099">+ +998 73 244 00 99</a> </p>
 					</div>
 				</div>
 
 				<div>
 					<h1 className='text-4xl font-creteRound mb-2'>Contact form</h1>
-					<div className='flex flex-col space-y-3'>
-						
-						<Input placeholder='Email address' />
-						<Input placeholder='Your name here' />
-						<Button className='w-fit' size={'lg'}>
-							<span>Send</span>
-							<Send className='w-4 h-4 ml-2' />
-						</Button>
-					</div>
+				<FormContact/>
 				</div>
 			</div>
 		</div>
