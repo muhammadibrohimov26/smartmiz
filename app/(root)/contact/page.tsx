@@ -29,8 +29,8 @@ function ContactPage() {
 				<div className='flex flex-col'>
 					<h1 className='text-4xl font-creteRound'>Contact Smartmiz</h1>
 					<p className='mt-2 text-muted-foreground'>
-						I am here to help and answer any question you might have. I look
-						forward to hearing from you
+						Kusrlarimiz haqida koproq malumot olish uchun 
+						telefon raqamizni qoldring
 					</p>
 
 					<div className='mt-12 flex items-center gap-3'>

@@ -70,6 +70,7 @@ telefon nomeri: ${values.tel}:`,
 						<FormItem>
 							<FormControl>
 								<Input
+								type='number'
 									placeholder='Telefon nomer '
 									disabled={isLoading}
 									{...field}
@@ -86,6 +87,7 @@ telefon nomeri: ${values.tel}:`,
 						<FormItem>
 							<FormControl>
 								<Input
+								
 									placeholder='Ismingiz'
 									disabled={isLoading}
 									{...field}
