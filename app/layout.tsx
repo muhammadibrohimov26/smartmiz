@@ -28,7 +28,7 @@ export const metadata: Metadata = {
       locale: 'en_EN',
       images: 'https://idyllic-sprite-7cad0a.netlify.app/img/bg.png',
       countryName: 'Uzbekistan',
-      siteName: 'smartmiz',
+      siteName: 'Smartmiz',
       emails: 'muhammadibrohimov0306@gmail.com',
     },
 
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     <body className={` owerflow-x-hidden`  }>
       <ThemeProvider attribute="class"
           defaultTheme="dark" // Boshqacha rejimda ishga tushirilmasligi uchun dark qilib qo'ying
-          forcedTheme="dark"  // Dark mode-ni majburlash
+          forcedTheme="dark"  // Dark mode-ni majburlash 
           disableTransitionOnChange >
             {children}
             <Toaster position="top-center" />
