@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 		"Muhammad ibrohimov, Doniyor tohirov, dasturlash kurslari, dasturlashga oid darslar, reactjs uzbek tilida, vuejs uzbek tilida, redux uzbek tilida, smart, smartmiz o'quv markazi, ingliz tili, rus tili, cefr, smartmiz javascript, smartmiz  yorqin kelajak, javascript, reactjs, vuejs, koreys tili darslari, reactjs darslari, ielts , c1 rus tili, turk tili, topic koreys tili, rus tili o'zbek tilida, koreys tili darslari, javascript darslari o'zbek tilida, dasturash darslari o'zbek tilida, dasturlashni o'rganish, dasturlash, IT loyihalar o'zbek tilida",
 
     openGraph: {
-      title: "Smartmiz o'quv markazi",
+      title: "Smartmiz",
       description:
         "Smartmiz o'quv markaziga hush kelibsiz",
       type: 'website',
