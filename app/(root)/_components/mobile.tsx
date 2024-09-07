@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ChegirmaPanel from './chegirma';
 
 const Mobile = () => {
   const pathName = usePathname();
@@ -41,6 +42,7 @@ const Mobile = () => {
                 </Link>
               ))}
             </div>
+              <ChegirmaPanel/>
           </Separator>
         </SheetContent>
       </Sheet>

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
       images: 'https://idyllic-sprite-7cad0a.netlify.app/img/bg.png',
       countryName: 'Uzbekistan',
       siteName: 'Smartmiz',
-      emails: 'muhammadibrohimov0306@gmail.com',
+      emails: 'muhammadibrohimov0306@gmail.com', 
     },
 
 };

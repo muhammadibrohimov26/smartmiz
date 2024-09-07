@@ -1,12 +1,12 @@
 import FormContact from '@/components/form/formContact'
 
-
-import { Dot, Home, Mail, Phone, Send } from 'lucide-react'
+import { Dot, Home, Phone } from 'lucide-react'
 import Link from 'next/link'
+
 
 function ContactPage() {
 	return (
-		<div className='max-w-6xl mx-auto mb-3'>
+		<div className='max-w-6xl mx-auto mb-3 h-screen'>
 			<div className='relative min-h-[40vh] flex items-center justify-end flex-col'>
 				<h2 className='text-center text-4xl section-title font-creteRound mt-2'>
 					<span>Contact</span>
@@ -48,7 +48,9 @@ function ContactPage() {
 				<FormContact/>
 				</div>
 			</div>
+			
 		</div>
+		
 	)
 }
 

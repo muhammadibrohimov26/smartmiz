@@ -1,5 +1,4 @@
 import { Price } from "@/app/service/server"
-import  './carditems.css'
 import Link from "next/link";
 
 interface PricesItemProps{
@@ -28,6 +27,9 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
               </div>
               <div className="cardType text-gray-500 dark:text-gray-400 mb-6">
                 <p>{price.courseType}</p>
+              </div>
+              <div className="cardType text-white dark:text-white mb-6">
+                <span>{price.desc}</span>
               </div>
             </div>
             <div className="mt-4">

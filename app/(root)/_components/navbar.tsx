@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { navLink } from "../../../constants"
 
 import Mobile from "./mobile"
+import ChegirmaPanel from "./chegirma"
 
 
 const Navbar = () => {
@@ -31,7 +32,10 @@ const Navbar = () => {
        </div>
             <div className="flex items-center gap-1">
               {/* <ModeToogle/> */}
-            
+              <div  className="hidden md:block  mb-5">
+
+            <ChegirmaPanel  />
+              </div>
         <Mobile/>
             </div>
     </div>

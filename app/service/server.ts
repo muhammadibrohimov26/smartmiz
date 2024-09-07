@@ -8,6 +8,7 @@ export interface Price {
         coursePrice:number
         courseTime:string
         courseType:string
+        desc: string
         image:string
     
     // Add other fields as needed
