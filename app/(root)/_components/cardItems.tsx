@@ -11,7 +11,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
 <div className="mt-20 container mx-auto px-4 mb-4">
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
     {prices.map((price, index) => (
-      <div key={index} className="shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-300 w-full max-w-xs">
+      <div key={index} className=" w-full max-w-xs">
         <div className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
           <div className="img">
             <img className="w-full h-48 object-cover" src={price.image} alt={price.courseName} />
