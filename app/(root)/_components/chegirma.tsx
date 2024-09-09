@@ -33,7 +33,7 @@ function ChegirmaPanel() {
                 Agarda aka ukalar yoki opa singillar bir kurs uchun guruxda
                 o’qisa 10 %
               </p>
-              <p>Ishchi xodim farzandlar uchun 40 %</p>
+              {/* <p>Ishchi xodim farzandlar uchun 40 %</p> */}
               <p>
                 Kam taminlangan oila uchun 50 % (maxalladan ma’lumotnoma olib
                 kelgandan keyin)
