@@ -3,7 +3,7 @@ function Footer() {
   return (
     <div className="cardFooterr">
         <div className="footer__content">
-        <div className="item">
+        <div className="item text-center">
                 <p>© 2024 Smartmiz. Barcha huquqlar himoyalangan</p>
             </div>
             <div className="item">
