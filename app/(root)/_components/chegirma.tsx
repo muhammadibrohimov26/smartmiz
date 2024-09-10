@@ -11,8 +11,15 @@ import { useEffect, useState } from "react";
 
 function ChegirmaPanel() {
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
-    setOpen(true);
+    // Faqat birinchi kirishda avtomatik ochish
+    const isFirstVisit = localStorage.getItem("isFirstVisit");
+
+    if (!isFirstVisit) {
+      setOpen(true);
+      localStorage.setItem("isFirstVisit", "true");
+    }
   }, []);
   return (
     <div>
