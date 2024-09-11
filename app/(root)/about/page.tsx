@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Biz haqimizda',
-  description: "Smartmiz o'quv markazi haqida",
-
-
+  title: "Biz haqimizda - Smartmiz o'quv markazi",
+  description: "Smartmiz o'quv markazi haqida to'liq ma'lumot. Bizning maqsadlarimiz, jamoamiz va ta'lim xizmatlarimiz haqida batafsil bilib oling.",
 }
+
 
 function About() {
   

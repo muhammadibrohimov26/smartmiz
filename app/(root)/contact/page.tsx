@@ -5,11 +5,10 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-	title: "Bog'lanish ",
-	description: "Smartmiz o'quv markaziga bog'lanish uchun telefon nomerizni qolding ",
-  
-  
+	title: "Bog'lanish - Smartmiz",
+	description: "Smartmiz o'quv markazi bilan bog'lanish uchun biz bilan telefon yoki e-mail orqali aloqa qiling.",
   }
+  
 
 function ContactPage() {
 	return (
