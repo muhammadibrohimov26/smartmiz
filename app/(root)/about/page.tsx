@@ -1,4 +1,14 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Biz haqimizda',
+  description: "Smartmiz o'quv markazi haqida",
+
+
+}
+
 function About() {
+  
   return (
     <div className="mt-28 container h-screen">
       <h1 className="text-3xl mb-4 text-center">SMARTMIZ o‘quv markazi tarixi haqida. 2016 – 2024! </h1>

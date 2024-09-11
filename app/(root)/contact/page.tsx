@@ -1,8 +1,15 @@
 import FormContact from '@/components/form/formContact'
 
 import { Dot, Home, Phone } from 'lucide-react'
+import { Metadata } from 'next'
 import Link from 'next/link'
 
+export const metadata: Metadata = {
+	title: "Bog'lanish ",
+	description: "Smartmiz o'quv markaziga bog'lanish uchun telefon nomerizni qolding ",
+  
+  
+  }
 
 function ContactPage() {
 	return (
