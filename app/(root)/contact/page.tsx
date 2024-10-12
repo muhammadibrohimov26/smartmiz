@@ -33,7 +33,7 @@ function ContactPage() {
 
 			<div className='grid grid-cols-2 max-md:grid-cols-1 gap-4 mt-6'>
 				<div className='flex flex-col'>
-					<h1 className='text-4xl font-creteRound'>Contact Smartmiz</h1>
+					<h1 className='text-4xl font-creteRound text-center md:text-left'>Contact Smartmiz</h1>
 					<p className='mt-2 text-muted-foreground'>
 						Kusrlarimiz haqida koproq malumot olish uchun 
 						telefon raqamizni qoldring
@@ -50,7 +50,7 @@ function ContactPage() {
 				</div>
 
 				<div>
-					<h1 className='text-4xl font-creteRound mb-2'>Contact form</h1>
+					<h1 className='text-4xl font-creteRound mb-4'>Contact form</h1>
 				<FormContact/>
 				</div>
 			</div>

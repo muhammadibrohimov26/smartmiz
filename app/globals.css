@@ -147,7 +147,7 @@
 
 	  @media only screen and (max-width: 768px) {
 		.card {
-		  width: 300px;
+		  width: 100%;
 		  padding: 10px 10px;
 		  overflow: hidden;
 		  border-radius: 20px;
@@ -157,4 +157,24 @@
 			gap: 1.4rem;
 
 		}
+	  }
+	  
+
+	  @media only screen and (max-width: 468px) {
+		.card {
+		  width: 100%;
+		  padding: 10px 10px;
+		  overflow: hidden;
+		  border-radius: 20px;
+		  margin-left: 0;
+		}
+		.footer__content{
+			justify-content: center;
+			gap: 1.4rem;
+
+		}
+		.cardName {
+			flex-direction: column;
+			align-items: flex-start;
+		  }
 	  }

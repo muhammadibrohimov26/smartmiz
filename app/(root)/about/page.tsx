@@ -18,19 +18,21 @@ function About() {
       </p>
       <p> Shunga qaramasdan SMARTMIZ katta yutuqlarga erishdi, 11 mingdan
       ziyod o‘quvchilarga ingliz tilidan taʼlim berdi. </p>
-{/* 
-      <p>  Ushbu bosib o‘tilgan
-      8 yillik tarixi haqida sizlar uchun videorolik tayyorladik. </p> */}
-      <p></p>
-      <p>Koreys tili ✅ </p>
-      <p>Rus tili ✅</p>
-      <p>Ingliz tili ✅</p>
-      <p>Turk tili ✅</p>
-      <p>Arab tili ✅</p>
-      <p>Web dasturlash ✅</p>
-      <p>Kompyuter kursi ✅ </p>
-      <p>Mental arifmetika kurslari mavjud ✅ </p>
 
+      <p>
+      Koreys tili ✅ 
+      Rus tili ✅
+      Ingliz tili ✅
+      Turk tili ✅
+      Arab tili ✅
+      Web dasturlash ✅
+      Kompyuter kursi ✅ 
+      Mental arifmetika kurslari mavjud ✅ </p>
+      
+      <p>  Ushbu bosib o`tilgan
+      9 yillik tarixi haqida sizlar uchun videorolik tayyorladik. </p>
+      <p>o`quv markazimiz haqida video ko`rish uchun link ustiga bosing</p>
+    <a target="_blank" href="https://www.instagram.com/tv/CazdM-nFCUF/?igsh=eWdscjR0OXMwcHEx" className="text-blue-700">👉 Link 👈</a>
     </div>
   );
 }
