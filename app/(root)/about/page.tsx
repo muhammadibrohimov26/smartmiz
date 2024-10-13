@@ -16,7 +16,7 @@ function About() {
         🔥 «SMARTMIZ» o‘quv markazining 8 yillik faoliyati davomida turli
         qiyinchiliklar, jamoadagi insonlarning ketishi, to‘siqlar va muammolar
         bo‘ldi. Shunga qaramasdan SMARTMIZ katta yutuqlarga erishdi, 11 mingdan
-        ziyod o‘quvchilarga ingliz tilidan taʼlim berdi. Koreys tili ✅ Rus tili
+        ziyod o‘quvchilarga ingliz tilidan taʼlim berdi. Koreys tili ✅ Rus tili 
         ✅ Ingliz tili ✅ Turk tili ✅ Arab tili ✅ Web dasturlash ✅ Kompyuter
         kursi ✅ Mental arifmetika kurslari mavjud ✅ Ushbu bosib o`tilgan 9
         yillik tarixi haqida sizlar uchun videorolik tayyorladik. o`quv
@@ -34,3 +34,4 @@ function About() {
 }
 
 export default About;
+ 
