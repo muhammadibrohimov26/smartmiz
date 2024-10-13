@@ -20,14 +20,8 @@ function About() {
         ✅ Ingliz tili ✅ Turk tili ✅ Arab tili ✅ Web dasturlash ✅ Kompyuter
         kursi ✅ Mental arifmetika kurslari mavjud ✅ Ushbu bosib o`tilgan 9
         yillik tarixi haqida sizlar uchun videorolik tayyorladik. o`quv
-        markazimiz haqida video ko`rish uchun link ustiga bosing
-        <a
-          target="_blank"
-          href="https://www.instagram.com/tv/CazdM-nFCUF/?igsh=eWdscjR0OXMwcHEx"
-          className="text-blue-700"
-        >
-          👉 Link 👈
-        </a>
+        markazimiz haqida video ko`rish uchun link ustiga bosing 
+        <a target="_blank" href="https://www.instagram.com/tv/CazdM-nFCUF/?igsh=eWdscjR0OXMwcHEx" className="text-blue-700" >  👉 Link 👈 </a>
       </p>
     </div>
   );
