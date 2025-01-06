@@ -4,7 +4,7 @@ function Footer() {
     <div className="cardFooterr">
         <div className="footer__content">
         <div className="item text-center">
-                <p>© 2024 Smartmiz. Barcha huquqlar himoyalangan</p>
+                <p>© 2025 Smartmiz. Barcha huquqlar himoyalangan</p>
             </div>
             <div className="item">
                 <a target='_blank' href="https://www.instagram.com/smartmiz_fergana">  <img src="https://idyllic-sprite-7cad0a.netlify.app/img/instagram.png" alt="rasm" /></a>
