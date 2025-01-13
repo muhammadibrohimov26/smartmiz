@@ -37,19 +37,15 @@ function ChegirmaPanel() {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-1 items-center gap-4">
               <p>
-                1 ta  do’stini olib kelganlar uchun 5 %
+              1 ta do’stini olib kelganlar uchun 7 %
               </p>
-              <p>2 ta kursda o’qiganlar uchun 10 %</p>
-              <p>Bir vaqtda 2 ta kursda aka uka o’qisa 15 %</p>
+              <p> 2 ta kursda o’qiganlar uchun 10 % </p>
+              <p>  Bir vaqtda 2 ta kursda  aka uka o’qisa 10 %  </p>
               <p>
-                Agarda aka ukalar yoki opa singillar bir kurs uchun guruxda
-                o’qisa 10 %
+             Agarda aka ukalar yoki opa singillar  bir kurs uchun guruxda o’qisa 10 %
               </p>
-              {/* <p>Ishchi xodim farzandlar uchun 40 %</p> */}
-              <p>
-                Kam taminlangan oila uchun 50 % (maxalladan ma’lumotnoma olib
-                kelgandan keyin)
-              </p>
+            
+       
             </div>
           </div>
         </SheetContent>
