@@ -28,9 +28,9 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
               <div className="cardType text-gray-500 dark:text-gray-400 mb-6">
                 <p>{price.courseType}</p>
               </div>
-              <div className="cardType text-white dark:text-white mb-6">
+              {/* <div className="cardType text-white dark:text-white mb-6">
                 <span>{price.desc}</span>
-              </div>
+              </div> */}
             </div>
             <div className="mt-4">
               <Link className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-center transition-colors duration-300 w-full inline-block" key={'/contact'} href={'/contact'}>
