@@ -13,10 +13,10 @@ function Homepage() {
   const [prices, setPrices] = useState<Price[]>([]);
 
   useEffect(() => {
-    const getAllPrices = () => {
-      getPrices().then((response) => setPrices(response));
-    };
-    getAllPrices();
+    fetch("/db.json")
+      .then((res) => res.json())
+      .then((data) => setPrices(data))
+      .catch((err) => console.error("Xatolik:", err));
   }, []);
 
   return <div>
