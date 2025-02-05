@@ -142,7 +142,9 @@
 	  display: flex;
 	  gap: 1rem;
   }
-
+  .logo{
+	width: 255px;
+  }
 
 
 	  @media only screen and (max-width: 768px) {

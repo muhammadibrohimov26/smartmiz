@@ -1,6 +1,6 @@
 "use client";
 
-import { getPrices, Price } from "@/app/service/server";
+import {  Price } from "@/app/service/server";
 import { useEffect, useState } from "react";
 import CardItems from "../_components/cardItems";
 import LoaderPage from "../_components/loader";

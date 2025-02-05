@@ -26,8 +26,9 @@ const Mobile = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side={"left"}>
-          <Link href={"/"}>
-            <h1 className="text-4xl font-creteRound">Smartmiz</h1>
+          <Link href={"/"} >
+            {/* <h1 className="text-4xl font-creteRound">Smartmiz</h1> */}
+            <img className="logo" src="/logo.png" alt="smartmiz" />
           </Link>
           <Separator className="my-3">
             <div className='gap-2 space-y-3 flex flex-col'>

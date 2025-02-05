@@ -29,23 +29,19 @@ function ChegirmaPanel() {
         </SheetTrigger>
         <SheetContent side={"top"}>
           <SheetHeader>
-            <SheetTitle className="text-center text-3xl">Smartmiz o’quv markazidagi chegirmalar </SheetTitle>
+            <SheetTitle className="text-center text-3xl">
+              Smartmiz o’quv markazidagi chegirmalar{" "}
+            </SheetTitle>
             {/* <SheetDescription>
                 Make changes to your profile here. Click save when you are done.
               </SheetDescription> */}
           </SheetHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-1 items-center gap-4">
-              <p>
-              1 ta do’stini olib kelganlar uchun 7 %
-              </p>
-              <p> 2 ta kursda o’qiganlar uchun 10 % </p>
-              <p>  Bir vaqtda 2 ta kursda  aka uka o’qisa 10 %  </p>
-              <p>
-             Agarda aka ukalar yoki opa singillar  bir kurs uchun guruxda o’qisa 10 %
-              </p>
-            
-       
+              <p>1 ta do`st taklifi uchun 7 %</p>
+              <p> Oilada 2ta farzand uchun 10 % </p>
+              <p> Bir vaqtda 5 ta do`st taklifi uchun 100 % </p>
+              <p>Bir vaqtda 8 ta do`st taklifi uchun 2 oylik</p>
             </div>
           </div>
         </SheetContent>
