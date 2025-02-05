@@ -18,7 +18,7 @@ const Navbar = () => {
     <div className='container max-w-6xl mx-auto h-[10vh] w-full flex items-center justify-between'>
        <Link href={'/'}>
         {/* <h1 className='text-4xl font-creteRound'>Smartmiz</h1> */}
-        <img className="logo" src="/logo.png" alt="smartmiz" />
+        <img className="logo" src="/smartlogo.png" alt="smartmiz" />
        </Link>
        <div className='gap-2 hidden md:flex'>
        {navLink.map(nav =>(
