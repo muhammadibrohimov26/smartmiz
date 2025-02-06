@@ -40,6 +40,7 @@ function ChegirmaPanel() {
             <div className="grid grid-cols-1 items-center gap-4">
               <p>1 ta do`st taklifi uchun 7 %</p>
               <p> Oilada 2ta farzand uchun 10 % </p>
+              <p>Bir vaqtda 2 ta kursda o'qilsa 10 % </p>
               <p> Bir vaqtda 5 ta do`st taklifi uchun 100 % </p>
               <p>Bir vaqtda 8 ta do`st taklifi uchun 2 oylik</p>
             </div>
