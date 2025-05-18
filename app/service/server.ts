@@ -6,9 +6,10 @@ export interface Price {
     
         courseName:string
         coursePrice:number
+        courseChegirma:number
         courseTime:string
         courseType:string
-        desc: string
+        chegirma: string
         image:string
     
     // Add other fields as needed

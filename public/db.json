@@ -1,101 +1,115 @@
 [
-    {
-      "_id": "66d833258c25cc01fa51dd41",
-      "courseName": "Arab tili",
-      "coursePrice": 270,
-      "courseType": "Arab tili",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/arab.png",
-      "courseTime": "1.5",
-      "desc": "6 oy davom etadi haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66d834fc8c25cc01fa51dd52",
-      "courseName": "Ingliz tili",
-      "coursePrice": 310,
-      "courseType": "General",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/inglis.png",
-      "courseTime": "1.5",
-      "desc": "kurs davomilgi 2 oy  haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66d835818c25cc01fa51dd60",
-      "courseName": "Kompyuter kursi",
-      "coursePrice": 390,
-      "courseType": "Kompyuter",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/Kompyuter.png",
-      "courseTime": "1.5",
-      "desc": "web dasturlash 8 oy haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66d8360b8c25cc01fa51dd64",
-      "courseName": "Web dasturlash",
-      "coursePrice": 450,
-      "courseType": "Frontend",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/web.png",
-      "courseTime": "1.5"
-    },
-    {
-      "_id": "66dea135a130ec12b56a3857",
-      "courseName": "Ingliz tili",
-      "coursePrice": 390,
-      "courseType": "IELTS",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/ielts.png",
-      "courseTime": "1.5",
-      "desc": "IELTS 3 oy haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66dea1c6a130ec12b56a3860",
-      "courseName": "Ingliz tili",
-      "coursePrice": 390,
-      "courseType": "CEFR",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cefr.png",
-      "courseTime": "1.5",
-      "desc": "CEFR 3 oy haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66dea275a130ec12b56a3863",
-      "courseName": "Koreys tili",
-      "coursePrice": 310,
-      "courseType": "Koreys tili",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/kores.png",
-      "courseTime": "1.5",
-      "desc": "Koreys tili 6 oy haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66dea326a130ec12b56a3866",
-      "courseName": "Rus tili",
-      "coursePrice": 310,
-      "courseType": "Rus tili",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/rus.png",
-      "courseTime": "1.5",
-      "desc": "Rus tili 6 oy haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66dea41fa130ec12b56a386b",
-      "courseName": "Turk tili",
-      "coursePrice": 270,
-      "courseType": "Turk tili",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/turk.png",
-      "courseTime": "1.5",
-      "desc": "Turk tili 4oy  haftada 3 kun",
-      "__v": 0
-    },
-    {
-      "_id": "66dea482a130ec12b56a386e",
-      "courseName": "Rus tili",
-      "coursePrice": 450,
-      "courseType": "C1",
-      "image": "https://idyllic-sprite-7cad0a.netlify.app/img/c1.png",
-      "courseTime": "2",
-      "desc": "C 1 2 xafta, haftada 3 kun",
-      "__v": 0
-    }
-  ]
-  
+  {
+    "_id": "66d834fc8c25cc01fa51dd52",
+    "courseName": "Ingliz tili",
+    "coursePrice": 390,
+    "courseChegirma": 350,
+    "courseType": "General",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/inglis.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66dea275a130ec12b56a3863",
+    "courseName": "Koreys tili",
+    "coursePrice": 390,
+    "courseChegirma": 350,
+    "courseType": "Koreys tili",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/kores.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66d835818c25cc01fa51dd60",
+    "courseName": "Kompyuter kursi",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "Kompyuter",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/Kompyuter.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66dea326a130ec12b56a3866",
+    "courseName": "Rus tili",
+    "coursePrice": 390,
+    "courseChegirma": 350,
+    "courseType": "Rus tili",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/rus.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66d833258c25cc01fa51dd41",
+    "courseName": "Arab tili",
+    "coursePrice": 360,
+    "courseChegirma": 330,
+    "courseType": "Arab tili",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/arab.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+
+ 
+  {
+    "_id": "66dea135a130ec12b56a3857",
+    "courseName": "Ingliz tili",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "IELTS",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/ielts.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66dea1c6a130ec12b56a3860",
+    "courseName": "Ingliz tili",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "CEFR",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cefr.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+
+
+  {
+    "_id": "66dea41fa130ec12b56a386b",
+    "courseName": "Turk tili",
+    "coursePrice": 360,
+    "courseChegirma": 330,
+    "courseType": "Turk tili",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/turk.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66d8360b8c25cc01fa51dd64",
+    "courseName": "Web dasturlash",
+    "coursePrice": 550,
+    "courseChegirma": 450,
+    "courseType": "Frontend",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/web.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa"
+  },
+  {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Rus tili",
+    "coursePrice": 550,
+    "courseChegirma": 450,
+    "courseType": "C1",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/c1.png",
+    "courseTime": "2",
+    "chegirma": "Chegirma: 10 kun ichida tolov amalga oshirilsa",
+    "__v": 0
+  }
+]

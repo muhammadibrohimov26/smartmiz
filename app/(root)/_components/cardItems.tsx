@@ -22,15 +22,18 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                 {price.courseName}
               </h2>
               <div className="cardName flex justify-between text-gray-700 dark:text-gray-300 mb-4">
-                <p>{price.coursePrice} ming so&apos;m</p>
+                <p> {price.courseChegirma} ming so&apos;m </p>
                 <p>{price.courseTime} soat</p>
               </div>
+              <p> <del>{price.coursePrice} ming so&apos;m </del></p>
+
+         
               <div className="cardType text-gray-500 dark:text-gray-400 mb-6">
                 <p>{price.courseType}</p>
               </div>
-              {/* <div className="cardType text-white dark:text-white mb-6">
-                <span>{price.desc}</span>
-              </div> */}
+              <div className="cardType text-white dark:text-white mb-6">
+                <span>{price.chegirma}</span>
+              </div>
             </div>
             <div className="mt-4">
               <Link className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-center transition-colors duration-300 w-full inline-block" key={'/contact'} href={'/contact'}>
