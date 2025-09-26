@@ -1,4 +1,37 @@
 [
+   {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Roboto texnika",
+    "coursePrice": 700,
+    "courseChegirma": 650,
+    "courseType": "IT",
+    "image":"https://idyllic-sprite-7cad0a.netlify.app/img/robot.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
+    {
+    "_id": "66dea275a130ec12b56a3863",
+    "courseName": "Koreys tili",
+    "coursePrice": 390,
+    "courseChegirma": 350,
+    "courseType": "Koreys tili",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/kores.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
+      {
+    "_id": "66d835818c25cc01fa51dd60",
+    "courseName": "Kompyuter kursi",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "Kompyuter",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/Kompyuter.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
   {
     "_id": "66d834fc8c25cc01fa51dd52",
     "courseName": "Ingliz tili",
@@ -10,28 +43,9 @@
     "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
     "__v": 0
   },
-  {
-    "_id": "66dea275a130ec12b56a3863",
-    "courseName": "Koreys tili",
-    "coursePrice": 390,
-    "courseChegirma": 350,
-    "courseType": "Koreys tili",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/kores.png",
-    "courseTime": "1.5",
-    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
-    "__v": 0
-  },
-  {
-    "_id": "66d835818c25cc01fa51dd60",
-    "courseName": "Kompyuter kursi",
-    "coursePrice": 450,
-    "courseChegirma": 390,
-    "courseType": "Kompyuter",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/Kompyuter.png",
-    "courseTime": "1.5",
-    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
-    "__v": 0
-  },
+
+
+
   {
     "_id": "66dea326a130ec12b56a3866",
     "courseName": "Rus tili",
@@ -94,8 +108,8 @@
   {
     "_id": "66d8360b8c25cc01fa51dd64",
     "courseName": "Web dasturlash",
-    "coursePrice": 550,
-    "courseChegirma": 450,
+    "coursePrice": 600,
+    "courseChegirma": 450,  
     "courseType": "Frontend",
     "image": "https://idyllic-sprite-7cad0a.netlify.app/img/web.png",
     "courseTime": "1.5",
@@ -104,12 +118,59 @@
   {
     "_id": "66dea482a130ec12b56a386e",
     "courseName": "Rus tili",
-    "coursePrice": 550,
-    "courseChegirma": 450,
+    "coursePrice": 600,
+    "courseChegirma": 520,
     "courseType": "C1",
     "image": "https://idyllic-sprite-7cad0a.netlify.app/img/c1.png",
     "courseTime": "2",
     "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
     "__v": 0
+  }, 
+
+  {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Rus tili",
+    "coursePrice": 500,
+    "courseChegirma": 400,
+    "courseType": "So'zlashuv",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cs%20soz.png",
+    "courseTime": "2",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Mental arifmetika",
+    "coursePrice": 390,
+    "courseChegirma": 350,
+    "courseType": "Mental arifmetika",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/mentall.png",
+    "courseTime": "1",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
+  {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Koreys tili",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "Topic 1,2",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/topik.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
+  },
+    {
+    "_id": "66dea482a130ec12b56a386e",
+    "courseName": "Koreys tili",
+    "coursePrice": 450,
+    "courseChegirma": 390,
+    "courseType": "EPS",
+    "image":"https://idyllic-sprite-7cad0a.netlify.app/img/eps.png",
+    "courseTime": "1.5",
+    "chegirma": "Chegirma: 10 kun ichida to‘lov amalga oshirilsa",
+    "__v": 0
   }
+    
+
 ]
