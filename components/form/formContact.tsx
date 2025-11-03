@@ -121,9 +121,10 @@ Kurs nomi: ${values.kurs}`,
                   <SelectItem disabled={isLoading} {...field}    value="Kompyuter kursi"> Kompyuter kursi  </SelectItem>
 				  <SelectItem disabled={isLoading} {...field} value="Arab tili">Arab tili</SelectItem>
 				  <SelectItem disabled={isLoading} {...field} value="Ingliz tili">Ingliz tili</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Web dasturlash">Web dasturlash</SelectItem>
+				  <SelectItem disabled={isLoading} {...field} value="Roboto Texnika">Roboto Texnika</SelectItem>
 				  <SelectItem disabled={isLoading} {...field} value="Rus tili">Rus tili</SelectItem>
 				  <SelectItem disabled={isLoading} {...field} value="Turk tili">Turk tili</SelectItem>
+				  <SelectItem disabled={isLoading} {...field} value="Mental arfimetika">Mental arfimetika</SelectItem>
 				  {/* <SelectItem disabled={isLoading} {...field} value=""> </SelectItem> */}
 
                 </SelectContent>
