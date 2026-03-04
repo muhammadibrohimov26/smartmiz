@@ -38,11 +38,11 @@ function ChegirmaPanel() {
           </SheetHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-1 items-center gap-4">
-              <p>1 ta do`st taklifi uchun 7 %</p>
-              <p> Oilada 2ta farzand uchun 10 % </p>
-              <p>Bir vaqtda 2 ta kursda o`qilsa 10 % </p>
-              <p> Bir vaqtda 5 ta do`st taklifi uchun 100 % </p>
-              <p>Bir vaqtda 8 ta do`st taklifi uchun 2 oylik</p>
+              <p> Bitta do‘stini taklif qilsa – taklif qilgan o‘quvchiga 15%, yangi kelgan o‘quvchiga 5% chegirma beriladi. </p>
+              <p> Bitta oiladan ikki nafar farzand o‘qisa – 10% chegirma beriladi. </p>
+              <p> Bir vaqtning o‘zida ikkita kursda o‘qisa – 10% chegirma beriladi. </p>
+              {/* <p> Bir vaqtda 5 ta do`st taklifi uchun 100 % </p>
+              <p>Bir vaqtda 8 ta do`st taklifi uchun 2 oylik</p> */}
             </div>
           </div>
         </SheetContent>
