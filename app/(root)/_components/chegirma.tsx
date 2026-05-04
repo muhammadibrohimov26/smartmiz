@@ -36,15 +36,32 @@ function ChegirmaPanel() {
                 Make changes to your profile here. Click save when you are done.
               </SheetDescription> */}
           </SheetHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-1 items-center gap-4">
-              <p> Bitta do‘stini taklif qilsa – taklif qilgan o‘quvchiga 15%, yangi kelgan o‘quvchiga 5% chegirma beriladi. </p>
-              <p> Bitta oiladan ikki nafar farzand o‘qisa – 10% chegirma beriladi. </p>
-              <p> Bir vaqtning o‘zida ikkita kursda o‘qisa – 10% chegirma beriladi. </p>
-              {/* <p> Bir vaqtda 5 ta do`st taklifi uchun 100 % </p>
-              <p>Bir vaqtda 8 ta do`st taklifi uchun 2 oylik</p> */}
-            </div>
-          </div>
+       <div className="grid gap-4 py-4">
+  <div className="grid grid-cols-1 items-center gap-4">
+    
+    <div className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-100 rounded-xl hover:shadow-md transition-shadow duration-200">
+      <div className="text-2xl shrink-0">🔥</div>
+      <p className="text-gray-700 text-sm md:text-base leading-relaxed m-0">
+        16 yoshgacha bo'lgan o'quvchilar uchun barcha kurslar aksiya doirasida 450 000 so'm o'rniga 315 000 so'm.
+      </p>
+    </div>
+
+    <div className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-100 rounded-xl hover:shadow-md transition-shadow duration-200">
+      <div className="text-2xl shrink-0">👨‍👩‍👧‍👦</div>
+      <p className="text-gray-700 text-sm md:text-base leading-relaxed m-0">
+        Bitta oiladan 2 nafar farzand o'qisa yoki 2 va undan ortiq kursda o'qisa – narx 300 000 so'm qilib beriladi.
+      </p>
+    </div>
+
+    <div className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-100 rounded-xl hover:shadow-md transition-shadow duration-200">
+      <div className="text-2xl shrink-0">🎁</div>
+      <p className="text-gray-700 text-sm md:text-base leading-relaxed m-0">
+        Do'stlarini yoki sinfdoshlarini taklif qilsa – har bir yangi o'quvchi uchun 5% chegirma taqdim etiladi.
+      </p>
+    </div>
+
+  </div>
+</div>
         </SheetContent>
       </Sheet>
     </div>
