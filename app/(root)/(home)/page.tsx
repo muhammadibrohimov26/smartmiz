@@ -4,7 +4,7 @@ import { Price } from "@/app/service/server";
 import { useEffect, useState } from "react";
 import CardItems from "../_components/cardItems";
 import LoaderPage from "../_components/loader";
-import { Sparkles, ArrowRight, BookOpen, Globe } from "lucide-react";
+import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { Locale } from "@/lib/dictionaries";
 import Link from "next/link";
@@ -32,16 +32,6 @@ function Homepage() {
       <div className="yellow-glow-bg">
         <div className="yellow-blob blob-1"></div>
         <div className="yellow-blob blob-2"></div>
-      </div>
-
-      {/* Navigation & Language Switcher */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 bw-panel px-4 py-2 rounded-full">
-        <Globe className="w-4 h-4 bw-text" />
-        <button onClick={() => changeLang('uz')} className={`text-sm font-bold ${locale === 'uz' ? 'bw-text' : 'text-gray-400'}`}>UZ</button>
-        <span className="text-gray-300">|</span>
-        <button onClick={() => changeLang('ru')} className={`text-sm font-bold ${locale === 'ru' ? 'bw-text' : 'text-gray-400'}`}>RU</button>
-        <span className="text-gray-300">|</span>
-        <button onClick={() => changeLang('en')} className={`text-sm font-bold ${locale === 'en' ? 'bw-text' : 'text-gray-400'}`}>EN</button>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

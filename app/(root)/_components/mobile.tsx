@@ -7,11 +7,17 @@ import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/context/LanguageContext";
+import { Globe } from "lucide-react";
+import { Locale } from "@/lib/dictionaries";
 import ChegirmaPanel from './chegirma';
 
 const Mobile = () => {
   const pathName = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { locale, setLocale } = useTranslation();
+
+  const changeLang = (lang: Locale) => setLocale(lang);
 
   const handleLinkClick = () => {
     setIsOpen(false);
@@ -43,7 +49,25 @@ const Mobile = () => {
                 </Link>
               ))}
             </div>
+            
+            <div className="flex flex-col gap-4 mt-6">
+              {/* Language Switcher */}
+              <div className="flex items-center justify-between bw-panel px-4 py-2 rounded-xl text-xs">
+                <div className="flex items-center gap-1.5 font-bold bw-text">
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Language:</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => changeLang('uz')} className={`font-bold transition-colors ${locale === 'uz' ? 'bw-text' : 'text-zinc-400'}`}>UZ</button>
+                  <span className="text-zinc-200 dark:text-zinc-800">|</span>
+                  <button onClick={() => changeLang('ru')} className={`font-bold transition-colors ${locale === 'ru' ? 'bw-text' : 'text-zinc-400'}`}>RU</button>
+                  <span className="text-zinc-200 dark:text-zinc-800">|</span>
+                  <button onClick={() => changeLang('en')} className={`font-bold transition-colors ${locale === 'en' ? 'bw-text' : 'text-zinc-400'}`}>EN</button>
+                </div>
+              </div>
+              
               <ChegirmaPanel/>
+            </div>
           </Separator>
         </SheetContent>
       </Sheet>

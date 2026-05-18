@@ -1,19 +1,21 @@
 'use client'
 import Link from "next/link"
-
-import {  usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navLink } from "../../../constants"
-
 import Mobile from "./mobile"
 import ChegirmaPanel from "./chegirma"
-
+import { useTranslation } from "@/context/LanguageContext"
+import { Globe } from "lucide-react"
+import { Locale } from "@/lib/dictionaries"
 
 const Navbar = () => {
     const pathName = usePathname()
+    const { locale, setLocale } = useTranslation();
+
+    const changeLang = (lang: Locale) => setLocale(lang);
  
-    
-  return (
+    return (
     <div className='h-[10vh] backdrop:blur-sm border-b fixed z-40 inset-0 bg-background'>
     <div className='container max-w-6xl mx-auto h-[10vh] w-full flex items-center justify-between'>
        <Link href={'/'}>
@@ -31,13 +33,22 @@ const Navbar = () => {
       </Link>
        ))}
        </div>
-            <div className="flex items-center gap-1">
-              {/* <ModeToogle/> */}
-              <div  className="hidden md:block  mb-5">
-
-            <ChegirmaPanel  />
+            <div className="flex items-center gap-4">
+              {/* Language Switcher */}
+              <div className="flex items-center gap-2 bw-panel px-3 py-1.5 rounded-full text-xs">
+                <Globe className="w-3.5 h-3.5 bw-text" />
+                <button onClick={() => changeLang('uz')} className={`font-bold transition-colors ${locale === 'uz' ? 'bw-text' : 'text-zinc-400 hover:text-zinc-950 dark:hover:text-white'}`}>UZ</button>
+                <span className="text-zinc-200 dark:text-zinc-800">|</span>
+                <button onClick={() => changeLang('ru')} className={`font-bold transition-colors ${locale === 'ru' ? 'bw-text' : 'text-zinc-400 hover:text-zinc-950 dark:hover:text-white'}`}>RU</button>
+                <span className="text-zinc-200 dark:text-zinc-800">|</span>
+                <button onClick={() => changeLang('en')} className={`font-bold transition-colors ${locale === 'en' ? 'bw-text' : 'text-zinc-400 hover:text-zinc-950 dark:hover:text-white'}`}>EN</button>
               </div>
-        <Mobile/>
+
+              {/* <ModeToogle/> */}
+              <div className="hidden md:block flex items-center">
+                <ChegirmaPanel />
+              </div>
+              <Mobile/>
             </div>
     </div>
 

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 
 
-  title: "Smartmiz - Dasturlash va Chet Tillar Kurslari",
-  description: "Smartmiz o'quv markaziga hush kelibsiz. Dasturlash, ingliz tili, rus tili, koreys tili va boshqa ko'plab kurslar bo'yicha yuqori sifatli ta'lim beramiz. Dasturlashni o'rganish uchun eng yaxshi joy!",
+  title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
+  description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz. Kelajagingizni tillar va kompyuter savodxonligi bilan quring!",
 
 
   authors: [{ name: 'Muhammad ibrohimov', url: 'https://smartmiz.uz' }],
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 
 
     openGraph: {
-      title: "Smartmiz - Dasturlash va Chet Tillar Kurslari",
-      description: "Smartmiz o'quv markaziga hush kelibsiz. Dasturlash, ingliz tili, rus tili, koreys tili va boshqa ko'plab kurslar bo'yicha yuqori sifatli ta'lim beramiz. Dasturlashni o'rganish uchun eng yaxshi joy!",
+      title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
+      description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
       type: 'website',
       url: 'https://smartmiz.uz',
       locale: 'uz_UZ',
