@@ -96,7 +96,7 @@ function AboutContent() {
           <div className="w-full h-1 bg-zinc-100 dark:bg-zinc-800 my-6"></div>
           <div className="flex items-center gap-2 text-[#FFB800] font-black text-sm uppercase tracking-wider">
             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-            <span>Smartmiz o'quv markazi professional jamoasi</span>
+            <span>{"Smartmiz o'quv markazi professional jamoasi"}</span>
           </div>
         </div>
 
