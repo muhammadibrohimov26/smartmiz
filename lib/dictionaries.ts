@@ -61,7 +61,18 @@ export const dictionaries = {
     discountCard1: "Aksiya - 16 Yoshgacha",
     discountCard2: "Oila & Ko'p Kurslilik",
     discountCard3: "Do'stlarni Taklif Qiling",
-    calcMonthly: "UZS / oylik"
+    calcMonthly: "UZS / oylik",
+    // About Page Translations
+    aboutTitle: "Smartmiz O'quv Markazi Tarixi",
+    aboutHistory: "«SMARTMIZ» o‘quv markazining 10 yildan ortiq muvaffaqiyatli faoliyati davomida turli qiyinchiliklar, to‘siqlar va muammolar bo‘ldi. Shunga qaramasdan, SMARTMIZ ulkan yutuqlarga erishib, 11,000 dan ziyod o‘quvchilarga yuqori darajada taʼlim berdi. Kelajagingizni biz bilan quring!",
+    aboutVideoBtn: "Tarixiy videorolikni tomosha qiling 🎥",
+    aboutStats1: "10+ Yillik",
+    aboutStats1Label: "Ta'lim Tajribasi",
+    aboutStats2: "11,000+",
+    aboutStats2Label: "Muvaffaqiyatli O'quvchilar",
+    aboutStats3: "9 ta",
+    aboutStats3Label: "Professional Kurslar",
+    aboutCoursesTitle: "Bizning Faol Kurslarimiz"
   },
   ru: {
     heroTag: "Образование будущего теперь в Smartmiz",
@@ -123,7 +134,18 @@ export const dictionaries = {
     discountCard1: "Акция - До 16 лет",
     discountCard2: "Семья & Многокурсовость",
     discountCard3: "Приглашайте Друзей",
-    calcMonthly: "сум / месяц"
+    calcMonthly: "сум / месяц",
+    // About Page Translations
+    aboutTitle: "История Учебного Центра Smartmiz",
+    aboutHistory: "За более чем 10 лет успешной работы учебного центра «SMARTMIZ» было много трудностей, препятствий и проблем. Несмотря на это, SMARTMIZ добился огромных успехов и обучил на высоком уровне более 11 000 студентов. Стройте свое будущее вместе с нами!",
+    aboutVideoBtn: "Смотреть исторический видеоролик 🎥",
+    aboutStats1: "10+ Лет",
+    aboutStats1Label: "Опыта Обучения",
+    aboutStats2: "11,000+",
+    aboutStats2Label: "Успешных Студентов",
+    aboutStats3: "9",
+    aboutStats3Label: "Проф. Курсов",
+    aboutCoursesTitle: "Наши Активные Курсы"
   },
   en: {
     heroTag: "Future education is now at Smartmiz",
@@ -185,7 +207,18 @@ export const dictionaries = {
     discountCard1: "Promo - Under 16",
     discountCard2: "Family & Multi-course",
     discountCard3: "Invite Friends",
-    calcMonthly: "UZS / month"
+    calcMonthly: "UZS / month",
+    // About Page Translations
+    aboutTitle: "History of Smartmiz Education Center",
+    aboutHistory: "During more than 10 years of successful activity of «SMARTMIZ» learning center, there were various difficulties, obstacles and problems. Despite this, SMARTMIZ has achieved great success and educated over 11,000 students at a high level. Build your future with us!",
+    aboutVideoBtn: "Watch our history video 🎥",
+    aboutStats1: "10+ Years",
+    aboutStats1Label: "Teaching Experience",
+    aboutStats2: "11,000+",
+    aboutStats2Label: "Successful Students",
+    aboutStats3: "9",
+    aboutStats3Label: "Professional Courses",
+    aboutCoursesTitle: "Our Active Courses"
   },
   tr: {
     heroTag: "Geleceğin Eğitimi Şimdi Smartmiz'de",
@@ -247,7 +280,18 @@ export const dictionaries = {
     discountCard1: "Kampanya - 16 Yaş Altı",
     discountCard2: "Aile & Çoklu Kurs",
     discountCard3: "Arkadaşlarınızı Davet Edin",
-    calcMonthly: "UZS / aylık"
+    calcMonthly: "UZS / aylık",
+    // About Page Translations
+    aboutTitle: "Smartmiz Eğitim Merkezi Tarihi",
+    aboutHistory: "«SMARTMIZ» eğitim merkezinin 10 yılı aşkın başarılı faaliyeti boyunca çeşitli zorluklar, engeller ve problemler yaşandı. Buna rağmen SMARTMIZ büyük bir başarı elde etti ve 11.000'den fazla öğrenciyi yüksek standartlarda eğitti. Geleceğinizi bizimle inşa edin!",
+    aboutVideoBtn: "Tarihsel videomuzu izleyin 🎥",
+    aboutStats1: "10+ Yıl",
+    aboutStats1Label: "Eğitim Deneyimi",
+    aboutStats2: "11,000+",
+    aboutStats2Label: "Başarılı Öğrenci",
+    aboutStats3: "9",
+    aboutStats3Label: "Profesyonel Kurs",
+    aboutCoursesTitle: "Aktif Kurslarımız"
   },
   ko: {
     heroTag: "미래의 교육은 이제 Smartmiz에서",
@@ -309,7 +353,18 @@ export const dictionaries = {
     discountCard1: "프로모션 - 16세 미만",
     discountCard2: "가족 및 복수 수강",
     discountCard3: "친구 초대",
-    calcMonthly: "UZS / 월"
+    calcMonthly: "UZS / 월",
+    // About Page Translations
+    aboutTitle: "Smartmiz 교육 센터의 역사",
+    aboutHistory: "«SMARTMIZ» 학습 센터가 10년이 넘는 성공적인 활동을 하는 동안 다양한 어려움과 장애물, 문제들이 있었습니다. 그럼에도 불구하고 SMARTMIZ는 큰 성공을 거두었고 11,000명 이상의 학생들을 높은 수준으로 교육했습니다. 우리와 함께 미래를 건설하십시오!",
+    aboutVideoBtn: "역사적 비디오 시청하기 🎥",
+    aboutStats1: "10년 이상",
+    aboutStats1Label: "교육 경험",
+    aboutStats2: "11,000명+",
+    aboutStats2Label: "성공적인 학생들",
+    aboutStats3: "9개",
+    aboutStats3Label: "전문 교육 과정",
+    aboutCoursesTitle: "활성 교육 과정"
   },
   ar: {
     heroTag: "تعليم المستقبل الآن في Smartmiz",
@@ -371,6 +426,17 @@ export const dictionaries = {
     discountCard1: "العرض - تحت 16 سنة",
     discountCard2: "العائلة والدورات المتعددة",
     discountCard3: "دعوة الأصدقاء",
-    calcMonthly: "UZS / شهرياً"
+    calcMonthly: "UZS / شهرياً",
+    // About Page Translations
+    aboutTitle: "تاريخ مركز Smartmiz التعليمي",
+    aboutHistory: "خلال أكثر من 10 سنوات من النشاط الناجح لمركز التعليم «SMARTMIZ»، كانت هناك صعوبات وعقبات ومشاكل مختلفة. على الرغم من ذلك، حقق SMARTMIZ نجاحاً كبيراً وقام بتعليم أكثر من 11,000 طالب على مستوى عالٍ. ابنِ مستقبلك معنا!",
+    aboutVideoBtn: "شاهد الفيديو التاريخي الخاص بنا 🎥",
+    aboutStats1: "10+ سنوات",
+    aboutStats1Label: "خبرة تعليمية",
+    aboutStats2: "11,000+",
+    aboutStats2Label: "طالب ناجح",
+    aboutStats3: "9",
+    aboutStats3Label: "دورات احترافية",
+    aboutCoursesTitle: "دوراتنا النشطة"
   }
 };

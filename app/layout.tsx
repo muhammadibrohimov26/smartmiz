@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,25 +18,25 @@ export const metadata: Metadata = {
 
 
   authors: [{ name: 'Muhammad ibrohimov', url: 'https://smartmiz.uz' }],
-	icons: { icon: '/SMARTMIZ.jpg' },
-	keywords: "Muhammad ibrohimov, Doniyor tohirov, dasturlash kurslari, dasturlash darslari, reactjs uzbek tilida, EPS topik uzbek tilida, redux uzbek tilida, Smartmiz o'quv markazi, ingliz tili kurslari, rus tili kurslari, CEFR, javascript darslari, IT kurslari o'zbek tilida, koreys tili darslari, IELTS, C1 rus tili, turk tili, TOPIK koreys tili, IT loyihalar o'zbek tilida",
+  icons: { icon: '/SMARTMIZ.jpg' },
+  keywords: "Muhammad ibrohimov, Doniyor tohirov, Smartmiz haqida, Smartmiz tarixi, dasturlash kurslari, dasturlash darslari, reactjs uzbek tilida, EPS topik uzbek tilida, redux uzbek tilida, Smartmiz o'quv markazi, ingliz tili kurslari, rus tili kurslari, CEFR, javascript darslari, IT kurslari o'zbek tilida, koreys tili darslari, IELTS, C1 rus tili, turk tili, TOPIK koreys tili, IT loyihalar o'zbek tilida, chet tillari Farg'onada, kompyuter kurslari Farg'ona",
 
 
-    openGraph: {
-      title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
-      description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
-      type: 'website',
-      url: 'https://smartmiz.uz',
-      locale: 'uz_UZ',
-      images: 'https://idyllic-sprite-7cad0a.netlify.app/img/bg.png',
-      countryName: 'Uzbekistan',
-      siteName: 'Smartmiz',
-      emails: 'muhammadibrohimov0306@gmail.com', 
-    },
+  openGraph: {
+    title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
+    description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
+    type: 'website',
+    url: 'https://smartmiz.uz',
+    locale: 'uz_UZ',
+    images: 'https://idyllic-sprite-7cad0a.netlify.app/img/bg.png',
+    countryName: 'Uzbekistan',
+    siteName: 'Smartmiz',
+    emails: 'muhammadibrohimov0306@gmail.com',
+  },
 
 };
 
- function RootLayout({children}: ChildProps) {
+function RootLayout({ children }: ChildProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -76,16 +77,16 @@ export const metadata: Metadata = {
           }}
         />
       </head>
-      <body className={` owerflow-x-hidden`  }>
+      <body className={` owerflow-x-hidden`}>
         <LanguageProvider>
           <ThemeProvider attribute="class"
-              defaultTheme="dark" 
-              disableTransitionOnChange >
-                {children}
-                <Toaster position="top-center" />
+            defaultTheme="dark"
+            disableTransitionOnChange >
+            {children}
+            <Toaster position="top-center" />
           </ThemeProvider>
         </LanguageProvider>
-       </body>
+      </body>
     </html>
   );
 }
