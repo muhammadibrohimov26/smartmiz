@@ -38,17 +38,55 @@ export const metadata: Metadata = {
  function RootLayout({children}: ChildProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-    <body className={` owerflow-x-hidden`  }>
-      <LanguageProvider>
-        <ThemeProvider attribute="class"
-            defaultTheme="dark" 
-            disableTransitionOnChange >
-              {children}
-              <Toaster position="top-center" />
-        </ThemeProvider>
-      </LanguageProvider>
-     </body>
-  </html>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "EducationalOrganization",
+              "name": "Smartmiz O'quv Markazi",
+              "url": "https://smartmiz.uz",
+              "logo": "https://smartmiz.uz/SMARTMIZ.jpg",
+              "description": "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Fergana",
+                "addressRegion": "Fergana Region",
+                "addressCountry": "UZ"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "+998-73-244-13-33",
+                  "contactType": "customer service"
+                },
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "+998-73-244-00-99",
+                  "contactType": "customer service"
+                }
+              ],
+              "sameAs": [
+                "https://www.instagram.com/smartmiz_fergana",
+                "https://t.me/Smartmiz",
+                "https://www.youtube.com/@smartmizoquvmarkazi7835"
+              ]
+            })
+          }}
+        />
+      </head>
+      <body className={` owerflow-x-hidden`  }>
+        <LanguageProvider>
+          <ThemeProvider attribute="class"
+              defaultTheme="dark" 
+              disableTransitionOnChange >
+                {children}
+                <Toaster position="top-center" />
+          </ThemeProvider>
+        </LanguageProvider>
+       </body>
+    </html>
   );
 }
 export default RootLayout
