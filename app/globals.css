@@ -144,6 +144,12 @@
   }
   .logo{
 	width: 25%;
+	/* Invert in light mode so white logo is visible on light backgrounds */
+	filter: invert(1);
+	transition: filter 0.3s ease;
+  }
+  .dark .logo {
+	filter: invert(0);
   }
 
 

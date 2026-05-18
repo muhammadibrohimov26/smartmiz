@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "name": "Dilnoza Yusupova",
+    "course": "IELTS",
+    "result": "IELTS 7.5",
+    "score": "7.5",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/inglis.png",
+    "date": "2025-03-15",
+    "quote": "Smartmiz ustoz-o'qituvchilari tufayli orzu qilgan natijamga erishdim. Endi Angliyaga o'qishga ketayapman!"
+  },
+  {
+    "id": "2",
+    "name": "Jasur Toshmatov",
+    "course": "TOPIK",
+    "result": "TOPIK 5-darajasi",
+    "score": "5",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/topik.png",
+    "date": "2025-04-02",
+    "quote": "2 yil davomida Smartmizda koreys tilini o'rgandim. Hozir Koreyadagi katta kompaniyada ishlamoqdaman."
+  },
+  {
+    "id": "3",
+    "name": "Malika Rahimova",
+    "course": "CEFR",
+    "result": "CEFR C1 Daraja",
+    "score": "C1",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cefr.png",
+    "date": "2025-02-20",
+    "quote": "C1 sertifikatimni olganimdan so'ng, xalqaro kompaniyada ish topishim ancha osonlashdi!"
+  },
+  {
+    "id": "4",
+    "name": "Sherzod Nazarov",
+    "course": "EPS-TOPIK",
+    "result": "EPS-TOPIK O'tdi",
+    "score": "Pass",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/eps.png",
+    "date": "2025-05-01",
+    "quote": "Smartmizda 8 oyda EPS-TOPIK imtihonini muvaffaqiyatli topshirdim. Endi Koreya ishchi vizasim tayyor!"
+  },
+  {
+    "id": "5",
+    "name": "Nilufar Xoliqova",
+    "course": "C1 Rus tili",
+    "result": "C1 Sertifikati",
+    "score": "C1",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/c1.png",
+    "date": "2025-01-10",
+    "quote": "Rus tilida C1 sertifikatini olganimdan so'ng, Rossiyada magistratura o'qishga qabul qilindim!"
+  },
+  {
+    "id": "6",
+    "name": "Akbar Mirzayev",
+    "course": "Roboto texnika",
+    "result": "O'zbekiston Robototexnika Olimpiyadasi - 2-o'rin",
+    "score": "2nd",
+    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/robot.png",
+    "date": "2024-12-05",
+    "quote": "Smartmizdagi robototexnika darslarisiz bu natijalarga erisha olmasdim. Ustoz Doniyor aka eng zo'r!"
+  }
+]

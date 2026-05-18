@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
 import { Locale } from "@/lib/dictionaries";
 import ChegirmaPanel from './chegirma';
+import ModeToogle from "@/components/shared/mode-toggle";
 
 const Mobile = () => {
   const pathName = usePathname();
@@ -34,10 +35,13 @@ const Mobile = () => {
         </SheetTrigger>
 
         <SheetContent side={"left"} className="flex flex-col w-[85vw] max-w-xs overflow-y-auto">
-          {/* Logo */}
-          <Link href={"/"} onClick={handleLinkClick} className="block mb-4">
-            <img className="logo" src="/smartlogo.png" alt="smartmiz" />
-          </Link>
+          {/* Logo + Theme Toggle row */}
+          <div className="flex items-center justify-between mb-4">
+            <Link href={"/"} onClick={handleLinkClick}>
+              <img className="logo" src="/smartlogo.png" alt="smartmiz" />
+            </Link>
+            <ModeToogle />
+          </div>
 
           <hr className="border-zinc-200 dark:border-zinc-800 mb-3" />
 

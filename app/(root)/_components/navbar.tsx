@@ -9,6 +9,7 @@ import { useTranslation } from "@/context/LanguageContext"
 import { Globe, ChevronDown } from "lucide-react"
 import { Locale } from "@/lib/dictionaries"
 import { useState, useEffect, useRef } from "react"
+import ModeToogle from "@/components/shared/mode-toggle"
 
 const Navbar = () => {
     const pathName = usePathname()
@@ -88,7 +89,7 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* <ModeToogle/> */}
+              <ModeToogle />
               <div className="hidden md:block flex items-center">
                 <ChegirmaPanel />
               </div>
