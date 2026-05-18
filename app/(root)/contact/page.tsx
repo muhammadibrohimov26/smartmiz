@@ -55,6 +55,22 @@ function ContactPage() {
 					</Suspense>
 				</div>
 			</div>
+
+			{/* GOOGLE MAPS SECTION */}
+			<div className='mt-16 md:mt-24'>
+				<h2 className='text-3xl font-creteRound mb-6 text-center md:text-left'>Bizning Manzil (Google Maps)</h2>
+				<div className='w-full h-[450px] border-4 border-zinc-950 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.05)] bg-zinc-100 dark:bg-zinc-900'>
+					<iframe
+						src="https://maps.google.com/maps?q=Smartmiz%20O'quv%20Markazi,%20Qomus%20ko'chasi,%20Farg'ona&t=&z=16&ie=UTF8&iwloc=&output=embed"
+						width="100%"
+						height="100%"
+						style={{ border: 0 }}
+						allowFullScreen={true}
+						loading="lazy"
+						referrerPolicy="no-referrer-when-downgrade"
+					></iframe>
+				</div>
+			</div>
 		</div>
 	)
 }
