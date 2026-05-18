@@ -1,5 +1,6 @@
 "use client";
 
+import { sendContactMessage } from "@/lib/actions";
 import { contactSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
@@ -39,29 +40,11 @@ function ContactForm() {
   function onSubmit(values: z.infer<typeof contactSchema>) {
     setIsLoading(true);
 
-    const telegramBotId = process.env.NEXT_PUBLIC_TETELGRAM_BOT_API!;
-
-    const telegramChatId = process.env.NEXT_PUBLIC_TETELGRAM_CHAT_ID!;
-    console.log(telegramBotId);
-    console.log(telegramChatId);
-
-    const promise = fetch(
-      `https://api.telegram.org/bot${telegramBotId}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "cache-control": "no-cache",
-        },
-        body: JSON.stringify({
-          chat_id: telegramChatId,
-          text: `Ism: ${values.name}:
-Telefon nomeri: ${values.tel}:
-Kurs nomi: ${values.kurs}`,
-        }),
-      }
-    )
-      .then(() => form.reset())
+    const promise = sendContactMessage(values)
+      .then((res) => {
+        if (!res.success) throw new Error(res.error);
+        form.reset();
+      })
       .finally(() => setIsLoading(false));
 
     toast.promise(promise, {
