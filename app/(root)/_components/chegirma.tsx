@@ -84,7 +84,7 @@ function ChegirmaPanel() {
                   <Flame className="w-6 h-6 yellow-accent" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">Aksiya - 16 Yoshgacha</h4>
+                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">{t("discountCard1")}</h4>
                   <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base leading-relaxed font-medium">
                     {t("discount1")}
                   </p>
@@ -97,7 +97,7 @@ function ChegirmaPanel() {
                   <Percent className="w-6 h-6 yellow-accent" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">Oila & Ko'p Kurslilik</h4>
+                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">{t("discountCard2")}</h4>
                   <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base leading-relaxed font-medium">
                     {t("discount2")}
                   </p>
@@ -110,7 +110,7 @@ function ChegirmaPanel() {
                   <Users className="w-6 h-6 yellow-accent" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">Do'stlarni Taklif Qiling</h4>
+                  <h4 className="font-bold text-lg bw-text uppercase tracking-tight mb-1">{t("discountCard3")}</h4>
                   <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base leading-relaxed font-medium">
                     {t("discount3")}
                   </p>
@@ -203,7 +203,7 @@ function ChegirmaPanel() {
                     <span className="text-2xl md:text-3xl font-black text-[#FFB800] tracking-tighter drop-shadow-sm">
                       {finalPrice.toLocaleString()}
                     </span>
-                    <span className="text-xs font-bold bw-text ml-1">UZS / oylik</span>
+                    <span className="text-xs font-bold bw-text ml-1">{t("calcMonthly")}</span>
                   </div>
                 </div>
 
