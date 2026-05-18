@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -9,12 +8,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
-import { Percent, Users, Sparkles, Flame, Calculator, ArrowRight, Check } from "lucide-react";
-import Link from "next/link";
+import { Percent, Users, Sparkles, Flame, Calculator, ArrowRight } from "lucide-react";
 
-function ChegirmaPanel() {
+interface ChegirmaPanelProps {
+  onClose?: () => void;
+}
+
+function ChegirmaPanel({ onClose }: ChegirmaPanelProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const { t } = useTranslation();
 
   // Calculator states
@@ -47,12 +51,10 @@ function ChegirmaPanel() {
   const finalPrice = Math.round(basePrice * (1 - totalDiscountPercent / 100));
 
   useEffect(() => {
-    // Automatically open on first visit
-    const isFirstVisit = localStorage.getItem("isFirstVisit");
-    if (!isFirstVisit) {
+    const timer = setTimeout(() => {
       setOpen(true);
-      localStorage.setItem("isFirstVisit", "true");
-    }
+    }, 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -210,14 +212,20 @@ function ChegirmaPanel() {
               </div>
 
               {/* ACTION BUTTON */}
-              <Link 
-                href={`/contact?course=AksiyaChegirma&price=${finalPrice}`}
-                onClick={() => setOpen(false)}
-                className="mt-6 w-full py-4 px-6 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 hover:bg-zinc-900 dark:hover:bg-zinc-100 rounded-2xl font-black text-base flex items-center justify-center gap-2 border-2 border-zinc-950 dark:border-white shadow-[4px_4px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)]"
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  onClose?.();
+                  // Wait for Sheet close animation before navigating
+                  setTimeout(() => {
+                    router.push(`/contact?course=AksiyaChegirma&price=${finalPrice}`);
+                  }, 350);
+                }}
+                className="mt-6 w-full py-4 px-6 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 hover:bg-zinc-900 dark:hover:bg-zinc-100 rounded-2xl font-black text-base flex items-center justify-center gap-2 border-2 border-zinc-950 dark:border-white shadow-[4px_4px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] cursor-pointer"
               >
                 <span>{t("calcEnroll")}</span>
                 <ArrowRight className="w-5 h-5 yellow-accent" />
-              </Link>
+              </button>
 
             </div>
 

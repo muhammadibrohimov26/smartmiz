@@ -43,7 +43,7 @@ function Homepage() {
             <span>{t("heroTag")}</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight bw-text mb-6 max-w-4xl animate-in fade-in zoom-in-95 duration-700 delay-150 uppercase">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight bw-text mb-6 max-w-4xl animate-in fade-in zoom-in-95 duration-700 delay-150 uppercase break-words hyphens-auto w-full px-2 sm:px-0">
             {t("heroTitle1")} <br />
             <span className="yellow-accent">{t("heroTitle2")}</span>
           </h1>
