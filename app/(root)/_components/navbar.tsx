@@ -13,7 +13,7 @@ import ModeToogle from "@/components/shared/mode-toggle"
 
 const Navbar = () => {
     const pathName = usePathname()
-    const { locale, setLocale } = useTranslation();
+    const { locale, setLocale, t } = useTranslation();
     const [langOpen, setLangOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -41,10 +41,10 @@ const Navbar = () => {
        {navLink.map(nav =>(
         <Link key={nav.route} href={nav.route}
         className={cn(
-          'hover:bg-blue-400/20 py-1 px-3 cursor-pointer rounded-sm transition-colors',
-          pathName === nav.route && 'text-blue-400'
+          'hover:bg-[#FFB800]/20 py-1.5 px-3.5 cursor-pointer rounded-xl transition-all duration-300 font-extrabold text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white',
+          pathName === nav.route && 'bg-[#FFB800]/10 text-yellow-600 dark:text-yellow-400 border border-[#FFB800]/20 shadow-[1px_1px_0px_rgba(255,184,0,1)]'
         )}>
-        {nav.name}
+        {t(nav.translationKey || nav.name)}
       </Link>
        ))}
        </div>

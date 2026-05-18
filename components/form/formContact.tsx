@@ -19,8 +19,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Select } from "@radix-ui/react-select";
 import {
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -110,7 +110,7 @@ function ContactForm() {
           render={({ field }) => (
             <FormItem>
               {/* <FormLabel>Email</FormLabel> */}
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value || ""} key={field.value || "empty"}>
                 <FormControl>
                   <SelectTrigger className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus:ring-1 focus:ring-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6">
                     <SelectValue placeholder={t("contactCourse")} />

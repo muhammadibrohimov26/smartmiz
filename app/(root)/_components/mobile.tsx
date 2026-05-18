@@ -17,7 +17,7 @@ const Mobile = () => {
   const pathName = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const { locale, setLocale } = useTranslation();
+  const { locale, setLocale, t } = useTranslation();
 
   const changeLang = (lang: Locale) => setLocale(lang);
 
@@ -55,12 +55,12 @@ const Mobile = () => {
                 className={cn(
                   'flex items-center gap-2.5 py-2.5 px-3 cursor-pointer rounded-xl transition-colors font-semibold text-sm',
                   pathName === nav.route
-                    ? 'text-yellow-600 bg-yellow-500/10 dark:text-yellow-400'
+                    ? 'text-yellow-600 bg-yellow-500/10 dark:text-yellow-400 font-black border border-yellow-500/20'
                     : 'hover:bg-zinc-100 dark:hover:bg-zinc-900 bw-text'
                 )}
               >
                 <nav.icon className="w-4 h-4 shrink-0" />
-                {nav.name}
+                {t(nav.translationKey || nav.name)}
               </Link>
             ))}
           </nav>

@@ -47,14 +47,14 @@ function NewsPage() {
       <div className="text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
           <Sparkles className="w-4 h-4 yellow-accent animate-pulse" />
-          <span>O&apos;quvchilarimiz Muvaffaqiyatlari</span>
+          <span>{t("newsBadge")}</span>
         </div>
         <h1 className="text-4xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
-          Yutuqlar va <span className="yellow-accent">Natijalar</span>
+          {t("newsTitle1")} <span className="yellow-accent">{t("newsTitle2")}</span>
         </h1>
         <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full mb-6" />
         <p className="text-zinc-500 dark:text-zinc-400 text-base md:text-lg font-medium leading-relaxed">
-          Smartmiz o&apos;quvchilarining real hayotdagi muvaffaqiyatlari. Ularning g&apos;alabasi — bizning g&apos;alabamiz!
+          {t("newsDesc")}
         </p>
       </div>
 
@@ -95,7 +95,7 @@ function NewsPage() {
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${courseColors[item.course] || "bg-zinc-800"}`}>
-                      {item.course}
+                      {t(item.course)}
                     </span>
                     <div className="flex items-center gap-1 text-zinc-400 text-xs">
                       <Calendar className="w-3 h-3" />
@@ -108,7 +108,7 @@ function NewsPage() {
                 <h3 className="font-black text-lg bw-text mb-1">{item.name}</h3>
                 <div className="flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-[#FFB800]" />
-                  <span className="font-bold text-sm text-[#FFB800]">{item.result}</span>
+                  <span className="font-bold text-sm text-[#FFB800]">{t(item.result)}</span>
                 </div>
               </div>
 
@@ -117,7 +117,7 @@ function NewsPage() {
                 <div className="relative bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
                   <Quote className="w-4 h-4 text-[#FFB800] mb-2 opacity-60" />
                   <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium italic">
-                    {item.quote}
+                    {t(item.quote)}
                   </p>
                 </div>
 
@@ -136,16 +136,16 @@ function NewsPage() {
       {/* CTA */}
       <div className="mt-16 text-center bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
         <h2 className="text-3xl md:text-4xl font-black bw-text uppercase tracking-tighter mb-4">
-          Siz ham <span className="yellow-accent">Muvaffaqiyatga</span> Erishasiz!
+          {t("newsCtaTitle1")} <span className="yellow-accent">{t("newsCtaTitle2")}</span> {t("newsCtaTitle3")}
         </h2>
         <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-8 max-w-xl mx-auto">
-          Smartmizda o&apos;qish boshla. 10+ yillik tajriba va 11,000+ muvaffaqiyatli bitiruvchilar sifatida biz sizga ham yordam beramiz!
+          {t("newsCtaDesc")}
         </p>
         <Link
           href="/contact"
           className="inline-flex items-center gap-2 px-8 py-4 bw-button-solid font-black text-lg uppercase tracking-wider"
         >
-          Hoziroq Yozilish
+          {t("newsCtaBtn")}
           <Sparkles className="w-5 h-5 yellow-accent" />
         </Link>
       </div>
