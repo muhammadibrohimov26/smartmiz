@@ -4,6 +4,7 @@ import "./globals.css";
 import { ChildProps } from "@/types";
 import { ThemeProvider } from "@/components/providers/theme-providers";
 import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,13 +39,14 @@ export const metadata: Metadata = {
   return (
     <html lang="en" suppressHydrationWarning>
     <body className={` owerflow-x-hidden`  }>
-      <ThemeProvider attribute="class"
-          defaultTheme="dark" // Boshqacha rejimda ishga tushirilmasligi uchun dark qilib qo'ying
-          forcedTheme="dark"  // Dark mode-ni majburlash 
-          disableTransitionOnChange >
-            {children}
-            <Toaster position="top-center" />
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider attribute="class"
+            defaultTheme="dark" 
+            disableTransitionOnChange >
+              {children}
+              <Toaster position="top-center" />
+        </ThemeProvider>
+      </LanguageProvider>
      </body>
   </html>
   );

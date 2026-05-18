@@ -184,3 +184,130 @@
 		  }
 		
 	  }
+
+/* Custom Premium Black, White & Yellow Utilities */
+body {
+  background-color: #fcfcfc;
+  color: #111111;
+}
+.dark body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.bw-panel {
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  border-radius: 24px;
+}
+.dark .bw-panel {
+  background: #111111;
+  border: 1px solid #222222;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.bw-text {
+  color: #111111;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.dark .bw-text {
+  color: #ffffff;
+}
+
+.yellow-accent {
+  color: #FFB800;
+}
+.yellow-bg {
+  background-color: #FFB800;
+  color: #111111;
+}
+.dark .yellow-bg {
+  background-color: #FFB800;
+  color: #111111;
+}
+
+/* Beautiful hover effects */
+.hover-bw-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-bw-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -15px rgba(255, 184, 0, 0.3);
+  border-color: #FFB800;
+}
+.dark .hover-bw-card:hover {
+  box-shadow: 0 20px 40px -15px rgba(255, 184, 0, 0.15);
+  border-color: #FFB800;
+}
+
+/* Buttons */
+.bw-button-solid {
+  background-color: #FFB800;
+  color: #111111;
+  border: none;
+  border-radius: 16px;
+  font-weight: 800;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px -5px rgba(255, 184, 0, 0.5);
+}
+.bw-button-solid:hover {
+  background-color: #e6a600;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -5px rgba(255, 184, 0, 0.6);
+}
+
+.bw-button-outline {
+  background-color: transparent;
+  color: #111111;
+  border: 2px solid #eaeaea;
+  border-radius: 16px;
+  font-weight: 800;
+  transition: all 0.3s ease;
+}
+.dark .bw-button-outline {
+  color: #ffffff;
+  border: 2px solid #333333;
+}
+.bw-button-outline:hover {
+  border-color: #FFB800;
+  color: #FFB800;
+}
+.dark .bw-button-outline:hover {
+  border-color: #FFB800;
+  color: #FFB800;
+}
+
+.bw-badge {
+  background-color: #111111;
+  color: #FFB800;
+  border-radius: 9999px;
+  padding: 4px 14px;
+  font-weight: 800;
+  border: none;
+}
+.dark .bw-badge {
+  background-color: #FFB800;
+  color: #111111;
+}
+
+/* Soft glowing background element */
+.yellow-glow-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+}
+.yellow-blob {
+  position: absolute;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(255,184,0,0.08) 0%, rgba(255,184,0,0) 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+.blob-1 { top: -20%; left: -20%; }
+.blob-2 { bottom: -20%; right: -20%; }
+.dark .yellow-blob {
+  background: radial-gradient(circle, rgba(255,184,0,0.05) 0%, rgba(255,184,0,0) 70%);
+}

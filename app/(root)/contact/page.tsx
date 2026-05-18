@@ -1,5 +1,5 @@
 import FormContact from '@/components/form/formContact'
-
+import { Suspense } from 'react'
 import { Dot, Home, Phone } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -7,12 +7,11 @@ import Link from 'next/link'
 export const metadata: Metadata = {
 	title: "Bog'lanish - Smartmiz",
 	description: "Smartmiz o'quv markazi bilan bog'lanish uchun biz bilan telefon yoki e-mail orqali aloqa qiling.",
-  }
+}
   
-
 function ContactPage() {
 	return (
-		<div className='max-w-6xl mx-auto mb-3  h-[100%] md:mb-36'>
+		<div className='max-w-6xl mx-auto mb-3 h-[100%] md:mb-36'>
 			<div className='relative min-h-[19vh] flex items-center justify-start flex-col mt-24'>
 				<h2 className='text-center text-4xl section-title font-creteRound mt-2'>
 					<span>Contact</span>
@@ -51,12 +50,12 @@ function ContactPage() {
 
 				<div>
 					<h1 className='text-4xl font-creteRound mb-4'>Contact form</h1>
-				<FormContact/>
+					<Suspense fallback={<div>Loading form...</div>}>
+						<FormContact/>
+					</Suspense>
 				</div>
 			</div>
-			
 		</div>
-		
 	)
 }
 

@@ -4,11 +4,13 @@ import { sendContactMessage } from "@/lib/actions";
 import { contactSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import { useTranslation } from "@/context/LanguageContext";
 import {
   Form,
   FormControl,
@@ -27,15 +29,24 @@ import {
 
 function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const courseParam = searchParams.get("course");
+  const { t } = useTranslation();
 
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       tel: "",
       name: "",
-      kurs: "",
+      kurs: courseParam || "",
     },
   });
+
+  useEffect(() => {
+    if (courseParam) {
+      form.setValue("kurs", courseParam);
+    }
+  }, [courseParam, form]);
 
   function onSubmit(values: z.infer<typeof contactSchema>) {
     setIsLoading(true);
@@ -48,15 +59,15 @@ function ContactForm() {
       .finally(() => setIsLoading(false));
 
     toast.promise(promise, {
-      loading: "Loading...",
-      success: "Successfully sent!",
-      error: "Something went wrong!",
+      loading: t("loading"),
+      success: t("successMsg"),
+      error: t("errorMsg"),
     });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel">
         <FormField
           control={form.control}
           name="tel"
@@ -64,8 +75,9 @@ function ContactForm() {
             <FormItem>
               <FormControl>
                 <Input
+                  className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6"
                   type="number"
-                  placeholder="Telefon nomer "
+                  placeholder={t("contactPhone")}
                   disabled={isLoading}
                   {...field}
                 />
@@ -80,7 +92,12 @@ function ContactForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Ismingiz" disabled={isLoading} {...field} />
+                <Input 
+                  className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6"
+                  placeholder={t("contactName")} 
+                  disabled={isLoading} 
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,21 +112,19 @@ function ContactForm() {
               {/* <FormLabel>Email</FormLabel> */}
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kursni tanlang" />
+                  <SelectTrigger className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus:ring-1 focus:ring-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6">
+                    <SelectValue placeholder={t("contactCourse")} />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                  <SelectItem  disabled={isLoading}  {...field}  value="Koreys tili"> Koreys tili   </SelectItem>
-                  <SelectItem disabled={isLoading} {...field}    value="Kompyuter kursi"> Kompyuter kursi  </SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Arab tili">Arab tili</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Ingliz tili">Ingliz tili</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Roboto Texnika">Roboto Texnika</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Rus tili">Rus tili</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Turk tili">Turk tili</SelectItem>
-				  <SelectItem disabled={isLoading} {...field} value="Mental arfimetika">Mental arfimetika</SelectItem>
-				  {/* <SelectItem disabled={isLoading} {...field} value=""> </SelectItem> */}
-
+                <SelectContent className="rounded-xl border-gray-200 dark:border-zinc-800 font-medium bg-white dark:bg-zinc-900 shadow-lg">
+                  <SelectItem disabled={isLoading} value="Koreys tili">{t("Koreys tili")}</SelectItem>
+                  <SelectItem disabled={isLoading} value="Kompyuter kursi">{t("Kompyuter kursi")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Arab tili">{t("Arab tili")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Ingliz tili">{t("Ingliz tili")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Roboto texnika">{t("Roboto texnika")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Rus tili">{t("Rus tili")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Turk tili">{t("Turk tili")}</SelectItem>
+				  <SelectItem disabled={isLoading} value="Mental arifmetika">{t("Mental arifmetika")}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -119,13 +134,13 @@ function ContactForm() {
         />
 
         <Button
-          className="w-fit"
+          className="w-full bw-button-solid text-[15px] py-6 mt-6 uppercase tracking-wider font-black flex items-center justify-center gap-2"
           size={"lg"}
           type="submit"
           disabled={isLoading}
         >
-          <span>Send</span>
-          <Send className="w-4 h-4 ml-2" />
+          <span>{t("btnSend")}</span>
+          <Send className="w-5 h-5 ml-2" />
         </Button>
       </form>
     </Form>
