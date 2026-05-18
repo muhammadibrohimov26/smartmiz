@@ -1,5 +1,7 @@
 "use server";
 
+// Telegram Bot Action handler for contact form submissions
+
 export async function sendContactMessage(values: {
   name: string;
   tel: string;
