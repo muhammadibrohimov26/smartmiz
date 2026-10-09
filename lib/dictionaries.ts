@@ -167,7 +167,12 @@ export const dictionaries = {
     levelA2: "A2 — Elementar",
     levelB1: "B1 — O'rta",
     levelB2: "B2 — Yuqori O'rta",
-    levelC1: "C1 — Ilg'or"
+    levelC1: "C1 — Ilg'or",
+    contactTitle: "Aloqa",
+    contactHeading: "Smartmiz bilan bog'lanish",
+    contactDesc: "Kurslarimiz haqida ko'proq ma'lumot olish uchun telefon raqamingizni qoldiring",
+    contactFormTitle: "Ariza qoldirish",
+    contactMapTitle: "Bizning manzil"
   },
   ru: {
     heroTag: "Образование будущего теперь в Smartmiz",
@@ -332,7 +337,12 @@ export const dictionaries = {
     levelA2: "A2 — Элементарный",
     levelB1: "B1 — Средний",
     levelB2: "B2 — Выше среднего",
-    levelC1: "C1 — Продвинутый"
+    levelC1: "C1 — Продвинутый",
+    contactTitle: "Контакты",
+    contactHeading: "Связаться со Smartmiz",
+    contactDesc: "Оставьте свой номер телефона, чтобы узнать больше о наших курсах",
+    contactFormTitle: "Оставить заявку",
+    contactMapTitle: "Наш адрес"
   },
   en: {
     heroTag: "Future education is now at Smartmiz",
@@ -500,7 +510,12 @@ export const dictionaries = {
     levelA2: "A2 — Elementary",
     levelB1: "B1 — Intermediate",
     levelB2: "B2 — Upper-Intermediate",
-    levelC1: "C1 — Advanced"
+    levelC1: "C1 — Advanced",
+    contactTitle: "Contact",
+    contactHeading: "Contact Smartmiz",
+    contactDesc: "Leave your phone number to learn more about our courses",
+    contactFormTitle: "Contact form",
+    contactMapTitle: "Our location"
   },
   tr: {
     heroTag: "Geleceğin Eğitimi Şimdi Smartmiz'de",
@@ -668,7 +683,12 @@ export const dictionaries = {
     levelA2: "A2 — Temel",
     levelB1: "B1 — Orta",
     levelB2: "B2 — Orta Üstü",
-    levelC1: "C1 — İleri"
+    levelC1: "C1 — İleri",
+    contactTitle: "İletişim",
+    contactHeading: "Smartmiz ile iletişime geçin",
+    contactDesc: "Kurslarımız hakkında daha fazla bilgi almak için telefon numaranızı bırakın",
+    contactFormTitle: "Başvuru formu",
+    contactMapTitle: "Adresimiz"
   },
   ko: {
     heroTag: "미래의 교육은 이제 Smartmiz에서",
@@ -836,7 +856,12 @@ export const dictionaries = {
     levelA2: "A2 — 기초",
     levelB1: "B1 — 중급",
     levelB2: "B2 — 중상급",
-    levelC1: "C1 — 고급"
+    levelC1: "C1 — 고급",
+    contactTitle: "문의",
+    contactHeading: "Smartmiz에 문의하기",
+    contactDesc: "과정에 대해 더 알아보려면 전화번호를 남겨주세요",
+    contactFormTitle: "신청서",
+    contactMapTitle: "오시는 길"
   },
   ar: {
     heroTag: "تعليم المستقبل الآن في Smartmiz",
@@ -1004,6 +1029,11 @@ export const dictionaries = {
     levelA2: "A2 — أساسي",
     levelB1: "B1 — متوسط",
     levelB2: "B2 — فوق المتوسط",
-    levelC1: "C1 — متقدم"
+    levelC1: "C1 — متقدم",
+    contactTitle: "اتصل بنا",
+    contactHeading: "تواصل مع Smartmiz",
+    contactDesc: "اترك رقم هاتفك لمعرفة المزيد عن دوراتنا",
+    contactFormTitle: "نموذج التواصل",
+    contactMapTitle: "موقعنا"
   }
 };

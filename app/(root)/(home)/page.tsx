@@ -1,12 +1,11 @@
 "use client";
 
-import { Price } from "@/app/service/server";
+import { Price } from "@/types";
 import { useEffect, useState } from "react";
 import CardItems from "../_components/cardItems";
 import LoaderPage from "../_components/loader";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { Locale } from "@/lib/dictionaries";
 import Link from "next/link";
 import CourseQuiz from "../_components/courseQuiz";
 import VocabGame from "../_components/vocabGame";
@@ -14,7 +13,7 @@ import FAQ from "../_components/faq";
 
 function Homepage() {
   const [prices, setPrices] = useState<Price[]>([]);
-  const { t, locale, setLocale } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetch("/db.json")
@@ -23,7 +22,6 @@ function Homepage() {
       .catch((err) => console.error("Xatolik:", err));
   }, []);
 
-  const changeLang = (lang: Locale) => setLocale(lang);
 
   const scrollToCourses = () => {
     document.getElementById("courses-section")?.scrollIntoView({ behavior: "smooth" });

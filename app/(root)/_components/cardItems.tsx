@@ -1,7 +1,8 @@
 "use client";
 
-import { Price } from "@/app/service/server"
+import { Price } from "@/types"
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 
@@ -22,10 +23,12 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                     >
                         {/* Course Image & Hero Area */}
                         <div className="relative h-60 w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
-                            <img 
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                                src={price.image} 
-                                alt={price.courseName} 
+                            <Image
+                                fill
+                                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                src={price.image}
+                                alt={price.courseName}
                             />
                         </div>
 

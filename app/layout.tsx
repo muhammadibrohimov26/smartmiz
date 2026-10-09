@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
 function RootLayout({ children }: ChildProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="uz" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -77,7 +77,7 @@ function RootLayout({ children }: ChildProps) {
           }}
         />
       </head>
-      <body className={` owerflow-x-hidden`}>
+      <body className="overflow-x-hidden">
         <LanguageProvider>
           <ThemeProvider attribute="class"
             defaultTheme="dark"
