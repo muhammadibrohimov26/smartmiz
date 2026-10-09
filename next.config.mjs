@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['avatars.mds.yandex.net'],
-      },
+        remotePatterns: [
+            { protocol: 'https', hostname: 'idyllic-sprite-7cad0a.netlify.app' },
+        ],
+    },
 };
 
 export default nextConfig;

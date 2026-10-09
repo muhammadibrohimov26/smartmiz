@@ -4,6 +4,7 @@ import { useTranslation } from "@/context/LanguageContext";
 import { useEffect, useState } from "react";
 import { Trophy, Star, Quote, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NewsItem {
   id: string;
@@ -90,8 +91,8 @@ function NewsPage() {
               {/* Card Header */}
               <div className="relative p-6 pb-4">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-14 h-14 rounded-2xl border-3 border-zinc-900 dark:border-zinc-700 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0">
-                    <img src={item.image} alt={item.course} className="w-full h-full object-contain p-2" />
+                  <div className="relative w-14 h-14 rounded-2xl border-3 border-zinc-900 dark:border-zinc-700 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0">
+                    <Image fill sizes="56px" src={item.image} alt={item.course} className="object-contain p-2" />
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${courseColors[item.course] || "bg-zinc-800"}`}>
