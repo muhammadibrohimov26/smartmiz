@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Images are uploaded by the server (Admin SDK) and served through
+// download-token URLs, so the browser needs no direct access.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

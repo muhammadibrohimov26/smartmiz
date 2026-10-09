@@ -18,18 +18,18 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                 {prices.map((price, index) => (
                     <div 
-                        key={index} 
+                        key={price.id ?? index} 
                         className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
                     >
                         {/* Course Image & Hero Area */}
                         <div className="relative h-60 w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
-                            <Image
+                            {price.image && <Image
                                 fill
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 src={price.image}
                                 alt={price.courseName}
-                            />
+                            />}
                         </div>
 
                         {/* Card Body */}
