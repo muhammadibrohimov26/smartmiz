@@ -1,16 +1,12 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { Timestamp } from "firebase-admin/firestore";
 import { adminDb, isFirebaseConfigured } from "@/lib/firebase/admin";
 import { Lead, NewsItem, Price } from "@/types";
+// Bundled into the server code, so the fallback also works in serverless functions
+import localCourses from "@/public/db.json";
+import localNews from "@/public/news.json";
 
 // Data access for courses, results (news) and leads.
 // Without Firebase env vars the public pages read the bundled JSON files.
-
-async function readPublicJson<T>(file: string): Promise<T> {
-  const raw = await fs.readFile(path.join(process.cwd(), "public", file), "utf8");
-  return JSON.parse(raw) as T;
-}
 
 function toIso(value: unknown): string {
   if (value instanceof Timestamp) return value.toDate().toISOString();
@@ -18,7 +14,7 @@ function toIso(value: unknown): string {
 }
 
 export async function getCourses(): Promise<Price[]> {
-  if (!isFirebaseConfigured()) return readPublicJson<Price[]>("db.json");
+  if (!isFirebaseConfigured()) return localCourses as Price[];
 
   const snap = await adminDb().collection("courses").orderBy("createdAt", "asc").get();
   return snap.docs.map((doc) => {
@@ -37,7 +33,7 @@ export async function getCourses(): Promise<Price[]> {
 }
 
 export async function getNews(): Promise<NewsItem[]> {
-  if (!isFirebaseConfigured()) return readPublicJson<NewsItem[]>("news.json");
+  if (!isFirebaseConfigured()) return localNews as NewsItem[];
 
   const snap = await adminDb().collection("news").orderBy("date", "desc").get();
   return snap.docs.map((doc) => {
