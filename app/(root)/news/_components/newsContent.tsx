@@ -4,6 +4,7 @@ import { useTranslation } from "@/context/LanguageContext";
 import { Trophy, Star, Quote, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Flag from "@/components/shared/flag";
 import { NewsItem } from "@/types";
 
 
@@ -50,8 +51,8 @@ function NewsPage({ news }: { news: NewsItem[] }) {
       {news.length > 0 && (
       <div className="grid grid-cols-3 gap-4 mb-16">
         {[
-          { label: "IELTS 7+", count: "23", icon: "🇬🇧" },
-          { label: "TOPIK 4-6", count: "47", icon: "🇰🇷" },
+          { label: "IELTS 7+", count: "23", icon: <Flag code="gb" className="w-8 mx-auto rounded-sm" /> },
+          { label: "TOPIK 4-6", count: "47", icon: <Flag code="kr" className="w-8 mx-auto rounded-sm border border-zinc-200" /> },
           { label: "CEFR C1+", count: "31", icon: "🌍" },
         ].map((stat) => (
           <div key={stat.label} className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl p-4 text-center hover:shadow-[3px_3px_0px_0px_rgba(255,184,0,1)] transition-all duration-300">

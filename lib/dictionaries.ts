@@ -20,7 +20,7 @@ export const dictionaries = {
     btnSend: "Jo'natish",
     loading: "Kuting...",
     successMsg: "Muvaffaqiyatli jo'natildi!",
-    errorMsg: "Xatolik yuz berdi!",
+    errorMsg: "Xatolik yuz berdi. Iltimos, +998 73 244 13 33 raqamiga qo'ng'iroq qiling.",
     footerRights: "Smartmiz. Barcha huquqlar himoyalangan.",
     // Course Mappings
     "Koreys tili": "Koreys tili",
@@ -167,7 +167,7 @@ export const dictionaries = {
     btnSend: "Отправить",
     loading: "Загрузка...",
     successMsg: "Успешно отправлено!",
-    errorMsg: "Произошла ошибка!",
+    errorMsg: "Произошла ошибка. Пожалуйста, позвоните по номеру +998 73 244 13 33.",
     footerRights: "Smartmiz. Все права защищены.",
     // Course Mappings
     "Koreys tili": "Корейский язык",
@@ -311,7 +311,7 @@ export const dictionaries = {
     btnSend: "Send",
     loading: "Loading...",
     successMsg: "Successfully sent!",
-    errorMsg: "Something went wrong!",
+    errorMsg: "Something went wrong. Please call us at +998 73 244 13 33.",
     footerRights: "Smartmiz. All rights reserved.",
     // Course Mappings
     "Koreys tili": "Korean Language",
@@ -458,7 +458,7 @@ export const dictionaries = {
     btnSend: "Gönder",
     loading: "Bekleyin...",
     successMsg: "Başarıyla gönderildi!",
-    errorMsg: "Bir hata oluştu!",
+    errorMsg: "Bir hata oluştu. Lütfen +998 73 244 13 33 numarasını arayın.",
     footerRights: "Smartmiz. Tüm hakları saklıdır.",
     // Course Mappings
     "Koreys tili": "Korece",
@@ -605,7 +605,7 @@ export const dictionaries = {
     btnSend: "보내기",
     loading: "대기 중...",
     successMsg: "성공적으로 전송되었습니다!",
-    errorMsg: "오류가 발생했습니다!",
+    errorMsg: "오류가 발생했습니다. +998 73 244 13 33 번호로 전화해 주세요.",
     footerRights: "Smartmiz. 판권 소유.",
     // Course Mappings
     "Koreys tili": "한국어",
@@ -752,7 +752,7 @@ export const dictionaries = {
     btnSend: "إرسال",
     loading: "انتظر...",
     successMsg: "تم الإرسال بنجاح!",
-    errorMsg: "حدث خطأ!",
+    errorMsg: "حدث خطأ. يرجى الاتصال على الرقم ⁦+998 73 244 13 33⁩.",
     footerRights: "Smartmiz. جميع الحقوق محفوظة.",
     // Course Mappings
     "Koreys tili": "اللغة الكورية",

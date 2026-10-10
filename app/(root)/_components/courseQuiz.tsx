@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "@/context/LanguageContext";
 import { ArrowRight, RotateCcw, CheckCircle2, Sparkles, Trophy, BookOpen, Phone } from "lucide-react";
 import Link from "next/link";
+import Flag from "@/components/shared/flag";
 
 type Answer = string | null;
 
@@ -11,7 +12,7 @@ interface QuizResult {
   course: string;
   formValue: string; // contact-form course value (see courseLabel in lib/courses.ts)
   description: string;
-  icon: string;
+  icon: React.ReactNode;
   color: string;
 }
 
@@ -74,10 +75,10 @@ export default function CourseQuiz() {
     const courseKey = resultMap[dir]?.[age]?.[goal] ?? "Ingliz tili";
 
     const resultData: Record<string, QuizResult> = {
-      "IELTS":             { course: "IELTS",                  formValue: "Ingliz tili — IELTS", description: t("quizResultIELTS"),   icon: "🇬🇧", color: "from-blue-500 to-blue-700" },
+      "IELTS":             { course: "IELTS",                  formValue: "Ingliz tili — IELTS", description: t("quizResultIELTS"),   icon: <Flag code="gb" className="w-14 rounded-md shadow" />, color: "from-blue-500 to-blue-700" },
       "CEFR C1":           { course: "CEFR C1",                formValue: "Ingliz tili — CEFR",  description: t("quizResultCEFR"),    icon: "🌍", color: "from-purple-500 to-purple-700" },
-      "Koreys tili":       { course: t("Koreys tili"),         formValue: "Koreys tili",         description: t("quizResultKorean"),  icon: "🇰🇷", color: "from-red-500 to-red-700" },
-      "Ingliz tili":       { course: t("Ingliz tili"),         formValue: "Ingliz tili",         description: t("quizResultEnglish"), icon: "🇬🇧", color: "from-indigo-500 to-indigo-700" },
+      "Koreys tili":       { course: t("Koreys tili"),         formValue: "Koreys tili",         description: t("quizResultKorean"),  icon: <Flag code="kr" className="w-14 rounded-md shadow" />, color: "from-red-500 to-red-700" },
+      "Ingliz tili":       { course: t("Ingliz tili"),         formValue: "Ingliz tili",         description: t("quizResultEnglish"), icon: <Flag code="gb" className="w-14 rounded-md shadow" />, color: "from-indigo-500 to-indigo-700" },
       "Kompyuter kursi":   { course: t("Kompyuter kursi"),     formValue: "Kompyuter kursi",     description: t("quizResultPC"),      icon: "💻", color: "from-emerald-500 to-emerald-700" },
       "Robototexnika":     { course: t("Robototexnika"),       formValue: "Robototexnika",       description: t("quizResultRobot"),   icon: "🤖", color: "from-orange-500 to-orange-700" },
       "Mental arifmetika": { course: t("Mental arifmetika"),   formValue: "Mental arifmetika",   description: t("quizResultMath"),    icon: "🧠", color: "from-pink-500 to-pink-700" },
