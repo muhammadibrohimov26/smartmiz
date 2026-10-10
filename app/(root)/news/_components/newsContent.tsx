@@ -13,7 +13,7 @@ const courseColors: Record<string, string> = {
   "CEFR": "bg-purple-500",
   "EPS-TOPIK": "bg-emerald-500",
   "C1 Rus tili": "bg-orange-500",
-  "Roboto texnika": "bg-yellow-500",
+  "Robototexnika": "bg-yellow-500",
 };
 
 function NewsPage({ news }: { news: NewsItem[] }) {
@@ -37,7 +37,17 @@ function NewsPage({ news }: { news: NewsItem[] }) {
         </p>
       </div>
 
-      {/* STATS BAR */}
+      {/* EMPTY STATE */}
+      {news.length === 0 && (
+        <div className="max-w-xl mx-auto mb-16 p-10 text-center bg-white dark:bg-zinc-900 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-3xl">
+          <Trophy className="w-10 h-10 mx-auto mb-4 yellow-accent" />
+          <h2 className="text-2xl font-black bw-text uppercase tracking-tight mb-2">{t("newsEmptyTitle")}</h2>
+          <p className="text-zinc-500 dark:text-zinc-400 font-medium">{t("newsEmptyDesc")}</p>
+        </div>
+      )}
+
+      {/* STATS BAR — hardcoded totals, hidden until real results are published */}
+      {news.length > 0 && (
       <div className="grid grid-cols-3 gap-4 mb-16">
         {[
           { label: "IELTS 7+", count: "23", icon: "🇬🇧" },
@@ -51,6 +61,7 @@ function NewsPage({ news }: { news: NewsItem[] }) {
           </div>
         ))}
       </div>
+      )}
 
       {/* SUCCESS CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

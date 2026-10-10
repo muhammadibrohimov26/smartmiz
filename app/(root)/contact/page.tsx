@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getCourses } from '@/lib/data'
 import ContactContent from './_components/contactContent'
 
 export const metadata: Metadata = {
@@ -6,8 +7,12 @@ export const metadata: Metadata = {
 	description: "Smartmiz o'quv markazi bilan bog'lanish uchun biz bilan telefon yoki e-mail orqali aloqa qiling.",
 }
 
-function ContactPage() {
-	return <ContactContent />
+// Re-rendered on demand when a course is changed in the admin panel
+export const revalidate = 3600
+
+async function ContactPage() {
+	const courses = await getCourses()
+	return <ContactContent courses={courses} />
 }
 
 export default ContactPage

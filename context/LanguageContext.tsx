@@ -35,7 +35,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = (key: string): string => {
     const dict = dictionaries[locale] as Record<string, string>;
-    return dict[key] || key; // Return translation or fallback to the key itself
+    // Data (e.g. Firestore) may use ‘ ’ ʻ ʼ where the dictionary keys use '
+    return dict[key] || dict[key.replace(/[‘’ʻʼ`]/g, "'")] || key; // fallback: the key itself
   };
 
   return (

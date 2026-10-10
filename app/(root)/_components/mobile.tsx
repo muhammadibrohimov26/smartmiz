@@ -10,7 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
 import { Locale } from "@/lib/dictionaries";
-import ChegirmaPanel from './chegirma';
 import ModeToogle from "@/components/shared/mode-toggle";
 
 const Mobile = () => {
@@ -110,8 +109,6 @@ const Mobile = () => {
             )}
           </div>
 
-          {/* Discount Panel Button */}
-          <ChegirmaPanel onClose={() => setIsOpen(false)} />
         </SheetContent>
       </Sheet>
     </div>

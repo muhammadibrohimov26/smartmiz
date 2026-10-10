@@ -143,7 +143,7 @@
 	  gap: 1rem;
   }
   .logo{
-	height: 38px;
+	height: 48px;
 	width: auto;
 	object-fit: contain;
 	/* Invert in light mode so white logo is visible on light backgrounds */
@@ -188,7 +188,7 @@
 			align-items: flex-start;
 		  }
 		  .logo{
-			height: 30px;
+			height: 40px;
 			width: auto;
 		  }
 		

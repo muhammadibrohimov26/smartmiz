@@ -9,6 +9,7 @@ type Answer = string | null;
 
 interface QuizResult {
   course: string;
+  formValue: string; // contact-form course value (see courseLabel in lib/courses.ts)
   description: string;
   icon: string;
   color: string;
@@ -22,13 +23,13 @@ const resultMap: Record<string, Record<string, Record<string, string>>> = {
     adult:  { abroad: "IELTS", certificate: "CEFR C1", career: "Koreys tili" },
   },
   computer: {
-    child:  { abroad: "Roboto texnika", certificate: "Kompyuter kursi", career: "Kompyuter kursi" },
+    child:  { abroad: "Robototexnika", certificate: "Kompyuter kursi", career: "Kompyuter kursi" },
     teen:   { abroad: "Kompyuter kursi", certificate: "Kompyuter kursi", career: "Kompyuter kursi" },
     adult:  { abroad: "Kompyuter kursi", certificate: "Kompyuter kursi", career: "Kompyuter kursi" },
   },
   children: {
-    child:  { abroad: "Mental arifmetika", certificate: "Mental arifmetika", career: "Roboto texnika" },
-    teen:   { abroad: "Roboto texnika",    certificate: "Roboto texnika",    career: "Roboto texnika" },
+    child:  { abroad: "Mental arifmetika", certificate: "Mental arifmetika", career: "Robototexnika" },
+    teen:   { abroad: "Robototexnika",    certificate: "Robototexnika",    career: "Robototexnika" },
     adult:  { abroad: "Ingliz tili",       certificate: "IELTS",             career: "Koreys tili" },
   },
 };
@@ -73,13 +74,13 @@ export default function CourseQuiz() {
     const courseKey = resultMap[dir]?.[age]?.[goal] ?? "Ingliz tili";
 
     const resultData: Record<string, QuizResult> = {
-      "IELTS":             { course: "IELTS Pro",          description: t("quizResultIELTS"),    icon: "🇬🇧", color: "from-blue-500 to-blue-700" },
-      "CEFR C1":           { course: "CEFR C1",            description: t("quizResultCEFR"),     icon: "🌍", color: "from-purple-500 to-purple-700" },
-      "Koreys tili":       { course: t("Koreys tili"),     description: t("quizResultKorean"),   icon: "🇰🇷", color: "from-red-500 to-red-700" },
-      "Ingliz tili":       { course: t("Ingliz tili"),     description: t("quizResultEnglish"),  icon: "🇬🇧", color: "from-indigo-500 to-indigo-700" },
-      "Kompyuter kursi":   { course: t("Kompyuter kursi"), description: t("quizResultPC"),       icon: "💻", color: "from-emerald-500 to-emerald-700" },
-      "Roboto texnika":    { course: t("Roboto texnika"),  description: t("quizResultRobot"),    icon: "🤖", color: "from-orange-500 to-orange-700" },
-      "Mental arifmetika": { course: t("Mental arifmetika"), description: t("quizResultMath"),  icon: "🧠", color: "from-pink-500 to-pink-700" },
+      "IELTS":             { course: "IELTS",                  formValue: "Ingliz tili — IELTS", description: t("quizResultIELTS"),   icon: "🇬🇧", color: "from-blue-500 to-blue-700" },
+      "CEFR C1":           { course: "CEFR C1",                formValue: "Ingliz tili — CEFR",  description: t("quizResultCEFR"),    icon: "🌍", color: "from-purple-500 to-purple-700" },
+      "Koreys tili":       { course: t("Koreys tili"),         formValue: "Koreys tili",         description: t("quizResultKorean"),  icon: "🇰🇷", color: "from-red-500 to-red-700" },
+      "Ingliz tili":       { course: t("Ingliz tili"),         formValue: "Ingliz tili",         description: t("quizResultEnglish"), icon: "🇬🇧", color: "from-indigo-500 to-indigo-700" },
+      "Kompyuter kursi":   { course: t("Kompyuter kursi"),     formValue: "Kompyuter kursi",     description: t("quizResultPC"),      icon: "💻", color: "from-emerald-500 to-emerald-700" },
+      "Robototexnika":     { course: t("Robototexnika"),       formValue: "Robototexnika",       description: t("quizResultRobot"),   icon: "🤖", color: "from-orange-500 to-orange-700" },
+      "Mental arifmetika": { course: t("Mental arifmetika"),   formValue: "Mental arifmetika",   description: t("quizResultMath"),    icon: "🧠", color: "from-pink-500 to-pink-700" },
     };
 
     return resultData[courseKey] ?? resultData["Ingliz tili"];
@@ -208,7 +209,7 @@ export default function CourseQuiz() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href={`/contact?course=${encodeURIComponent(result.course)}`}
+              href={`/contact?course=${encodeURIComponent(result.formValue)}`}
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bw-button-solid font-black text-sm uppercase tracking-wider"
             >
               <Phone className="w-4 h-4" />
