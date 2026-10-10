@@ -11,14 +11,23 @@ function getAdminApp(): App | null {
 
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY
+    ?.trim()
+    .replace(/^"|"$/g, "") // hosting dashboards keep quotes pasted from .env files
+    .replace(/\\n/g, "\n");
 
   if (!projectId || !clientEmail || !privateKey) return null;
 
-  return initializeApp({
-    credential: cert({ projectId, clientEmail, privateKey }),
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  });
+  try {
+    return initializeApp({
+      credential: cert({ projectId, clientEmail, privateKey }),
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    });
+  } catch (error) {
+    // A bad key must not take the whole site down — callers fall back
+    console.error("Firebase Admin init failed (check FIREBASE_* env vars):", error);
+    return null;
+  }
 }
 
 export function isFirebaseConfigured() {

@@ -5,13 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { Clock, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
+import { courseLabel, formatHours } from "@/lib/courses";
 
 interface PricesItemProps{
     prices: Price[]
 }
 
 const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
 
     return (
         <div className="mt-12 container mx-auto mb-16 px-4">
@@ -65,7 +66,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                 </div>
                                 <div className="flex items-center gap-1.5 text-xs bg-yellow-500 text-black font-extrabold px-3.5 py-2 rounded-xl shadow-md shadow-yellow-500/10">
                                     <Clock className="w-3.5 h-3.5" />
-                                    <span>{price.courseTime} {t("courseTime")}</span>
+                                    <span>{formatHours(price.courseTime, locale)} {t("courseTime")}</span>
                                 </div>
                             </div>
 
@@ -80,7 +81,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                             <div className="mt-auto">
                                 <Link 
                                     className="w-full py-4 px-6 bg-black dark:bg-white text-white dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-500 hover:text-black dark:hover:text-black font-bold flex items-center justify-center gap-2 rounded-2xl transition-all duration-300 tracking-wide text-sm shadow-lg shadow-black/5 dark:shadow-white/5 active:scale-[0.98]" 
-                                    href={`/contact?course=${encodeURIComponent(price.courseName)}`}
+                                    href={`/contact?course=${encodeURIComponent(courseLabel(price))}`}
                                 >
                                     <Phone className="w-4 h-4" />
                                     {t("btnEnroll")}

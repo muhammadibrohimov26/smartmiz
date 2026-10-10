@@ -5,7 +5,7 @@ import { ensureAdminPage } from "@/lib/auth";
 
 async function AdminDashboard() {
   await ensureAdminPage();
-  const [courses, news, leads] = await Promise.all([getCourses(), getNews(), getLeads()]);
+  const [courses, news, leads] = await Promise.all([getCourses({ strict: true }), getNews({ strict: true }), getLeads()]);
   const newLeads = leads.filter((l) => l.status === "new").length;
 
   const cards = [

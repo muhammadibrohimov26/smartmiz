@@ -4,7 +4,7 @@ import CourseManager from "../../_components/courseManager";
 
 async function AdminCoursesPage() {
   await ensureAdminPage();
-  const courses = await getCourses();
+  const courses = await getCourses({ strict: true });
   return <CourseManager courses={courses} />;
 }
 

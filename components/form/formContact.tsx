@@ -2,6 +2,8 @@
 
 import { sendContactMessage } from "@/lib/actions";
 import { contactSchema } from "@/lib/validation";
+import { courseLabel, translatedCourseLabel, uniqueCourses } from "@/lib/courses";
+import { Price } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -16,7 +18,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
+  useFormField,
 } from "../ui/form";
 import { Input } from "../ui/input";
 import {
@@ -27,11 +29,35 @@ import {
   SelectValue,
 } from "../ui/select";
 
-function ContactForm() {
+// Schema messages are dictionary keys (see lib/validation.ts)
+function TranslatedFormMessage() {
+  const { error, formMessageId } = useFormField();
+  const { t } = useTranslation();
+  if (!error?.message) return null;
+  return (
+    <p id={formMessageId} className="text-sm font-medium text-destructive">
+      {t(String(error.message))}
+    </p>
+  );
+}
+
+const inputClass =
+  "rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6";
+
+function ContactForm({ courses }: { courses: Price[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const courseParam = searchParams.get("course");
   const { t } = useTranslation();
+
+  const options = uniqueCourses(courses).map((c) => ({
+    value: courseLabel(c),
+    label: translatedCourseLabel(c, t),
+  }));
+  // Keep a course passed in the link even if it is not in the list (e.g. renamed later)
+  if (courseParam && !options.some((o) => o.value === courseParam)) {
+    options.unshift({ value: courseParam, label: t(courseParam) });
+  }
 
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
@@ -54,7 +80,7 @@ function ContactForm() {
     const promise = sendContactMessage(values)
       .then((res) => {
         if (!res.success) throw new Error(res.error);
-        form.reset();
+        form.reset({ tel: "", name: "", kurs: "" });
       })
       .finally(() => setIsLoading(false));
 
@@ -67,7 +93,7 @@ function ContactForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel" noValidate>
         <FormField
           control={form.control}
           name="tel"
@@ -75,15 +101,18 @@ function ContactForm() {
             <FormItem>
               <FormControl>
                 <Input
-                  className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6"
+                  className={inputClass}
                   type="tel"
                   inputMode="tel"
-                  placeholder={t("contactPhone")}
+                  autoComplete="tel"
+                  required
+                  aria-required="true"
+                  placeholder={`${t("contactPhone")} *`}
                   disabled={isLoading}
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <TranslatedFormMessage />
             </FormItem>
           )}
         />
@@ -93,14 +122,17 @@ function ContactForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input 
-                  className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6"
-                  placeholder={t("contactName")} 
-                  disabled={isLoading} 
-                  {...field} 
+                <Input
+                  className={inputClass}
+                  autoComplete="name"
+                  required
+                  aria-required="true"
+                  placeholder={`${t("contactName")} *`}
+                  disabled={isLoading}
+                  {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <TranslatedFormMessage />
             </FormItem>
           )}
         />
@@ -110,26 +142,20 @@ function ContactForm() {
           name="kurs"
           render={({ field }) => (
             <FormItem>
-              {/* <FormLabel>Email</FormLabel> */}
-              <Select onValueChange={field.onChange} value={field.value || ""} key={field.value || "empty"}>
+              <Select onValueChange={field.onChange} value={field.value || ""} key={field.value || "empty"} disabled={isLoading}>
                 <FormControl>
-                  <SelectTrigger className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus:ring-1 focus:ring-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6">
-                    <SelectValue placeholder={t("contactCourse")} />
+                  <SelectTrigger aria-required="true" className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus:ring-1 focus:ring-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6">
+                    <SelectValue placeholder={`${t("contactCourse")} *`} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="rounded-xl border-gray-200 dark:border-zinc-800 font-medium bg-white dark:bg-zinc-900 shadow-lg">
-                  <SelectItem disabled={isLoading} value="Koreys tili">{t("Koreys tili")}</SelectItem>
-                  <SelectItem disabled={isLoading} value="Kompyuter kursi">{t("Kompyuter kursi")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Arab tili">{t("Arab tili")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Ingliz tili">{t("Ingliz tili")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Roboto texnika">{t("Roboto texnika")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Rus tili">{t("Rus tili")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Turk tili">{t("Turk tili")}</SelectItem>
-				  <SelectItem disabled={isLoading} value="Mental arifmetika">{t("Mental arifmetika")}</SelectItem>
+                  {options.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
-              <FormMessage />
+              <TranslatedFormMessage />
             </FormItem>
           )}
         />

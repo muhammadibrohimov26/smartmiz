@@ -2,38 +2,12 @@
 
 import { useTranslation } from "@/context/LanguageContext";
 import { Award, Users, BookOpen, Play, CheckCircle2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Price } from "@/types";
+import { translatedCourseLabel, uniqueCourses } from "@/lib/courses";
 
-function AboutContent() {
+function AboutContent({ courses }: { courses: Price[] }) {
   const { t, locale } = useTranslation();
-  const [courseCount, setCourseCount] = useState<number>(0);
-
-  useEffect(() => {
-    fetch("/db.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setCourseCount(data.length);
-        }
-      })
-      .catch((err) => console.error("Error fetching courses count:", err));
-  }, []);
-
-  const activeCourses = [
-    "Ingliz tili",
-    "Rus tili",
-    "Koreys tili",
-    "Turk tili",
-    "Arab tili",
-    "Kompyuter kursi",
-    "Roboto texnika",
-    "Mental arifmetika",
-    "IELTS",
-    "CEFR",
-    "C1",
-    "Topic 1,2",
-    "EPS"
-  ];
+  const activeCourses = uniqueCourses(courses).map((c) => translatedCourseLabel(c, t));
 
   return (
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto px-4 mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -73,7 +47,7 @@ function AboutContent() {
             <BookOpen className="w-6 h-6 text-[#FFB800]" />
           </div>
           <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">
-            {courseCount || 14}{locale === "uz" ? " ta" : locale === "ko" ? "개" : ""}
+            {activeCourses.length}{locale === "uz" ? " ta" : locale === "ko" ? "개" : ""}
           </h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats3Label")}</p>
         </div>
@@ -140,7 +114,7 @@ function AboutContent() {
               className="px-4 py-2 border-2 border-zinc-900 dark:border-zinc-800 rounded-full bg-zinc-50 dark:bg-zinc-950 font-extrabold text-sm bw-text hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors shadow-[1px_1px_0px_0px_rgba(255,184,0,1)] flex items-center gap-1.5"
             >
               <div className="w-2 h-2 rounded-full bg-[#FFB800]"></div>
-              <span>{t(course)}</span>
+              <span>{course}</span>
             </div>
           ))}
         </div>

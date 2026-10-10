@@ -5,8 +5,9 @@ import { Suspense } from 'react'
 import { Dot, Home, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslation } from '@/context/LanguageContext'
+import { Price } from '@/types'
 
-function ContactContent() {
+function ContactContent({ courses }: { courses: Price[] }) {
 	const { t } = useTranslation()
 
 	return (
@@ -49,7 +50,7 @@ function ContactContent() {
 				<div>
 					<h1 className='text-4xl font-creteRound mb-4'>{t('contactFormTitle')}</h1>
 					<Suspense fallback={<div>{t('loading')}</div>}>
-						<FormContact/>
+						<FormContact courses={courses} />
 					</Suspense>
 				</div>
 			</div>

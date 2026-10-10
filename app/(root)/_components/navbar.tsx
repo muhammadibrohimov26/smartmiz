@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navLink } from "../../../constants"
 import Mobile from "./mobile"
-import ChegirmaPanel from "./chegirma"
 import { useTranslation } from "@/context/LanguageContext"
 import { Globe, ChevronDown } from "lucide-react"
 import { Locale } from "@/lib/dictionaries"
@@ -90,9 +89,6 @@ const Navbar = () => {
               </div>
 
               <ModeToogle />
-              <div className="hidden md:block flex items-center">
-                <ChegirmaPanel />
-              </div>
               <Mobile/>
             </div>
     </div>

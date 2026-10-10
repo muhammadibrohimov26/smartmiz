@@ -94,6 +94,11 @@ function str(formData: FormData, key: string) {
 
 // ---------- Courses ----------
 
+// Every public page that shows the course list
+function revalidateCoursePages() {
+  for (const path of ["/", "/about", "/contact", "/admin/courses"]) revalidatePath(path);
+}
+
 export async function saveCourse(formData: FormData): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
@@ -117,8 +122,7 @@ export async function saveCourse(formData: FormData): Promise<ActionResult> {
     if (id) await col.doc(id).update(data);
     else await col.add({ ...data, createdAt: FieldValue.serverTimestamp() });
 
-    revalidatePath("/");
-    revalidatePath("/admin/courses");
+    revalidateCoursePages();
   });
 }
 
@@ -126,8 +130,7 @@ export async function deleteCourse(id: string): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
     await adminDb().collection("courses").doc(id).delete();
-    revalidatePath("/");
-    revalidatePath("/admin/courses");
+    revalidateCoursePages();
   });
 }
 
