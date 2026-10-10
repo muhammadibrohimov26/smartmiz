@@ -81,7 +81,7 @@ function AboutContent({ courses }: { courses: Price[] }) {
           className="lg:col-span-5 relative group border-4 border-zinc-950 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)] bg-zinc-950 flex flex-col items-center justify-center p-8 text-center min-h-[300px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(255,184,0,1)]"
         >
           {/* Background image overlay */}
-          <div className="absolute inset-0 opacity-40 bg-[url('https://idyllic-sprite-7cad0a.netlify.app/img/bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"></div>
+          <div className="absolute inset-0 opacity-40 bg-[url('/og.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-0"></div>
 
           {/* Card Content */}

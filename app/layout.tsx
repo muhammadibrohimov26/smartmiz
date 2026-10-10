@@ -28,7 +28,8 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://smartmiz.uz',
     locale: 'uz_UZ',
-    images: 'https://idyllic-sprite-7cad0a.netlify.app/img/bg.png',
+    // Served from this site (smartmiz.uz redirects to www, so link the final URL)
+    images: [{ url: 'https://www.smartmiz.uz/og.png', width: 640, height: 283, alt: "Smartmiz o'quv markazi" }],
     countryName: 'Uzbekistan',
     siteName: 'Smartmiz',
     emails: 'muhammadibrohimov0306@gmail.com',
