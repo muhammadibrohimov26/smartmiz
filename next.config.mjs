@@ -3,7 +3,6 @@ const nextConfig = {
     images: {
         // Keep in sync with IMAGE_HOSTS in lib/images.ts
         remotePatterns: [
-            { protocol: 'https', hostname: 'idyllic-sprite-7cad0a.netlify.app' },
             { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
         ],
     },
