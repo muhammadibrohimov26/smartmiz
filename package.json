@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "set-admin": "node --env-file=.env.local scripts/set-admin.mjs",
+    "seed": "node --env-file=.env.local scripts/seed-firestore.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -17,6 +19,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^13.0.0",
+    "firebase-admin": "^14.5.0",
     "lucide-react": "^0.436.0",
     "next": "^14.2.33",
     "next-themes": "^0.3.0",

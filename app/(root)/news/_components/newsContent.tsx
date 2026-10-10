@@ -1,21 +1,11 @@
 "use client";
 
 import { useTranslation } from "@/context/LanguageContext";
-import { useEffect, useState } from "react";
 import { Trophy, Star, Quote, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { NewsItem } from "@/types";
 
-interface NewsItem {
-  id: string;
-  name: string;
-  course: string;
-  result: string;
-  score: string;
-  image: string;
-  date: string;
-  quote: string;
-}
 
 const courseColors: Record<string, string> = {
   "IELTS": "bg-blue-500",
@@ -26,20 +16,8 @@ const courseColors: Record<string, string> = {
   "Roboto texnika": "bg-yellow-500",
 };
 
-function NewsPage() {
+function NewsPage({ news }: { news: NewsItem[] }) {
   const { t } = useTranslation();
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/news.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setNews(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
 
   return (
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto px-4 mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -75,64 +53,56 @@ function NewsPage() {
       </div>
 
       {/* SUCCESS CARDS */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-64 bg-zinc-100 dark:bg-zinc-900 rounded-3xl animate-pulse" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {news.map((item) => (
-            <div
-              key={item.id}
-              className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:-translate-y-1 flex flex-col"
-            >
-              {/* Card Header */}
-              <div className="relative p-6 pb-4">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="relative w-14 h-14 rounded-2xl border-3 border-zinc-900 dark:border-zinc-700 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0">
-                    <Image fill sizes="56px" src={item.image} alt={item.course} className="object-contain p-2" />
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${courseColors[item.course] || "bg-zinc-800"}`}>
-                      {t(item.course)}
-                    </span>
-                    <div className="flex items-center gap-1 text-zinc-400 text-xs">
-                      <Calendar className="w-3 h-3" />
-                      <span>{new Date(item.date).toLocaleDateString("uz-UZ")}</span>
-                    </div>
-                  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {news.map((item) => (
+          <div
+            key={item.id}
+            className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:-translate-y-1 flex flex-col"
+          >
+            {/* Card Header */}
+            <div className="relative p-6 pb-4">
+              <div className="flex items-start justify-between mb-4">
+                <div className="relative w-14 h-14 rounded-2xl border-3 border-zinc-900 dark:border-zinc-700 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0">
+                  {item.image && <Image fill sizes="56px" src={item.image} alt={item.course} className="object-contain p-2" />}
                 </div>
-
-                {/* Name & Result */}
-                <h3 className="font-black text-lg bw-text mb-1">{item.name}</h3>
-                <div className="flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-[#FFB800]" />
-                  <span className="font-bold text-sm text-[#FFB800]">{t(item.result)}</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${courseColors[item.course] || "bg-zinc-800"}`}>
+                    {t(item.course)}
+                  </span>
+                  <div className="flex items-center gap-1 text-zinc-400 text-xs">
+                    <Calendar className="w-3 h-3" />
+                    <span>{new Date(item.date).toLocaleDateString("uz-UZ")}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Quote */}
-              <div className="px-6 pb-6 flex-1 flex flex-col justify-between">
-                <div className="relative bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
-                  <Quote className="w-4 h-4 text-[#FFB800] mb-2 opacity-60" />
-                  <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium italic">
-                    {t(item.quote)}
-                  </p>
-                </div>
-
-                {/* Stars */}
-                <div className="flex items-center gap-0.5 mt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#FFB800] text-[#FFB800]" />
-                  ))}
-                </div>
+              {/* Name & Result */}
+              <h3 className="font-black text-lg bw-text mb-1">{item.name}</h3>
+              <div className="flex items-center gap-2">
+                <Trophy className="w-4 h-4 text-[#FFB800]" />
+                <span className="font-bold text-sm text-[#FFB800]">{t(item.result)}</span>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+
+            {/* Quote */}
+            <div className="px-6 pb-6 flex-1 flex flex-col justify-between">
+              <div className="relative bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
+                <Quote className="w-4 h-4 text-[#FFB800] mb-2 opacity-60" />
+                <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium italic">
+                  {t(item.quote)}
+                </p>
+              </div>
+
+              {/* Stars */}
+              <div className="flex items-center gap-0.5 mt-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-[#FFB800] text-[#FFB800]" />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* CTA */}
       <div className="mt-16 text-center bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
