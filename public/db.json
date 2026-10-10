@@ -5,7 +5,7 @@
     "coursePrice": 750,
     "courseChegirma": 650,
     "courseType": "IT",
-    "image":"https://idyllic-sprite-7cad0a.netlify.app/img/robot.png",
+    "image":"/img/robot.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -16,7 +16,7 @@
     "coursePrice": 450,
     "courseChegirma": 400,
     "courseType": "Koreys tili",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/kores.png",
+    "image": "/img/kores.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -27,7 +27,7 @@
     "coursePrice": 570,
     "courseChegirma": 500,
     "courseType": "Kompyuter",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/Kompyuter.png",
+    "image": "/img/kompyuter.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -38,7 +38,7 @@
     "coursePrice": 450,
     "courseChegirma": 400,
     "courseType": "General",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/inglis.png",
+    "image": "/img/inglis.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -52,7 +52,7 @@
     "coursePrice": 450,
     "courseChegirma": 400,
     "courseType": "Rus tili",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/rus.png",
+    "image": "/img/rus.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -63,7 +63,7 @@
     "coursePrice": 420,
     "courseChegirma": 380,
     "courseType": "Arab tili",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/arab.png",
+    "image": "/img/arab.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -76,7 +76,7 @@
     "coursePrice": 570,
     "courseChegirma": 500,
     "courseType": "IELTS",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/ielts.png",
+    "image": "/img/ielts.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -87,7 +87,7 @@
     "coursePrice": 570,
     "courseChegirma": 500,
     "courseType": "CEFR",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cefr.png",
+    "image": "/img/cefr.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -100,7 +100,7 @@
     "coursePrice": 420,
     "courseChegirma": 380,
     "courseType": "Turk tili",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/turk.png",
+    "image": "/img/turk.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -112,7 +112,7 @@
     "coursePrice": 740,
     "courseChegirma": 640,
     "courseType": "C1",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/c1.png",
+    "image": "/img/c1.png",
     "courseTime": "2",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -124,7 +124,7 @@
     "coursePrice": 570,
     "courseChegirma": 500,
     "courseType": "So'zlashuv",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/cs%20soz.png",
+    "image": "/img/cs-soz.png",
     "courseTime": "2",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -135,7 +135,7 @@
     "coursePrice": 420,
     "courseChegirma": 380,
     "courseType": "Mental arifmetika",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/mentall.png",
+    "image": "/img/mentall.png",
     "courseTime": "1",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -146,7 +146,7 @@
     "coursePrice": 600,
     "courseChegirma": 550,
     "courseType": "Topic 1,2",
-    "image": "https://idyllic-sprite-7cad0a.netlify.app/img/topik.png",
+    "image": "/img/topik.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0
@@ -157,7 +157,7 @@
     "coursePrice": 450,
     "courseChegirma": 400,
     "courseType": "EPS",
-    "image":"https://idyllic-sprite-7cad0a.netlify.app/img/eps.png",
+    "image":"/img/eps.png",
     "courseTime": "1.5",
     "chegirma": "Chegirma: 10 kun ichida to'lov amalga oshirilsa",
     "__v": 0

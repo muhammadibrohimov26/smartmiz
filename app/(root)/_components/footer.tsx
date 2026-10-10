@@ -13,13 +13,13 @@ function Footer() {
         </div>
         <div className="flex gap-6">
           <a target='_blank' href="https://www.instagram.com/smartmiz_fergana" className="hover:scale-110 hover:brightness-110 transition-transform">
-            <img src="https://idyllic-sprite-7cad0a.netlify.app/img/instagram.png" alt="Instagram" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <img src="/img/instagram.png" alt="Instagram" className="w-6 h-6 grayscale hover:grayscale-0" />
           </a>
           <a target='_blank' href="https://t.me/Smartmiz" className="hover:scale-110 hover:brightness-110 transition-transform">
-            <img src="https://idyllic-sprite-7cad0a.netlify.app/img/telegram.png" alt="Telegram" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <img src="/img/telegram.png" alt="Telegram" className="w-6 h-6 grayscale hover:grayscale-0" />
           </a>
           <a target='_blank' href="https://www.youtube.com/@smartmizoquvmarkazi7835" className="hover:scale-110 hover:brightness-110 transition-transform">
-             <img src="https://idyllic-sprite-7cad0a.netlify.app/img/youtube.png" alt="Youtube" className="w-6 h-6 grayscale hover:grayscale-0" />
+             <img src="/img/youtube.png" alt="Youtube" className="w-6 h-6 grayscale hover:grayscale-0" />
           </a>
         </div>
       </div>

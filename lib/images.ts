@@ -7,6 +7,8 @@ export const IMAGE_HOSTS = [
 
 export function isAllowedImageUrl(url: string) {
   if (!url) return true;
+  // Files in /public, e.g. "/img/robot.png"
+  if (/^\/[\w\-./]+\.(png|jpe?g|webp|gif|svg)$/i.test(url) && !url.includes("..")) return true;
   try {
     const { protocol, hostname } = new URL(url);
     return protocol === "https:" && IMAGE_HOSTS.includes(hostname);
