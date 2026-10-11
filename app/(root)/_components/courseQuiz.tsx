@@ -48,6 +48,12 @@ const alternatives: Record<string, string[]> = {
   "Mental arifmetika": ["Robototexnika", "Kompyuter kursi", "Ingliz tili"],
 };
 
+// Young children (not in the computer direction): fall back to English, not the computer course
+const youngChildAlternatives: Record<string, string[]> = {
+  "Mental arifmetika": ["Robototexnika", "Ingliz tili"],
+  "Robototexnika":     ["Mental arifmetika", "Ingliz tili"],
+};
+
 export default function CourseQuiz({ courses }: { courses: Price[] }) {
   const { t } = useTranslation();
   const [step, setStep] = useState(0); // 0=intro, 1,2,3=questions, 4=result
@@ -101,7 +107,7 @@ export default function CourseQuiz({ courses }: { courses: Price[] }) {
     const available = new Set(courses.map(courseLabel));
     const isAvailable = (key: string) => resultData[key] && available.has(resultData[key].formValue);
     const pick =
-      [courseKey, ...(alternatives[courseKey] ?? [])].find(isAvailable) ??
+      [courseKey, ...((dir !== "computer" && age === "child" && youngChildAlternatives[courseKey]) || alternatives[courseKey] || [])].find(isAvailable) ??
       Object.keys(resultData).find(isAvailable) ??
       "Ingliz tili";
 
