@@ -167,7 +167,7 @@ function ContactForm({ courses }: { courses: Price[] }) {
           disabled={isLoading}
         >
           <span>{t("btnSend")}</span>
-          <Send className="w-5 h-5 ml-2" />
+          <Send className="w-5 h-5 ms-2 rtl:-scale-x-100" />
         </Button>
       </form>
     </Form>

@@ -48,7 +48,7 @@ function HomeContent({ prices }: { prices: Price[] }) {
               className="px-8 py-4 bw-button-solid font-bold text-lg flex items-center justify-center gap-2 group"
             >
               {t("btnCourses")}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 transition-transform" />
             </button>
             <Link 
               href="/contact" 

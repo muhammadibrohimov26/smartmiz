@@ -150,7 +150,7 @@ export default function CourseQuiz({ courses }: { courses: Price[] }) {
             className="inline-flex items-center gap-2 px-8 py-4 bw-button-solid font-black text-lg uppercase tracking-wider group"
           >
             {t("quizStart")}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 transition-transform" />
           </button>
         </div>
       )}
@@ -204,7 +204,7 @@ export default function CourseQuiz({ courses }: { courses: Price[] }) {
             className="w-full py-4 bw-button-solid font-black text-base uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed group"
           >
             {step === 3 ? t("quizFinish") : t("quizNext")}
-            <ArrowRight className="w-5 h-5 group-enabled:group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5 h-5 group-enabled:group-hover:translate-x-1 rtl:rotate-180 rtl:group-enabled:group-hover:-translate-x-1 transition-transform" />
           </button>
         </div>
       )}

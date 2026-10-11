@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { dictionaries, Locale } from "@/lib/dictionaries";
 import { yearVars } from "@/lib/years";
+import { usePathname } from "next/navigation";
 
 interface LanguageContextType {
   locale: Locale;
@@ -11,6 +12,13 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+const PAGE_TITLE_KEYS: Record<string, string> = {
+  "/": "pageTitleHome",
+  "/about": "pageTitleAbout",
+  "/news": "pageTitleNews",
+  "/contact": "pageTitleContact",
+};
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("uz");
@@ -28,6 +36,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
   }, [locale]);
+
+  // Translate the browser tab title. The server only knows the Uzbek title (used for SEO),
+  // since the locale lives in localStorage.
+  const pathname = usePathname();
+  useEffect(() => {
+    const key = PAGE_TITLE_KEYS[pathname];
+    const title = key && (dictionaries[locale] as Record<string, string>)[key];
+    if (title) document.title = title;
+  }, [locale, pathname]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);

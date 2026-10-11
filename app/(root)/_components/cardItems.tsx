@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Clock, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseLabel, formatHours } from "@/lib/courses";
+import { formatPrice } from "@/lib/numbers";
 
 interface PricesItemProps{
     prices: Price[]
@@ -43,7 +44,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                 {price.chegirma && (
                                     <span className="flex items-center gap-1 text-[9px] uppercase tracking-widest font-black bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-md border border-yellow-500/20">
                                         <Sparkles className="w-2.5 h-2.5" />
-                                        PROMO
+                                        {t("promoBadge")}
                                     </span>
                                 )}
                             </div>
@@ -56,11 +57,11 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                             <div className="flex justify-between items-center mb-6 rounded-2xl bg-gray-50 dark:bg-zinc-900/30 p-4 border border-gray-100 dark:border-zinc-900/50">
                                 <div>
                                     <p className="text-2xl font-black text-gray-900 dark:text-white">
-                                        {price.courseChegirma} <span className="text-xs font-medium text-gray-400">{t("courseCurrency")}</span>
+                                        {formatPrice(price.courseChegirma, locale)} <span className="text-xs font-medium text-gray-400">{t("courseCurrency")}</span>
                                     </p>
                                     {price.coursePrice && (
                                         <p className="text-xs font-bold line-through text-gray-400 dark:text-zinc-500 mt-0.5">
-                                            {price.coursePrice} {t("courseCurrency")}
+                                            {formatPrice(price.coursePrice, locale)} {t("courseCurrency")}
                                         </p>
                                     )}
                                 </div>

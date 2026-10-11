@@ -2,7 +2,7 @@
 
 import FormContact from '@/components/form/formContact'
 import { Suspense } from 'react'
-import { Dot, Home, Phone } from 'lucide-react'
+import { Clock, Dot, Home, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslation } from '@/context/LanguageContext'
 import { Price } from '@/types'
@@ -44,6 +44,10 @@ function ContactContent({ courses }: { courses: Price[] }) {
 					<div className='flex items-center gap-3 mt-2'>
 						<Phone className='w-4 h-4' />
 						<p className='text-sm'> <a href="tel:+998732440099" dir='ltr'>+998 73 244 00 99</a> </p>
+					</div>
+					<div className='flex items-center gap-3 mt-2'>
+						<Clock className='w-4 h-4' />
+						<p className='text-sm'>{t('footerHours')}</p>
 					</div>
 				</div>
 
