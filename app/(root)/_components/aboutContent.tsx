@@ -4,6 +4,7 @@ import { useTranslation } from "@/context/LanguageContext";
 import { Award, Users, BookOpen, Play, CheckCircle2 } from "lucide-react";
 import { Price } from "@/types";
 import { translatedCourseLabel, uniqueCourses } from "@/lib/courses";
+import { FOUNDING_YEAR, currentYear } from "@/lib/years";
 
 function AboutContent({ courses }: { courses: Price[] }) {
   const { t, locale } = useTranslation();
@@ -61,7 +62,7 @@ function AboutContent({ courses }: { courses: Price[] }) {
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
           <div>
             <h2 className="text-2xl md:text-3xl font-black bw-text uppercase tracking-tight mb-4">
-              SMARTMIZ 2016 - 2026
+              SMARTMIZ {FOUNDING_YEAR} - {currentYear()}
             </h2>
             <p className="text-zinc-600 dark:text-zinc-300 text-base md:text-lg leading-relaxed font-semibold">
               {t("aboutHistory")}

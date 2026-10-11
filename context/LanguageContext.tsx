@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { dictionaries, Locale } from "@/lib/dictionaries";
+import { yearVars } from "@/lib/years";
 
 interface LanguageContextType {
   locale: Locale;
@@ -36,7 +37,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const t = (key: string): string => {
     const dict = dictionaries[locale] as Record<string, string>;
     // Data (e.g. Firestore) may use ‘ ’ ʻ ʼ where the dictionary keys use '
-    return dict[key] || dict[key.replace(/[‘’ʻʼ`]/g, "'")] || key; // fallback: the key itself
+    const text = dict[key] || dict[key.replace(/[‘’ʻʼ`]/g, "'")] || key; // fallback: the key itself
+    // Fill {years}, {yearsWord}, {foundedYear}, {currentYear}
+    const vars: Record<string, string | number> = yearVars(locale);
+    return text.replace(/\{(\w+)\}/g, (match, name) => String(vars[name] ?? match));
   };
 
   return (

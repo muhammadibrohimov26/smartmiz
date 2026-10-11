@@ -1,12 +1,17 @@
 import { Metadata } from "next";
 import { getCourses } from "@/lib/data";
+import { yearsActive } from "@/lib/years";
 import AboutContent from "../_components/aboutContent";
 
-export const metadata: Metadata = {
-  title: "Biz haqimizda - Smartmiz o'quv markazi",
-  description: "Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. 10 yillik ta'lim tajribasi va 18 000 dan ortiq muvaffaqiyatli bitiruvchilar.",
-  keywords: "Smartmiz haqida, Smartmiz tarixi, Smartmiz o'quv markazi jamoasi, Farg'ona chet tillari maktabi, Smartmiz yutuqlari, o'quv markazi tarixi, 10 yillik tajriba, Farg'ona o'quv markazlari"
-};
+// A function (not a constant) so the years are recomputed on every regeneration
+export function generateMetadata(): Metadata {
+  const years = yearsActive();
+  return {
+    title: "Biz haqimizda - Smartmiz o'quv markazi",
+    description: `Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. ${years} yillik ta'lim tajribasi va 18 000 dan ortiq muvaffaqiyatli bitiruvchilar.`,
+    keywords: `Smartmiz haqida, Smartmiz tarixi, Smartmiz o'quv markazi jamoasi, Farg'ona chet tillari maktabi, Smartmiz yutuqlari, o'quv markazi tarixi, ${years} yillik tajriba, Farg'ona o'quv markazlari`,
+  };
+}
 
 // Re-rendered on demand when a course is changed in the admin panel
 export const revalidate = 3600;
