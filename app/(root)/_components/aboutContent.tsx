@@ -94,7 +94,7 @@ function AboutContent({ courses }: { courses: Price[] }) {
                 {t("aboutVideoBtn")}
               </h4>
               <p className="text-zinc-400 text-xs font-bold uppercase tracking-widest">
-                Instagram video • 9 Yillik Tarix
+                Instagram video • {t("aboutVideoCaption")}
               </p>
             </div>
           </div>
