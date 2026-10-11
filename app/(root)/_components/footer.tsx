@@ -2,14 +2,12 @@
 
 import { Clock, MapPin, Phone } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
+import { branches } from "@/constants";
 
 const phones = [
   { href: "tel:+998732441333", label: "+998 73 244 13 33" },
   { href: "tel:+998732440099", label: "+998 73 244 00 99" },
 ];
-
-const mapUrl =
-  "https://maps.google.com/?q=Smartmiz%20O'quv%20Markazi,%20Qomus%20ko'chasi%2053,%20Farg'ona";
 
 function Footer() {
   const { t } = useTranslation();
@@ -29,15 +27,22 @@ function Footer() {
               ))}
             </div>
           </div>
-          <a
-            href={mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-start gap-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
-          >
+          <div className="flex items-start gap-2.5">
             <MapPin className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
-            <span>{t("footerAddress")}</span>
-          </a>
+            <div className="flex flex-col gap-1">
+              {branches.map((b) => (
+                <a
+                  key={b.house}
+                  href={b.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-zinc-950 dark:hover:text-white transition-colors"
+                >
+                  {t("footerAddress", { house: b.house })}
+                </a>
+              ))}
+            </div>
+          </div>
           <div className="flex items-start gap-2.5">
             <Clock className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
             <span>{t("footerHours")}</span>

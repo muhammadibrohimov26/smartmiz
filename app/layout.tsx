@@ -51,13 +51,10 @@ function RootLayout({ children }: ChildProps) {
               "url": "https://smartmiz.uz",
               "logo": "https://smartmiz.uz/SMARTMIZ.jpg",
               "description": "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Qomus ko'chasi 53",
-                "addressLocality": "Fergana",
-                "addressRegion": "Fergana Region",
-                "addressCountry": "UZ"
-              },
+              "address": [
+                { "@type": "PostalAddress", "streetAddress": "Qomus ko'chasi 44", "addressLocality": "Fergana", "addressRegion": "Fergana Region", "addressCountry": "UZ" },
+                { "@type": "PostalAddress", "streetAddress": "Qomus ko'chasi 53", "addressLocality": "Fergana", "addressRegion": "Fergana Region", "addressCountry": "UZ" }
+              ],
               "openingHours": "Mo-Sa 08:00-19:00",
               "contactPoint": [
                 {

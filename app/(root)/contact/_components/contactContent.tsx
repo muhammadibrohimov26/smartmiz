@@ -2,7 +2,8 @@
 
 import FormContact from '@/components/form/formContact'
 import { Suspense } from 'react'
-import { Clock, Dot, Home, Phone } from 'lucide-react'
+import { Clock, Dot, Home, MapPin, Phone } from 'lucide-react'
+import { branches } from '@/constants'
 import Link from 'next/link'
 import { useTranslation } from '@/context/LanguageContext'
 import { Price } from '@/types'
@@ -45,6 +46,12 @@ function ContactContent({ courses }: { courses: Price[] }) {
 						<Phone className='w-4 h-4' />
 						<p className='text-sm'> <a href="tel:+998732440099" dir='ltr'>+998 73 244 00 99</a> </p>
 					</div>
+					{branches.map((b) => (
+						<div key={b.house} className='flex items-center gap-3 mt-2'>
+							<MapPin className='w-4 h-4' />
+							<a href={b.mapUrl} target='_blank' rel='noopener noreferrer' className='text-sm hover:underline'>{t('footerAddress', { house: b.house })}</a>
+						</div>
+					))}
 					<div className='flex items-center gap-3 mt-2'>
 						<Clock className='w-4 h-4' />
 						<p className='text-sm'>{t('footerHours')}</p>
