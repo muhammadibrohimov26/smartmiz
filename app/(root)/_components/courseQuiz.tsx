@@ -5,6 +5,8 @@ import { useTranslation } from "@/context/LanguageContext";
 import { ArrowRight, RotateCcw, CheckCircle2, Sparkles, Trophy, BookOpen, Phone } from "lucide-react";
 import Link from "next/link";
 import Flag from "@/components/shared/flag";
+import { courseLabel } from "@/lib/courses";
+import { Price } from "@/types";
 
 type Answer = string | null;
 
@@ -35,7 +37,18 @@ const resultMap: Record<string, Record<string, Record<string, string>>> = {
   },
 };
 
-export default function CourseQuiz() {
+// If the recommended course is not on the site, try these instead (in order)
+const alternatives: Record<string, string[]> = {
+  "IELTS":             ["CEFR C1", "Ingliz tili"],
+  "CEFR C1":           ["IELTS", "Ingliz tili"],
+  "Ingliz tili":       ["IELTS", "CEFR C1"],
+  "Koreys tili":       ["Ingliz tili", "IELTS"],
+  "Kompyuter kursi":   ["Robototexnika"],
+  "Robototexnika":     ["Kompyuter kursi", "Mental arifmetika"],
+  "Mental arifmetika": ["Robototexnika", "Kompyuter kursi", "Ingliz tili"],
+};
+
+export default function CourseQuiz({ courses }: { courses: Price[] }) {
   const { t } = useTranslation();
   const [step, setStep] = useState(0); // 0=intro, 1,2,3=questions, 4=result
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
@@ -84,7 +97,15 @@ export default function CourseQuiz() {
       "Mental arifmetika": { course: t("Mental arifmetika"),   formValue: "Mental arifmetika",   description: t("quizResultMath"),    icon: "🧠", color: "from-pink-500 to-pink-700" },
     };
 
-    return resultData[courseKey] ?? resultData["Ingliz tili"];
+    // Only recommend courses that are actually listed on the site
+    const available = new Set(courses.map(courseLabel));
+    const isAvailable = (key: string) => resultData[key] && available.has(resultData[key].formValue);
+    const pick =
+      [courseKey, ...(alternatives[courseKey] ?? [])].find(isAvailable) ??
+      Object.keys(resultData).find(isAvailable) ??
+      "Ingliz tili";
+
+    return resultData[pick];
   };
 
   const handleNext = () => {

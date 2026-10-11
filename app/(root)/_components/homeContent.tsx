@@ -77,7 +77,7 @@ function HomeContent({ prices }: { prices: Price[] }) {
         {/* INTERACTIVE COURSE recommendation QUIZ */}
         <div className="py-24 border-t-2 border-zinc-100 dark:border-zinc-800">
           <div className="p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
-            <CourseQuiz />
+            <CourseQuiz courses={prices} />
           </div>
         </div>
 
