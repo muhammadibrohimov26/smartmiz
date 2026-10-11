@@ -192,3 +192,23 @@ export async function deleteLead(id: string): Promise<ActionResult> {
     revalidatePath("/admin");
   });
 }
+
+// ---------- Site settings ----------
+
+export async function saveSettings(formData: FormData): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+
+    const studentCount = Number(str(formData, "studentCount").replace(/\D/g, ""));
+    if (!Number.isInteger(studentCount) || studentCount <= 0 || studentCount > 10_000_000) {
+      throw new Error("O'quvchilar sonini to'g'ri kiriting");
+    }
+
+    await adminDb().collection("settings").doc("site").set(
+      { studentCount, updatedAt: FieldValue.serverTimestamp() },
+      { merge: true }
+    );
+
+    for (const path of ["/about", "/news", "/admin/settings"]) revalidatePath(path);
+  });
+}

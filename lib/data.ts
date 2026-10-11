@@ -1,4 +1,4 @@
-import { Lead, NewsItem, Price } from "@/types";
+import { Lead, NewsItem, Price, SiteSettings } from "@/types";
 // Bundled into the server code, so the fallback also works in serverless functions
 import localCourses from "@/public/db.json";
 import localNews from "@/public/news.json";
@@ -88,4 +88,18 @@ export async function getLeads(): Promise<Lead[]> {
       createdAt: toIso(d.createdAt),
     };
   });
+}
+
+// ---------- Site settings (admin panel → Sozlamalar) ----------
+
+export const DEFAULT_STUDENT_COUNT = 18000;
+
+export async function getSiteSettings(options: Options = {}): Promise<SiteSettings> {
+  return withFallback<SiteSettings>(async () => {
+    const db = await firestore();
+    if (!db) return null;
+    const doc = await db.collection("settings").doc("site").get();
+    const count = Number(doc.get("studentCount"));
+    return { studentCount: Number.isFinite(count) && count > 0 ? count : DEFAULT_STUDENT_COUNT };
+  }, { studentCount: DEFAULT_STUDENT_COUNT }, options);
 }

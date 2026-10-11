@@ -5,9 +5,11 @@ import { Award, Users, BookOpen, Play, CheckCircle2 } from "lucide-react";
 import { Price } from "@/types";
 import { translatedCourseLabel, uniqueCourses } from "@/lib/courses";
 import { FOUNDING_YEAR, currentYear } from "@/lib/years";
+import { formatCount } from "@/lib/numbers";
 
-function AboutContent({ courses }: { courses: Price[] }) {
+function AboutContent({ courses, studentCount }: { courses: Price[]; studentCount: number }) {
   const { t, locale } = useTranslation();
+  const vars = { students: formatCount(studentCount, locale) };
   const activeCourses = uniqueCourses(courses).map((c) => translatedCourseLabel(c, t));
 
   return (
@@ -38,7 +40,7 @@ function AboutContent({ courses }: { courses: Price[] }) {
           <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30">
             <Users className="w-6 h-6 text-[#FFB800]" />
           </div>
-          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">{t("aboutStats2")}</h3>
+          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">{t("aboutStats2", vars)}</h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats2Label")}</p>
         </div>
 
@@ -65,7 +67,7 @@ function AboutContent({ courses }: { courses: Price[] }) {
               SMARTMIZ {FOUNDING_YEAR} - {currentYear()}
             </h2>
             <p className="text-zinc-600 dark:text-zinc-300 text-base md:text-lg leading-relaxed font-semibold">
-              {t("aboutHistory")}
+              {t("aboutHistory", vars)}
             </p>
           </div>
           <div className="w-full h-1 bg-zinc-100 dark:bg-zinc-800 my-6"></div>

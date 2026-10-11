@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, ExternalLink, Inbox, LayoutDashboard, LogOut, Trophy } from "lucide-react";
+import { BookOpen, ExternalLink, Inbox, LayoutDashboard, LogOut, Settings, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "../actions";
 
@@ -11,6 +11,7 @@ const links = [
   { href: "/admin/courses", label: "Kurslar", icon: BookOpen },
   { href: "/admin/news", label: "Natijalar", icon: Trophy },
   { href: "/admin/leads", label: "Arizalar", icon: Inbox },
+  { href: "/admin/settings", label: "Sozlamalar", icon: Settings },
 ];
 
 function AdminNav({ email }: { email: string }) {

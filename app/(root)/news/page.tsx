@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getNews } from "@/lib/data";
+import { getNews, getSiteSettings } from "@/lib/data";
 import NewsContent from "./_components/newsContent";
 
 export const metadata: Metadata = {
@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 async function NewsPage() {
-  const news = await getNews();
-  return <NewsContent news={news} />;
+  const [news, settings] = await Promise.all([getNews(), getSiteSettings()]);
+  return <NewsContent news={news} studentCount={settings.studentCount} />;
 }
 
 export default NewsPage;

@@ -5,6 +5,7 @@ import { Trophy, Star, Quote, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Flag from "@/components/shared/flag";
+import { formatCount } from "@/lib/numbers";
 import { NewsItem } from "@/types";
 
 
@@ -17,8 +18,8 @@ const courseColors: Record<string, string> = {
   "Robototexnika": "bg-yellow-500",
 };
 
-function NewsPage({ news }: { news: NewsItem[] }) {
-  const { t } = useTranslation();
+function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: number }) {
+  const { t, locale } = useTranslation();
 
   return (
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto px-4 mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -122,7 +123,7 @@ function NewsPage({ news }: { news: NewsItem[] }) {
           {t("newsCtaTitle1")} <span className="yellow-accent">{t("newsCtaTitle2")}</span> {t("newsCtaTitle3")}
         </h2>
         <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-8 max-w-xl mx-auto">
-          {t("newsCtaDesc")}
+          {t("newsCtaDesc", { students: formatCount(studentCount, locale) })}
         </p>
         <Link
           href="/contact"

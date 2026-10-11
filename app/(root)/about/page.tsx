@@ -1,14 +1,16 @@
 import { Metadata } from "next";
-import { getCourses } from "@/lib/data";
+import { getCourses, getSiteSettings } from "@/lib/data";
+import { formatCount } from "@/lib/numbers";
 import { yearsActive } from "@/lib/years";
 import AboutContent from "../_components/aboutContent";
 
 // A function (not a constant) so the years are recomputed on every regeneration
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
   const years = yearsActive();
+  const students = formatCount((await getSiteSettings()).studentCount, "uz");
   return {
     title: "Biz haqimizda - Smartmiz o'quv markazi",
-    description: `Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. ${years} yillik ta'lim tajribasi va 18 000 dan ortiq muvaffaqiyatli bitiruvchilar.`,
+    description: `Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. ${years} yillik ta'lim tajribasi va ${students} dan ortiq muvaffaqiyatli bitiruvchilar.`,
     keywords: `Smartmiz haqida, Smartmiz tarixi, Smartmiz o'quv markazi jamoasi, Farg'ona chet tillari maktabi, Smartmiz yutuqlari, o'quv markazi tarixi, ${years} yillik tajriba, Farg'ona o'quv markazlari`,
   };
 }
@@ -17,8 +19,8 @@ export function generateMetadata(): Metadata {
 export const revalidate = 3600;
 
 async function AboutPage() {
-  const courses = await getCourses();
-  return <AboutContent courses={courses} />;
+  const [courses, settings] = await Promise.all([getCourses(), getSiteSettings()]);
+  return <AboutContent courses={courses} studentCount={settings.studentCount} />;
 }
 
 export default AboutPage;

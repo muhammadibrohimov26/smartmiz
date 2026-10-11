@@ -34,3 +34,7 @@ export interface Lead {
     status: LeadStatus
     createdAt: string
 }
+
+export interface SiteSettings {
+    studentCount: number
+}
