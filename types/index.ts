@@ -37,4 +37,5 @@ export interface Lead {
 
 export interface SiteSettings {
     studentCount: number
+    aboutVideoUrl: string
 }

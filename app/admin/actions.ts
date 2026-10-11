@@ -7,6 +7,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { adminAuth, adminBucket, adminDb } from "@/lib/firebase/admin";
 import { requireAdmin, SESSION_COOKIE, SESSION_MAX_AGE_MS } from "@/lib/auth";
 import { isAllowedImageUrl } from "@/lib/images";
+import { isValidVideoUrl } from "@/lib/video";
 import { LeadStatus } from "@/types";
 
 type ActionResult = { success: true } | { success: false; error: string };
@@ -204,8 +205,13 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
       throw new Error("O'quvchilar sonini to'g'ri kiriting");
     }
 
+    const aboutVideoUrl = str(formData, "aboutVideoUrl");
+    if (!isValidVideoUrl(aboutVideoUrl)) {
+      throw new Error("Video havolasi https:// bilan boshlanishi kerak");
+    }
+
     await adminDb().collection("settings").doc("site").set(
-      { studentCount, updatedAt: FieldValue.serverTimestamp() },
+      { studentCount, aboutVideoUrl, updatedAt: FieldValue.serverTimestamp() },
       { merge: true }
     );
 

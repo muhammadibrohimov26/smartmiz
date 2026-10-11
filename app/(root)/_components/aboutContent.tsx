@@ -6,8 +6,9 @@ import { Price } from "@/types";
 import { translatedCourseLabel, uniqueCourses } from "@/lib/courses";
 import { FOUNDING_YEAR, currentYear } from "@/lib/years";
 import { formatCount } from "@/lib/numbers";
+import { videoPlatform } from "@/lib/video";
 
-function AboutContent({ courses, studentCount }: { courses: Price[]; studentCount: number }) {
+function AboutContent({ courses, studentCount, videoUrl }: { courses: Price[]; studentCount: number; videoUrl: string }) {
   const { t, locale } = useTranslation();
   const vars = { students: formatCount(studentCount, locale) };
   const activeCourses = uniqueCourses(courses).map((c) => translatedCourseLabel(c, t));
@@ -80,7 +81,8 @@ function AboutContent({ courses, studentCount }: { courses: Price[]; studentCoun
         {/* Video Embed Play Teaser Card */}
         <a 
           target="_blank" 
-          href="https://www.instagram.com/tv/CazdM-nFCUF/?igsh=eWdscjR0OXMwcHEx"
+          href={videoUrl}
+          rel="noopener noreferrer"
           className="lg:col-span-5 relative group border-4 border-zinc-950 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)] bg-zinc-950 flex flex-col items-center justify-center p-8 text-center min-h-[300px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(255,184,0,1)]"
         >
           {/* Background image overlay */}
@@ -97,7 +99,7 @@ function AboutContent({ courses, studentCount }: { courses: Price[]; studentCoun
                 {t("aboutVideoBtn")}
               </h4>
               <p className="text-zinc-400 text-xs font-bold uppercase tracking-widest">
-                Instagram video • {t("aboutVideoCaption")}
+                {videoPlatform(videoUrl) ? `${videoPlatform(videoUrl)} video` : "Video"} • {t("aboutVideoCaption")}
               </p>
             </div>
           </div>

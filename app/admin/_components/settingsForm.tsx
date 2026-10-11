@@ -4,6 +4,7 @@ import { FormEvent, useTransition } from "react";
 import { toast } from "sonner";
 import { SiteSettings } from "@/types";
 import { formatCount } from "@/lib/numbers";
+import { videoPlatform } from "@/lib/video";
 import { saveSettings } from "../actions";
 import { Field, PageHeader } from "./fields";
 
@@ -38,6 +39,20 @@ function SettingsForm({ settings }: { settings: SiteSettings }) {
         <p className="-mt-2 text-xs text-zinc-500">
           Saytda &quot;{formatCount(settings.studentCount, "uz")}+&quot; ko&apos;rinishida chiqadi:
           &quot;Biz haqimizda&quot; va &quot;Muvaffaqiyatlar&quot; sahifalarida, barcha tillarda.
+        </p>
+        <Field
+          label={'"Biz haqimizda" sahifasidagi video havolasi'}
+          name="aboutVideoUrl"
+          type="url"
+          defaultValue={settings.aboutVideoUrl}
+          placeholder="https://www.instagram.com/... yoki https://youtu.be/..."
+          required
+        />
+        <p className="-mt-2 text-xs text-zinc-500">
+          Instagram, YouTube yoki boshqa https:// havola. Hozir: {videoPlatform(settings.aboutVideoUrl) || "video"}.{" "}
+          <a href={settings.aboutVideoUrl} target="_blank" rel="noopener noreferrer" className="underline">
+            Videoni ochish
+          </a>
         </p>
         <div className="flex justify-end">
           <button

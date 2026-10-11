@@ -1,4 +1,5 @@
 import { Lead, NewsItem, Price, SiteSettings } from "@/types";
+import { DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 // Bundled into the server code, so the fallback also works in serverless functions
 import localCourses from "@/public/db.json";
 import localNews from "@/public/news.json";
@@ -100,6 +101,10 @@ export async function getSiteSettings(options: Options = {}): Promise<SiteSettin
     if (!db) return null;
     const doc = await db.collection("settings").doc("site").get();
     const count = Number(doc.get("studentCount"));
-    return { studentCount: Number.isFinite(count) && count > 0 ? count : DEFAULT_STUDENT_COUNT };
-  }, { studentCount: DEFAULT_STUDENT_COUNT }, options);
+    const video = String(doc.get("aboutVideoUrl") ?? "");
+    return {
+      studentCount: Number.isFinite(count) && count > 0 ? count : DEFAULT_STUDENT_COUNT,
+      aboutVideoUrl: isValidVideoUrl(video) ? video : DEFAULT_ABOUT_VIDEO_URL,
+    };
+  }, { studentCount: DEFAULT_STUDENT_COUNT, aboutVideoUrl: DEFAULT_ABOUT_VIDEO_URL }, options);
 }
