@@ -22,6 +22,8 @@ export const dictionaries = {
     successMsg: "Muvaffaqiyatli jo'natildi!",
     errorMsg: "Xatolik yuz berdi. Iltimos, +998 73 244 13 33 raqamiga qo'ng'iroq qiling.",
     footerRights: "Smartmiz. Barcha huquqlar himoyalangan.",
+    footerAddress: "Farg'ona sh., Qomus ko'chasi 53",
+    footerHours: "Du–Sha: 8:00–19:00, Yakshanba: dam olish kuni",
     // Course Mappings
     "Koreys tili": "Koreys tili",
     "Kompyuter kursi": "Kompyuter kursi",
@@ -169,6 +171,8 @@ export const dictionaries = {
     successMsg: "Успешно отправлено!",
     errorMsg: "Произошла ошибка. Пожалуйста, позвоните по номеру +998 73 244 13 33.",
     footerRights: "Smartmiz. Все права защищены.",
+    footerAddress: "г. Фергана, ул. Комус, 53",
+    footerHours: "Пн–Сб: 8:00–19:00, Вс: выходной",
     // Course Mappings
     "Koreys tili": "Корейский язык",
     "Kompyuter kursi": "Компьютерные курсы",
@@ -313,6 +317,8 @@ export const dictionaries = {
     successMsg: "Successfully sent!",
     errorMsg: "Something went wrong. Please call us at +998 73 244 13 33.",
     footerRights: "Smartmiz. All rights reserved.",
+    footerAddress: "53 Qomus Street, Fergana",
+    footerHours: "Mon–Sat: 8:00–19:00, Sun: closed",
     // Course Mappings
     "Koreys tili": "Korean Language",
     "Kompyuter kursi": "Computer Courses",
@@ -460,6 +466,8 @@ export const dictionaries = {
     successMsg: "Başarıyla gönderildi!",
     errorMsg: "Bir hata oluştu. Lütfen +998 73 244 13 33 numarasını arayın.",
     footerRights: "Smartmiz. Tüm hakları saklıdır.",
+    footerAddress: "Qomus Caddesi No: 53, Fergana",
+    footerHours: "Pzt–Cmt: 8:00–19:00, Pazar: kapalı",
     // Course Mappings
     "Koreys tili": "Korece",
     "Kompyuter kursi": "Bilgisayar Kursu",
@@ -607,6 +615,8 @@ export const dictionaries = {
     successMsg: "성공적으로 전송되었습니다!",
     errorMsg: "오류가 발생했습니다. +998 73 244 13 33 번호로 전화해 주세요.",
     footerRights: "Smartmiz. 판권 소유.",
+    footerAddress: "페르가나, 코무스 거리 53",
+    footerHours: "월–토: 8:00–19:00, 일요일 휴무",
     // Course Mappings
     "Koreys tili": "한국어",
     "Kompyuter kursi": "컴퓨터 과정",
@@ -754,6 +764,8 @@ export const dictionaries = {
     successMsg: "تم الإرسال بنجاح!",
     errorMsg: "حدث خطأ. يرجى الاتصال على الرقم ⁦+998 73 244 13 33⁩.",
     footerRights: "Smartmiz. جميع الحقوق محفوظة.",
+    footerAddress: "فرغانة، شارع قاموس 53",
+    footerHours: "الاثنين–السبت: 8:00–19:00، الأحد: عطلة",
     // Course Mappings
     "Koreys tili": "اللغة الكورية",
     "Kompyuter kursi": "دورة الكمبيوتر",
