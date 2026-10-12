@@ -20,7 +20,7 @@ export const revalidate = 3600;
 
 async function AboutPage() {
   const [courses, settings] = await Promise.all([getCourses(), getSiteSettings()]);
-  return <AboutContent courses={courses} studentCount={settings.studentCount} videoUrl={settings.aboutVideoUrl} />;
+  return <AboutContent courses={courses} studentCount={settings.studentCount} videoUrl={settings.aboutVideoUrl} videoImage={settings.aboutVideoImage} />;
 }
 
 export default AboutPage;

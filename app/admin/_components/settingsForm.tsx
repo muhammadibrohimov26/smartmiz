@@ -6,7 +6,7 @@ import { SiteSettings } from "@/types";
 import { formatCount } from "@/lib/numbers";
 import { videoPlatform } from "@/lib/video";
 import { saveSettings } from "../actions";
-import { Field, PageHeader } from "./fields";
+import { Field, ImageField, PageHeader } from "./fields";
 
 function SettingsForm({ settings }: { settings: SiteSettings }) {
   const [pending, startTransition] = useTransition();
@@ -54,6 +54,7 @@ function SettingsForm({ settings }: { settings: SiteSettings }) {
             Videoni ochish
           </a>
         </p>
+        <ImageField label="Video kartochkasining fon rasmi" defaultValue={settings.aboutVideoImage} />
         <div className="flex justify-end">
           <button
             type="submit"

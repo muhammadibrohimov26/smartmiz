@@ -69,10 +69,20 @@ async function uploadImage(file: File, folder: string): Promise<string> {
   const filePath = `${folder}/${randomUUID()}.${ext}`;
   const token = randomUUID();
 
-  await bucket.file(filePath).save(Buffer.from(await file.arrayBuffer()), {
-    contentType: file.type,
-    metadata: { metadata: { firebaseStorageDownloadTokens: token } },
-  });
+  try {
+    await bucket.file(filePath).save(Buffer.from(await file.arrayBuffer()), {
+      contentType: file.type,
+      metadata: { metadata: { firebaseStorageDownloadTokens: token } },
+    });
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    const [exists] = await bucket.exists().catch(() => [true]);
+    throw new Error(
+      exists
+        ? "Rasm yuklanmadi. Qaytadan urinib ko'ring yoki rasm havolasini kiriting."
+        : "Rasm yuklanmadi: Firebase Storage yoqilmagan. Hozircha rasm havolasini kiriting."
+    );
+  }
 
   return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filePath)}?alt=media&token=${token}`;
 }
@@ -210,8 +220,11 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
       throw new Error("Video havolasi https:// bilan boshlanishi kerak");
     }
 
+    // Video card background: uploaded file or URL (empty = default image)
+    const aboutVideoImage = await resolveImage(formData, "settings");
+
     await adminDb().collection("settings").doc("site").set(
-      { studentCount, aboutVideoUrl, updatedAt: FieldValue.serverTimestamp() },
+      { studentCount, aboutVideoUrl, aboutVideoImage, updatedAt: FieldValue.serverTimestamp() },
       { merge: true }
     );
 

@@ -20,3 +20,6 @@ export function videoPlatform(url: string) {
   } catch {}
   return "";
 }
+
+// Background image of the video card (a /public path or a Firebase Storage URL)
+export const DEFAULT_ABOUT_VIDEO_IMAGE = "/og.png";

@@ -53,12 +53,12 @@ export function TextArea({ label, name, defaultValue }: { label: string; name: s
 }
 
 // Image either from an uploaded file (stored in Firebase Storage) or an existing URL.
-export function ImageField({ defaultValue }: { defaultValue?: string }) {
+export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: string; label?: string }) {
   const [preview, setPreview] = useState(defaultValue ?? "");
 
   return (
     <div className="space-y-1.5 sm:col-span-2">
-      <Label>Rasm</Label>
+      <Label>{label}</Label>
       <div className="flex gap-4 items-start">
         <div className="w-24 h-24 shrink-0 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950 overflow-hidden">
           {preview && (
