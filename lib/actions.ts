@@ -1,6 +1,6 @@
 "use server";
 
-import { contactSchema } from "@/lib/validation";
+import { contactSchema, normalizeUzPhone } from "@/lib/validation";
 
 // Contact form handler: saves the lead to Firestore (admin panel → Arizalar)
 // and notifies the Telegram chat. Succeeds if at least one of them worked.
@@ -68,10 +68,8 @@ export async function sendContactMessage(values: {
     return { success: false, error: "Invalid form data" };
   }
 
-  const [saved, sent] = await Promise.all([
-    saveLead(parsed.data),
-    sendTelegram(parsed.data),
-  ]);
+  const lead = { ...parsed.data, tel: normalizeUzPhone(parsed.data.tel) ?? parsed.data.tel };
+  const [saved, sent] = await Promise.all([saveLead(lead), sendTelegram(lead)]);
 
   if (!saved && !sent) {
     return { success: false, error: "Failed to send message" };

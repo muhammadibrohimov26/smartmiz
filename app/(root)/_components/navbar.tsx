@@ -52,6 +52,8 @@ const Navbar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setLangOpen(!langOpen)}
+                  aria-label={t("langSelect")}
+                  aria-expanded={langOpen}
                   className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-full text-xs font-black bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer shadow-[1px_1px_0px_rgba(255,184,0,1)] hover:shadow-[2px_2px_0px_rgba(255,184,0,1)] transition-all uppercase tracking-wider text-zinc-900 dark:text-white"
                 >
                   <Globe className="w-3.5 h-3.5 yellow-accent" />

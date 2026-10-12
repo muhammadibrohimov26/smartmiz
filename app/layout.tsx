@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz. Kelajagingizni tillar va kompyuter savodxonligi bilan quring!",
 
 
-  authors: [{ name: 'Muhammad ibrohimov', url: 'https://smartmiz.uz' }],
-  icons: { icon: '/SMARTMIZ.jpg' },
+  authors: [{ name: 'Muhammad ibrohimov', url: 'https://www.smartmiz.uz' }],
+  // Icons: app/icon.svg and app/apple-icon.tsx
   keywords: "Muhammad ibrohimov, Doniyor tohirov, Smartmiz haqida, Smartmiz tarixi, dasturlash kurslari, dasturlash darslari, reactjs uzbek tilida, EPS topik uzbek tilida, redux uzbek tilida, Smartmiz o'quv markazi, ingliz tili kurslari, rus tili kurslari, CEFR, javascript darslari, IT kurslari o'zbek tilida, koreys tili darslari, IELTS, C1 rus tili, turk tili, TOPIK koreys tili, IT loyihalar o'zbek tilida, chet tillari Farg'onada, kompyuter kurslari Farg'ona",
 
 
@@ -29,12 +29,10 @@ export const metadata: Metadata = {
     title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
     description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
     type: 'website',
-    url: 'https://smartmiz.uz',
     locale: 'uz_UZ',
     // The image comes from app/opengraph-image.tsx
     countryName: 'Uzbekistan',
     siteName: 'Smartmiz',
-    emails: 'muhammadibrohimov0306@gmail.com',
   },
 
 };
@@ -50,8 +48,8 @@ function RootLayout({ children }: ChildProps) {
               "@context": "https://schema.org",
               "@type": "EducationalOrganization",
               "name": "Smartmiz O'quv Markazi",
-              "url": "https://smartmiz.uz",
-              "logo": "https://smartmiz.uz/SMARTMIZ.jpg",
+              "url": "https://www.smartmiz.uz",
+              "logo": "https://www.smartmiz.uz/SMARTMIZ.jpg",
               "description": "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
               "address": [
                 { "@type": "PostalAddress", "streetAddress": "Qomus ko'chasi 44", "addressLocality": "Fergana", "addressRegion": "Fergana Region", "addressCountry": "UZ" },

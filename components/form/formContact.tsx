@@ -18,6 +18,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   useFormField,
 } from "../ui/form";
 import { Input } from "../ui/input";
@@ -62,8 +63,8 @@ function ContactForm({ courses }: { courses: Price[] }) {
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      tel: "",
       name: "",
+      tel: "",
       kurs: courseParam || "",
     },
   });
@@ -80,7 +81,7 @@ function ContactForm({ courses }: { courses: Price[] }) {
     const promise = sendContactMessage(values)
       .then((res) => {
         if (!res.success) throw new Error(res.error);
-        form.reset({ tel: "", name: "", kurs: "" });
+        form.reset({ name: "", tel: "", kurs: "" });
       })
       .finally(() => setIsLoading(false));
 
@@ -96,18 +97,16 @@ function ContactForm({ courses }: { courses: Price[] }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel" noValidate>
         <FormField
           control={form.control}
-          name="tel"
+          name="name"
           render={({ field }) => (
             <FormItem>
+              <FormLabel className="text-sm font-bold">{t("contactName")} *</FormLabel>
               <FormControl>
                 <Input
                   className={inputClass}
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
+                  autoComplete="name"
                   required
                   aria-required="true"
-                  placeholder={`${t("contactPhone")} *`}
                   disabled={isLoading}
                   {...field}
                 />
@@ -118,16 +117,20 @@ function ContactForm({ courses }: { courses: Price[] }) {
         />
         <FormField
           control={form.control}
-          name="name"
+          name="tel"
           render={({ field }) => (
             <FormItem>
+              <FormLabel className="text-sm font-bold">{t("contactPhone")} *</FormLabel>
               <FormControl>
                 <Input
                   className={inputClass}
-                  autoComplete="name"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  dir="ltr"
                   required
                   aria-required="true"
-                  placeholder={`${t("contactName")} *`}
+                  placeholder="+998 90 123 45 67"
                   disabled={isLoading}
                   {...field}
                 />
@@ -142,10 +145,11 @@ function ContactForm({ courses }: { courses: Price[] }) {
           name="kurs"
           render={({ field }) => (
             <FormItem>
+              <FormLabel className="text-sm font-bold">{t("contactCourse")} *</FormLabel>
               <Select onValueChange={field.onChange} value={field.value || ""} key={field.value || "empty"} disabled={isLoading}>
                 <FormControl>
                   <SelectTrigger aria-required="true" className="rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus:ring-1 focus:ring-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6">
-                    <SelectValue placeholder={`${t("contactCourse")} *`} />
+                    <SelectValue placeholder={t("contactCourse")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="rounded-xl border-gray-200 dark:border-zinc-800 font-medium bg-white dark:bg-zinc-900 shadow-lg">

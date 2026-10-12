@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Clock, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { courseLabel, formatHours } from "@/lib/courses";
+import { courseCardTitles, courseLabel, formatHours } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
 import { isTemplateCourseImage } from "@/lib/images";
 import CourseCover from "./courseCover";
@@ -20,7 +20,9 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
     return (
         <div className="mt-12 container mx-auto mb-16 px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                {prices.map((price, index) => (
+                {prices.map((price, index) => {
+                    const titles = courseCardTitles(price, t);
+                    return (
                     <div 
                         key={price.id ?? index} 
                         className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
@@ -41,7 +43,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                             {/* Category & Title */}
                             <div className="flex items-center justify-between mb-3">
                                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
-                                    {t(price.courseType)}
+                                    {titles.label}
                                 </span>
                                 {price.chegirma && (
                                     <span className="flex items-center gap-1 text-[9px] uppercase tracking-widest font-black bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-md border border-yellow-500/20">
@@ -52,7 +54,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                             </div>
                             
                             <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300 mb-6">
-                                {t(price.courseName)}
+                                {titles.heading}
                             </h2>
 
                             {/* Pricing Section */}
@@ -92,7 +94,8 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                             </div>
                         </div>
                     </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

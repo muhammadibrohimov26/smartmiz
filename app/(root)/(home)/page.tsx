@@ -1,5 +1,10 @@
 import { getCourses } from "@/lib/data";
+import { Metadata } from "next";
 import HomeContent from "../_components/homeContent";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 // Re-rendered on demand when a course is changed in the admin panel
 export const revalidate = 3600;

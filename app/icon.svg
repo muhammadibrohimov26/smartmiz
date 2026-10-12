@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The "A" mark from the Smartmiz logo -->
+  <rect width="64" height="64" rx="14" fill="#0c0c0c"/>
+  <path d="M12 52 L32 12 L52 52 H43 L32 30 L21 52 Z" fill="#ffffff"/>
+  <path d="M32 37 L39.5 52 H24.5 Z" fill="#4be033"/>
+</svg>

@@ -30,7 +30,7 @@ function Footer() {
           <div className="flex items-start gap-2.5">
             <MapPin className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
             <div className="flex flex-col gap-1">
-              {branches.map((b) => (
+              {branches.map((b, i) => (
                 <a
                   key={b.house}
                   href={b.mapUrl}
@@ -38,7 +38,7 @@ function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-zinc-950 dark:hover:text-white transition-colors"
                 >
-                  {t("footerAddress", { house: b.house })}
+                  <span className="font-bold">{t("branchLabel", { n: i + 1 })}:</span> {t("footerAddress", { house: b.house })}
                 </a>
               ))}
             </div>
@@ -54,14 +54,14 @@ function Footer() {
             <p>© {new Date().getFullYear()} {t("footerRights")}</p>
           </div>
           <div className="flex gap-6">
-            <a target='_blank' href="https://www.instagram.com/smartmiz_fergana" className="hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/instagram.png" alt="Instagram" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="hover:scale-110 hover:brightness-110 transition-transform">
+              <img src="/img/instagram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
-            <a target='_blank' href="https://t.me/Smartmiz" className="hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/telegram.png" alt="Telegram" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="hover:scale-110 hover:brightness-110 transition-transform">
+              <img src="/img/telegram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
-            <a target='_blank' href="https://www.youtube.com/@smartmizoquvmarkazi7835" className="hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/youtube.png" alt="Youtube" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="hover:scale-110 hover:brightness-110 transition-transform">
+              <img src="/img/youtube.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
           </div>
         </div>

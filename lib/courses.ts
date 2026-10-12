@@ -45,3 +45,13 @@ export function formatHours(value: string, locale: string) {
   const text = String(n);
   return DECIMAL_COMMA_LOCALES.has(locale) ? text.replace(".", ",") : text;
 }
+
+// Card heading and the small label above it, without repeating each other:
+// "Ingliz tili" / "IELTS" → label "Ingliz tili", heading "IELTS".
+export function courseCardTitles(course: CourseRef, t: (key: string) => string) {
+  const spec = courseSpecialization(course);
+  const heading = spec ? t(spec) : t(course.courseName);
+  const label = spec ? t(course.courseName) : t(course.courseType || "");
+  const repeats = !label || heading.toLowerCase().startsWith(label.toLowerCase());
+  return { heading, label: repeats ? "" : label };
+}

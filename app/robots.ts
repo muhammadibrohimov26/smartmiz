@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/admin',
     },
-    sitemap: 'https://smartmiz.uz/sitemap.xml',
+    sitemap: 'https://www.smartmiz.uz/sitemap.xml',
+    host: 'https://www.smartmiz.uz',
   }
 }

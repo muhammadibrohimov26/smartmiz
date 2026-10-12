@@ -46,10 +46,10 @@ function ContactContent({ courses }: { courses: Price[] }) {
 						<Phone className='w-4 h-4' />
 						<p className='text-sm'> <a href="tel:+998732440099" dir='ltr'>+998 73 244 00 99</a> </p>
 					</div>
-					{branches.map((b) => (
+					{branches.map((b, i) => (
 						<div key={b.house} className='flex items-center gap-3 mt-2'>
 							<MapPin className='w-4 h-4' />
-							<a href={b.mapUrl} target='_blank' rel='noopener noreferrer' className='text-sm hover:underline'>{t('footerAddress', { house: b.house })}</a>
+							<a href={b.mapUrl} target='_blank' rel='noopener noreferrer' className='text-sm hover:underline'><span className='font-bold'>{t('branchLabel', { n: i + 1 })}:</span> {t('footerAddress', { house: b.house })}</a>
 						</div>
 					))}
 					<div className='flex items-center gap-3 mt-2'>
@@ -59,7 +59,7 @@ function ContactContent({ courses }: { courses: Price[] }) {
 				</div>
 
 				<div>
-					<h1 className='text-4xl font-creteRound mb-4'>{t('contactFormTitle')}</h1>
+					<h2 className='text-4xl font-creteRound mb-4'>{t('contactFormTitle')}</h2>
 					<Suspense fallback={<div>{t('loading')}</div>}>
 						<FormContact courses={courses} />
 					</Suspense>

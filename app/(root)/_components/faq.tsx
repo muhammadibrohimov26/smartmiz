@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/context/LanguageContext";
-import { ChevronDown, HelpCircle, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, HelpCircle, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 interface FAQItem {
   q: string;
   a: string;
+  link?: { href: string; label: string };
 }
 
 export default function FAQ() {
@@ -20,7 +22,7 @@ export default function FAQ() {
     { q: t("faq4Q"), a: t("faq4A") },
     { q: t("faq5Q"), a: t("faq5A") },
     { q: t("faq6Q"), a: t("faq6A") },
-    { q: t("faq7Q"), a: t("faq7A") },
+    { q: t("faq7Q"), a: t("faq7A"), link: { href: "/contact", label: t("faqContactLink") } },
   ];
 
   return (
@@ -82,6 +84,15 @@ export default function FAQ() {
                       <p className="text-zinc-600 dark:text-zinc-300 text-sm md:text-base leading-relaxed font-medium pl-4">
                         {item.a}
                       </p>
+                      {item.link && (
+                        <Link
+                          href={item.link.href}
+                          className="inline-flex items-center gap-1.5 mt-3 ps-4 text-sm font-black text-yellow-600 dark:text-yellow-400 hover:underline"
+                        >
+                          {item.link.label}
+                          <ArrowRight className="w-4 h-4 rtl:rotate-180" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

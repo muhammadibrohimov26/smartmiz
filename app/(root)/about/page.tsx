@@ -10,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const students = formatCount((await getSiteSettings()).studentCount, "uz");
   return {
     title: "Biz haqimizda - Smartmiz o'quv markazi",
+    alternates: { canonical: "/about" },
     description: `Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. ${years} yillik ta'lim tajribasi va ${students} dan ortiq muvaffaqiyatli bitiruvchilar.`,
     keywords: `Smartmiz haqida, Smartmiz tarixi, Smartmiz o'quv markazi jamoasi, Farg'ona chet tillari maktabi, Smartmiz yutuqlari, o'quv markazi tarixi, ${years} yillik tajriba, Farg'ona o'quv markazlari`,
   };

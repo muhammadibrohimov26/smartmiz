@@ -28,7 +28,7 @@ const Mobile = () => {
     <div className="md:hidden">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button size={"icon"} variant={"ghost"} onClick={() => setIsOpen(true)}>
+          <Button size={"icon"} variant={"ghost"} onClick={() => setIsOpen(true)} aria-label={t("navMenu")}>
             <Menu />
           </Button>
         </SheetTrigger>
