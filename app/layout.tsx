@@ -10,6 +10,9 @@ import { LanguageProvider } from "@/context/LanguageContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  // smartmiz.uz redirects to www; absolute URLs (og:image) must use the final host
+  metadataBase: new URL("https://www.smartmiz.uz"),
+  twitter: { card: "summary_large_image" },
 
 
 
@@ -28,8 +31,7 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://smartmiz.uz',
     locale: 'uz_UZ',
-    // Served from this site (smartmiz.uz redirects to www, so link the final URL)
-    images: [{ url: 'https://www.smartmiz.uz/og.png', width: 640, height: 283, alt: "Smartmiz o'quv markazi" }],
+    // The image comes from app/opengraph-image.tsx
     countryName: 'Uzbekistan',
     siteName: 'Smartmiz',
     emails: 'muhammadibrohimov0306@gmail.com',

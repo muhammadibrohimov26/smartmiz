@@ -7,6 +7,8 @@ import { Clock, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseLabel, formatHours } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
+import { isTemplateCourseImage } from "@/lib/images";
+import CourseCover from "./courseCover";
 
 interface PricesItemProps{
     prices: Price[]
@@ -25,13 +27,13 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                     >
                         {/* Course Image & Hero Area */}
                         <div className="relative h-60 w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
-                            {price.image && <Image
+                            {price.image && !isTemplateCourseImage(price.image) ? <Image
                                 fill
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 src={price.image}
                                 alt={price.courseName}
-                            />}
+                            /> : <CourseCover course={price} />}
                         </div>
 
                         {/* Card Body */}

@@ -15,3 +15,12 @@ export function isAllowedImageUrl(url: string) {
     return false;
   }
 }
+
+// The old Canva course tiles (text "Koreys tili" etc. baked in, Uzbek only).
+// Cards draw a language-neutral cover instead; real photos are shown as-is.
+const TEMPLATE_COURSE_IMAGES =
+  /^\/img\/(robot|kores|kompyuter|inglis|rus|arab|ielts|cefr|turk|c1|cs-soz|mentall|topik|eps)\.png$/;
+
+export function isTemplateCourseImage(url: string) {
+  return TEMPLATE_COURSE_IMAGES.test(url);
+}
