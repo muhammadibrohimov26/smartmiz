@@ -40,3 +40,15 @@ export interface SiteSettings {
     aboutVideoUrl: string
     aboutVideoImage: string
 }
+
+export type ReviewStatus = "pending" | "approved" | "hidden"
+
+export interface Review {
+    id: string
+    name: string
+    photo: string
+    rating: number
+    text: string
+    status: ReviewStatus
+    updatedAt: string
+}

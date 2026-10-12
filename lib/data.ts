@@ -1,4 +1,4 @@
-import { Lead, NewsItem, Price, SiteSettings } from "@/types";
+import { Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings } from "@/types";
 import { DEFAULT_ABOUT_VIDEO_IMAGE, DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 import { isAllowedImageUrl } from "@/lib/images";
 // Bundled into the server code, so the fallback also works in serverless functions
@@ -114,4 +114,40 @@ export async function getSiteSettings(options: Options = {}): Promise<SiteSettin
     aboutVideoUrl: DEFAULT_ABOUT_VIDEO_URL,
     aboutVideoImage: DEFAULT_ABOUT_VIDEO_IMAGE,
   }, options);
+}
+
+// ---------- Reviews (customers sign in with Google; admin approves) ----------
+
+const REVIEW_STATUSES: ReviewStatus[] = ["pending", "approved", "hidden"];
+
+async function readReviews(onlyApproved: boolean): Promise<Review[]> {
+  const db = await firestore();
+  if (!db) return [];
+  const { Timestamp } = await import("firebase-admin/firestore");
+  const col = db.collection("reviews");
+  // Filter only (no orderBy) so Firestore needs no composite index; sort here
+  const snap = await (onlyApproved ? col.where("status", "==", "approved") : col).get();
+  return snap.docs
+    .map((doc) => {
+      const d = doc.data();
+      const updated = d.updatedAt instanceof Timestamp ? d.updatedAt.toDate().toISOString() : "";
+      return {
+        id: doc.id,
+        name: String(d.name ?? ""),
+        photo: String(d.photo ?? ""),
+        rating: Math.min(5, Math.max(1, Number(d.rating) || 5)),
+        text: String(d.text ?? ""),
+        status: REVIEW_STATUSES.includes(d.status) ? (d.status as ReviewStatus) : "pending",
+        updatedAt: updated,
+      };
+    })
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function getApprovedReviews(): Promise<Review[]> {
+  return withFallback<Review[]>(() => readReviews(true), [], {});
+}
+
+export async function getAllReviews(): Promise<Review[]> {
+  return readReviews(false);
 }

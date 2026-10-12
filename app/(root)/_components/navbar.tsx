@@ -9,6 +9,7 @@ import { Globe, ChevronDown } from "lucide-react"
 import { Locale } from "@/lib/dictionaries"
 import { useState, useEffect, useRef } from "react"
 import ModeToogle from "@/components/shared/mode-toggle"
+import CustomerMenu from "@/components/shared/customer-menu"
 
 const Navbar = () => {
     const pathName = usePathname()
@@ -91,6 +92,7 @@ const Navbar = () => {
               </div>
 
               <ModeToogle />
+              <CustomerMenu />
               <Mobile/>
             </div>
     </div>

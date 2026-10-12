@@ -8,7 +8,7 @@ import { adminAuth, adminBucket, adminDb } from "@/lib/firebase/admin";
 import { requireAdmin, SESSION_COOKIE, SESSION_MAX_AGE_MS } from "@/lib/auth";
 import { isAllowedImageUrl } from "@/lib/images";
 import { isValidVideoUrl } from "@/lib/video";
-import { LeadStatus } from "@/types";
+import { LeadStatus, ReviewStatus } from "@/types";
 
 type ActionResult = { success: true } | { success: false; error: string };
 
@@ -229,5 +229,24 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
     );
 
     for (const path of ["/about", "/news", "/admin/settings"]) revalidatePath(path);
+  });
+}
+
+// ---------- Reviews ----------
+
+export async function setReviewStatus(id: string, status: ReviewStatus): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    if (!["pending", "approved", "hidden"].includes(status)) throw new Error("Noto'g'ri holat");
+    await adminDb().collection("reviews").doc(id).update({ status });
+    for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
+  });
+}
+
+export async function deleteReview(id: string): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    await adminDb().collection("reviews").doc(id).delete();
+    for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
   });
 }

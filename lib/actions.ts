@@ -1,6 +1,7 @@
 "use server";
 
 import { contactSchema, normalizeUzPhone } from "@/lib/validation";
+import { notifyTelegram } from "@/lib/telegram";
 
 // Contact form handler: saves the lead to Firestore (admin panel → Arizalar)
 // and notifies the Telegram chat. Succeeds if at least one of them worked.
@@ -23,39 +24,8 @@ async function saveLead(values: { name: string; tel: string; kurs: string }) {
   }
 }
 
-async function sendTelegram(values: { name: string; tel: string; kurs: string }) {
-  const telegramBotId = process.env.TELEGRAM_BOT_API;
-  const telegramChatId = process.env.TELEGRAM_CHAT_ID;
-
-  if (!telegramBotId || !telegramChatId) {
-    console.error("Missing Telegram bot credentials");
-    return false;
-  }
-
-  try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${telegramBotId}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "cache-control": "no-cache",
-        },
-        body: JSON.stringify({
-          chat_id: telegramChatId,
-          text: `Ism: ${values.name}:\nTelefon nomeri: ${values.tel}:\nKurs nomi: ${values.kurs}`,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Telegram API Error: ${response.statusText}`);
-    }
-    return true;
-  } catch (error) {
-    console.error("Failed to send telegram message:", error);
-    return false;
-  }
+function sendTelegram(values: { name: string; tel: string; kurs: string }) {
+  return notifyTelegram(`Ism: ${values.name}:\nTelefon nomeri: ${values.tel}:\nKurs nomi: ${values.kurs}`);
 }
 
 export async function sendContactMessage(values: {

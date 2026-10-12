@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { BookOpen, Inbox, Trophy } from "lucide-react";
-import { getCourses, getLeads, getNews } from "@/lib/data";
+import { BookOpen, Inbox, MessageSquareQuote, Trophy } from "lucide-react";
+import { getAllReviews, getCourses, getLeads, getNews } from "@/lib/data";
 import { ensureAdminPage } from "@/lib/auth";
 
 async function AdminDashboard() {
   await ensureAdminPage();
-  const [courses, news, leads] = await Promise.all([getCourses({ strict: true }), getNews({ strict: true }), getLeads()]);
+  const [courses, news, leads, reviews] = await Promise.all([getCourses({ strict: true }), getNews({ strict: true }), getLeads(), getAllReviews()]);
   const newLeads = leads.filter((l) => l.status === "new").length;
+  const pendingReviews = reviews.filter((r) => r.status === "pending").length;
 
   const cards = [
     { href: "/admin/leads", label: "Yangi arizalar", value: newLeads, icon: Inbox, highlight: newLeads > 0 },
+    { href: "/admin/reviews", label: "Tasdiqlanmagan sharhlar", value: pendingReviews, icon: MessageSquareQuote, highlight: pendingReviews > 0 },
     { href: "/admin/courses", label: "Kurslar", value: courses.length, icon: BookOpen },
     { href: "/admin/news", label: "Natijalar", value: news.length, icon: Trophy },
   ];
@@ -17,7 +19,7 @@ async function AdminDashboard() {
   return (
     <div>
       <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-6">Bosh sahifa</h1>
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map(({ href, label, value, icon: Icon, highlight }) => (
           <Link
             key={href}

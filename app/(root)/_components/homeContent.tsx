@@ -1,6 +1,6 @@
 "use client";
 
-import { Price } from "@/types";
+import { Price, Review } from "@/types";
 import CardItems from "./cardItems";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
@@ -8,8 +8,9 @@ import Link from "next/link";
 import CourseQuiz from "./courseQuiz";
 import VocabGame from "./vocabGame";
 import FAQ from "./faq";
+import Reviews from "./reviews";
 
-function HomeContent({ prices }: { prices: Price[] }) {
+function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }) {
   const { t } = useTranslation();
 
   const scrollToCourses = () => {
@@ -86,6 +87,11 @@ function HomeContent({ prices }: { prices: Price[] }) {
           <div className="p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
             <VocabGame />
           </div>
+        </div>
+
+        {/* CUSTOMER REVIEWS */}
+        <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
+          <Reviews reviews={reviews} />
         </div>
 
         {/* FAQ ACCORDION */}

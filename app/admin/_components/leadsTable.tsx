@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Check, Phone, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { formatTashkent } from "@/lib/dates";
 import { Lead, LeadStatus } from "@/types";
 import { deleteLead, setLeadStatus } from "../actions";
 import { PageHeader } from "./fields";
@@ -13,17 +14,6 @@ const filters: { value: LeadStatus | "all"; label: string }[] = [
   { value: "new", label: "Yangi" },
   { value: "contacted", label: "Bog'lanilgan" },
 ];
-
-function formatDate(iso: string) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleString("uz-UZ", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 function LeadsTable({ leads }: { leads: Lead[] }) {
   const [filter, setFilter] = useState<LeadStatus | "all">("all");
@@ -80,7 +70,7 @@ function LeadsTable({ leads }: { leads: Lead[] }) {
               <div className="flex-1 min-w-[180px]">
                 <p className="font-black">{lead.name}</p>
                 <p className="text-sm text-zinc-500">
-                  {lead.kurs} · {formatDate(lead.createdAt)}
+                  {lead.kurs} · {formatTashkent(lead.createdAt)}
                 </p>
               </div>
               <a
