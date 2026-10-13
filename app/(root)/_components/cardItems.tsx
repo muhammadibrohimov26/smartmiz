@@ -28,7 +28,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                         className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
                     >
                         {/* Course Image & Hero Area */}
-                        <div className="relative h-60 w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
+                        <div className="relative aspect-square w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
                             {price.image && !isTemplateCourseImage(price.image) ? <Image
                                 fill
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
