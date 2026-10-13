@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, UserCredential } from "firebase/auth";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
 import { clientAuth } from "@/lib/firebase/client";
@@ -16,18 +16,13 @@ function AdminLoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
+  // Signs in with Firebase, then exchanges the ID token for the admin session cookie.
+  // The server only accepts accounts with the { admin: true } claim.
+  async function signInWith(getCredential: () => Promise<UserCredential>) {
     setLoading(true);
-
     try {
       const auth = clientAuth();
-      const cred = await signInWithEmailAndPassword(
-        auth,
-        String(form.get("email")),
-        String(form.get("password"))
-      );
+      const cred = await getCredential();
       const res = await login(await cred.user.getIdToken());
       // The session lives in an httpOnly cookie; the browser SDK session is not needed
       await signOut(auth);
@@ -36,14 +31,32 @@ function AdminLoginPage() {
       router.replace("/admin");
       router.refresh();
     } catch (error) {
-      const code = (error as { code?: string }).code;
-      toast.error(
-        code === "auth/invalid-credential" || code === "auth/wrong-password"
-          ? "Email yoki parol noto'g'ri"
-          : error instanceof Error ? error.message : "Kirishda xatolik"
-      );
+      const code = (error as { code?: string }).code ?? "";
+      if (code !== "auth/popup-closed-by-user" && code !== "auth/cancelled-popup-request") {
+        toast.error(
+          code === "auth/invalid-credential" || code === "auth/wrong-password"
+            ? "Email yoki parol noto'g'ri (hisob Google orqali ochilgan bo'lsa, \"Google bilan kirish\"ni bosing)"
+            : error instanceof Error ? error.message : "Kirishda xatolik"
+        );
+      }
       setLoading(false);
     }
+  }
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    signInWith(() =>
+      signInWithEmailAndPassword(clientAuth(), String(form.get("email")), String(form.get("password")))
+    );
+  }
+
+  function onGoogle() {
+    signInWith(() => {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
+      return signInWithPopup(clientAuth(), provider);
+    });
   }
 
   return (
@@ -80,6 +93,21 @@ function AdminLoginPage() {
           className="w-full py-3 rounded-xl bg-black dark:bg-white text-white dark:text-black font-bold hover:bg-[#FFB800] dark:hover:bg-[#FFB800] hover:text-black transition-colors disabled:opacity-50"
         >
           {loading ? "Kirilmoqda..." : "Kirish"}
+        </button>
+
+        <div className="flex items-center gap-3 text-xs text-zinc-400">
+          <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+          yoki
+          <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+
+        <button
+          type="button"
+          onClick={onGoogle}
+          disabled={loading || !configured}
+          className="w-full py-3 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 font-bold hover:border-[#FFB800] transition-colors disabled:opacity-50"
+        >
+          Google bilan kirish
         </button>
       </form>
     </div>
