@@ -1,7 +1,6 @@
 import { cert, getApps, initializeApp, App } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage";
 
 // Server-only Firebase Admin SDK. Returns null when the env vars are not set,
 // so the public site keeps working (falls back to the local JSON files).
@@ -21,8 +20,7 @@ function getAdminApp(): App | null {
   try {
     return initializeApp({
       credential: cert({ projectId, clientEmail, privateKey }),
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    });
+      });
   } catch (error) {
     // A bad key must not take the whole site down — callers fall back
     console.error("Firebase Admin init failed (check FIREBASE_* env vars):", error);
@@ -46,8 +44,3 @@ export function adminAuth() {
   return getAuth(app);
 }
 
-export function adminBucket() {
-  const app = getAdminApp();
-  if (!app) throw new Error("Firebase Admin is not configured");
-  return getStorage(app).bucket();
-}

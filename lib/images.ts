@@ -6,6 +6,8 @@ export const IMAGE_HOSTS = [
 
 export function isAllowedImageUrl(url: string) {
   if (!url) return true;
+  // Images uploaded in the admin panel (lib/media.ts), e.g. "/media/<uuid>"
+  if (/^\/media\/[0-9a-f-]{36}$/.test(url)) return true;
   // Files in /public, e.g. "/img/robot.png"
   if (/^\/[\w\-./]+\.(png|jpe?g|webp|gif|svg)$/i.test(url) && !url.includes("..")) return true;
   try {

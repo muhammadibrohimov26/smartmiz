@@ -1,10 +1,10 @@
 "use server";
 
-import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { FieldValue } from "firebase-admin/firestore";
-import { adminAuth, adminBucket, adminDb } from "@/lib/firebase/admin";
+import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { deleteMediaUrl, MediaValidationError, saveMedia } from "@/lib/media";
 import { requireAdmin, SESSION_COOKIE, SESSION_MAX_AGE_MS } from "@/lib/auth";
 import { isAllowedImageUrl } from "@/lib/images";
 import { isValidVideoUrl } from "@/lib/video";
@@ -58,39 +58,20 @@ export async function logout() {
 
 // ---------- Images ----------
 
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
-
-async function uploadImage(file: File, folder: string): Promise<string> {
-  if (!file.type.startsWith("image/")) throw new Error("Faqat rasm yuklash mumkin");
-  if (file.size > MAX_IMAGE_BYTES) throw new Error("Rasm hajmi 4MB dan oshmasin");
-
-  const bucket = adminBucket();
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const filePath = `${folder}/${randomUUID()}.${ext}`;
-  const token = randomUUID();
-
+async function uploadImage(file: File): Promise<string> {
   try {
-    await bucket.file(filePath).save(Buffer.from(await file.arrayBuffer()), {
-      contentType: file.type,
-      metadata: { metadata: { firebaseStorageDownloadTokens: token } },
-    });
+    return await saveMedia(file);
   } catch (error) {
+    if (error instanceof MediaValidationError) throw error;
     console.error("Image upload failed:", error);
-    const [exists] = await bucket.exists().catch(() => [true]);
-    throw new Error(
-      exists
-        ? "Rasm yuklanmadi. Qaytadan urinib ko'ring yoki rasm havolasini kiriting."
-        : "Rasm yuklanmadi: Firebase Storage yoqilmagan. Hozircha rasm havolasini kiriting."
-    );
+    throw new Error("Rasm yuklanmadi. Qaytadan urinib ko'ring.");
   }
-
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filePath)}?alt=media&token=${token}`;
 }
 
 // Uses the uploaded file if there is one, otherwise the URL field.
-async function resolveImage(formData: FormData, folder: string): Promise<string> {
+async function resolveImage(formData: FormData): Promise<string> {
   const file = formData.get("imageFile");
-  if (file instanceof File && file.size > 0) return uploadImage(file, folder);
+  if (file instanceof File && file.size > 0) return uploadImage(file);
 
   const url = String(formData.get("image") ?? "").trim();
   if (!isAllowedImageUrl(url)) {
@@ -125,12 +106,16 @@ export async function saveCourse(formData: FormData): Promise<ActionResult> {
       courseChegirma: Number(str(formData, "courseChegirma")) || 0,
       courseTime: str(formData, "courseTime"),
       chegirma: str(formData, "chegirma"),
-      image: await resolveImage(formData, "courses"),
+      image: await resolveImage(formData),
       updatedAt: FieldValue.serverTimestamp(),
     };
 
     const col = adminDb().collection("courses");
-    if (id) await col.doc(id).update(data);
+    if (id) {
+      const oldImage = (await col.doc(id).get()).get("image");
+      await col.doc(id).update(data);
+      if (oldImage !== data.image) await deleteMediaUrl(oldImage);
+    }
     else await col.add({ ...data, createdAt: FieldValue.serverTimestamp() });
 
     revalidateCoursePages();
@@ -140,7 +125,10 @@ export async function saveCourse(formData: FormData): Promise<ActionResult> {
 export async function deleteCourse(id: string): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
-    await adminDb().collection("courses").doc(id).delete();
+    const ref = adminDb().collection("courses").doc(id);
+    const oldImage = (await ref.get()).get("image");
+    await ref.delete();
+    await deleteMediaUrl(oldImage);
     revalidateCoursePages();
   });
 }
@@ -162,12 +150,16 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
       result: str(formData, "result"),
       quote: str(formData, "quote"),
       date: str(formData, "date"),
-      image: await resolveImage(formData, "news"),
+      image: await resolveImage(formData),
       updatedAt: FieldValue.serverTimestamp(),
     };
 
     const col = adminDb().collection("news");
-    if (id) await col.doc(id).update(data);
+    if (id) {
+      const oldImage = (await col.doc(id).get()).get("image");
+      await col.doc(id).update(data);
+      if (oldImage !== data.image) await deleteMediaUrl(oldImage);
+    }
     else await col.add({ ...data, createdAt: FieldValue.serverTimestamp() });
 
     revalidatePath("/news");
@@ -178,7 +170,10 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
 export async function deleteNews(id: string): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
-    await adminDb().collection("news").doc(id).delete();
+    const ref = adminDb().collection("news").doc(id);
+    const oldImage = (await ref.get()).get("image");
+    await ref.delete();
+    await deleteMediaUrl(oldImage);
     revalidatePath("/news");
     revalidatePath("/admin/news");
   });
@@ -221,12 +216,15 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
     }
 
     // Video card background: uploaded file or URL (empty = default image)
-    const aboutVideoImage = await resolveImage(formData, "settings");
+    const aboutVideoImage = await resolveImage(formData);
 
-    await adminDb().collection("settings").doc("site").set(
+    const settingsRef = adminDb().collection("settings").doc("site");
+    const oldImage = (await settingsRef.get()).get("aboutVideoImage");
+    await settingsRef.set(
       { studentCount, aboutVideoUrl, aboutVideoImage, updatedAt: FieldValue.serverTimestamp() },
       { merge: true }
     );
+    if (oldImage !== aboutVideoImage) await deleteMediaUrl(oldImage);
 
     for (const path of ["/about", "/news", "/admin/settings"]) revalidatePath(path);
   });

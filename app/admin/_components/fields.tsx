@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { shrinkImage } from "@/lib/shrinkImage";
 
 const inputClass = "rounded-xl bg-zinc-50 dark:bg-zinc-950";
 
@@ -52,9 +53,25 @@ export function TextArea({ label, name, defaultValue }: { label: string; name: s
   );
 }
 
-// Image either from an uploaded file (stored in Firebase Storage) or an existing URL.
+// Image either from an uploaded file (shrunk in the browser, stored in Firestore
+// — see lib/media.ts) or an existing URL.
 export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: string; label?: string }) {
   const [preview, setPreview] = useState(defaultValue ?? "");
+  const [info, setInfo] = useState("");
+
+  async function onFile(input: HTMLInputElement) {
+    const original = input.files?.[0];
+    if (!original) return;
+    setInfo("Rasm kichraytirilmoqda...");
+    const file = await shrinkImage(original);
+    // Put the shrunk file back into the input so the form submits it
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    setPreview(URL.createObjectURL(file));
+    const img = await createImageBitmap(file).catch(() => null);
+    setInfo(`${img ? `${img.width}×${img.height}, ` : ""}${Math.round(file.size / 1024)} KB`);
+  }
 
   return (
     <div className="space-y-1.5 sm:col-span-2">
@@ -72,11 +89,9 @@ export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: st
             type="file"
             accept="image/*"
             className={inputClass}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setPreview(URL.createObjectURL(file));
-            }}
+            onChange={(e) => onFile(e.currentTarget)}
           />
+          {info && <p className="text-xs font-bold text-emerald-600">{info}</p>}
           <Input
             name="image"
             defaultValue={defaultValue}
@@ -84,7 +99,9 @@ export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: st
             className={inputClass}
             onChange={(e) => setPreview(e.target.value)}
           />
-          <p className="text-xs text-zinc-500">Fayl tanlansa, URL o&apos;rniga yuklangan fayl ishlatiladi. Maksimal hajm: 4MB.</p>
+          <p className="text-xs text-zinc-500">
+            Fayl tanlansa, URL o&apos;rniga yuklangan fayl ishlatiladi. Katta rasm avtomatik kichraytiriladi.
+          </p>
         </div>
       </div>
     </div>
