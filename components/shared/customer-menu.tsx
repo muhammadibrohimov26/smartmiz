@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogIn, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Loader2, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { login } from "@/app/admin/actions";
 import { toast } from "sonner";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
 import { useTranslation } from "@/context/LanguageContext";
@@ -39,11 +41,31 @@ export function CustomerAvatar({ name, photo, className }: { name: string; photo
 }
 
 function CustomerMenu() {
-  const { user, ready, enabled, signOut } = useCustomerAuth();
+  const { user, isAdmin, ready, enabled, signOut, getIdToken } = useCustomerAuth();
   const signIn = useGoogleSignIn();
   const { t } = useTranslation();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [opening, setOpening] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  // One click into the admin panel: reuse the Google sign-in the visitor already
+  // has on the site to create the admin session cookie (no second login, no popup)
+  async function openAdmin() {
+    setOpening(true);
+    try {
+      const token = await getIdToken();
+      const res = token ? await login(token) : { success: false as const, error: "" };
+      if (!res.success) {
+        toast.error(t("errLogin"));
+        return;
+      }
+      setOpen(false);
+      router.push("/admin");
+    } finally {
+      setOpening(false);
+    }
+  }
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -78,6 +100,16 @@ function CustomerMenu() {
         <div className="absolute top-11 end-0 w-56 bg-white dark:bg-zinc-950 border border-zinc-900 dark:border-zinc-800 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.1)] p-3 z-50">
           <p className="text-sm font-black truncate">{user.displayName}</p>
           <p className="text-xs text-zinc-500 truncate mb-3">{user.email}</p>
+          {isAdmin && (
+            <button
+              onClick={openAdmin}
+              disabled={opening}
+              className="w-full flex items-center gap-2 px-2 py-2 mb-1 rounded-lg text-sm font-bold bg-[#FFB800]/15 text-yellow-700 dark:text-yellow-400 hover:bg-[#FFB800]/25 disabled:opacity-60"
+            >
+              {opening ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+              {t("adminPanel")}
+            </button>
+          )}
           <button
             onClick={() => { setOpen(false); signOut(); }}
             className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm font-bold text-red-500 hover:bg-red-500/10"

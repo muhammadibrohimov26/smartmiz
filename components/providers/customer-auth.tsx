@@ -11,6 +11,9 @@ import { ChildProps } from "@/types";
 
 interface CustomerAuth {
   user: User | null;
+  // The account has the { admin: true } claim (shows the "Admin panel" shortcut).
+  // Display only — the server checks the claim again before opening the panel.
+  isAdmin: boolean;
   ready: boolean;
   enabled: boolean;
   signIn: () => Promise<void>;
@@ -22,6 +25,7 @@ const CustomerAuthContext = createContext<CustomerAuth | undefined>(undefined);
 
 export function CustomerAuthProvider({ children }: ChildProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [ready, setReady] = useState(!isClientFirebaseConfigured);
 
   useEffect(() => {
@@ -29,11 +33,16 @@ export function CustomerAuthProvider({ children }: ChildProps) {
     return onAuthStateChanged(clientAuth(), (u) => {
       setUser(u);
       setReady(true);
+      setIsAdmin(false);
+      u?.getIdTokenResult()
+        .then((r) => setIsAdmin(r.claims.admin === true))
+        .catch(() => setIsAdmin(false));
     });
   }, []);
 
   const value: CustomerAuth = {
     user,
+    isAdmin,
     ready,
     enabled: isClientFirebaseConfigured,
     signIn: async () => {

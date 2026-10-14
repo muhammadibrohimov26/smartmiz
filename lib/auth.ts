@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { adminAuth, isFirebaseConfigured } from "@/lib/firebase/admin";
 
 export const SESSION_COOKIE = "session";
-export const SESSION_MAX_AGE_MS = 5 * 24 * 60 * 60 * 1000; // 5 kun
+export const SESSION_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000; // 14 kun (Firebase maximum)
 
 // The admin is the Firebase user that has the custom claim { admin: true }
 // (set once with `npm run set-admin -- <email>`).
