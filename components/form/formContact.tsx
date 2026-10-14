@@ -69,10 +69,10 @@ function ContactForm({ courses }: { courses: Price[] }) {
     },
   });
 
+  // Follow the ?course= link. Navigating to plain /contact (e.g. via the menu) keeps
+  // this page mounted, so clear the previous course instead of leaving it selected.
   useEffect(() => {
-    if (courseParam) {
-      form.setValue("kurs", courseParam);
-    }
+    form.setValue("kurs", courseParam ?? "");
   }, [courseParam, form]);
 
   function onSubmit(values: z.infer<typeof contactSchema>) {
