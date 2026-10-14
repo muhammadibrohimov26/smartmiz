@@ -6,6 +6,12 @@ const nextConfig = {
             { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
         ],
     },
+        async rewrites() {
+        return [
+            { source: '/__/auth/:path*', destination: 'https://yangi-3cf87.firebaseapp.com/__/auth/:path*' },
+            { source: '/__/firebase/:path*', destination: 'https://yangi-3cf87.firebaseapp.com/__/firebase/:path*' },
+        ];
+    },
     // Browsers and crawlers still ask for /favicon.ico
     async redirects() {
         return [{ source: '/favicon.ico', destination: '/icon.svg', permanent: true }];
