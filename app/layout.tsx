@@ -1,87 +1,89 @@
-
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ChildProps } from "@/types";
 import { ThemeProvider } from "@/components/providers/theme-providers";
 import { Toaster } from "@/components/ui/sonner";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
-const inter = Inter({ subsets: ["latin"] });
+const DESCRIPTION =
+  "Fargʻonadagi Smartmiz oʻquv markazi: ingliz (IELTS, CEFR), rus, koreys (EPS-TOPIK), arab, turk tillari va kompyuter kurslari. Bepul sinov darsiga yoziling.";
 
+// Defaults; every public page sets its own via pageMetadata() in lib/seo.ts
 export const metadata: Metadata = {
   // smartmiz.uz redirects to www; absolute URLs (og:image) must use the final host
-  metadataBase: new URL("https://www.smartmiz.uz"),
-  twitter: { card: "summary_large_image" },
-
-
-
-  title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
-  description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz. Kelajagingizni tillar va kompyuter savodxonligi bilan quring!",
-
-
-  authors: [{ name: 'Muhammad ibrohimov', url: 'https://www.smartmiz.uz' }],
-  // Icons: app/icon.svg and app/apple-icon.tsx
-  keywords: "Muhammad ibrohimov, Doniyor tohirov, Smartmiz haqida, Smartmiz tarixi, dasturlash kurslari, dasturlash darslari, reactjs uzbek tilida, EPS topik uzbek tilida, redux uzbek tilida, Smartmiz o'quv markazi, ingliz tili kurslari, rus tili kurslari, CEFR, javascript darslari, IT kurslari o'zbek tilida, koreys tili darslari, IELTS, C1 rus tili, turk tili, TOPIK koreys tili, IT loyihalar o'zbek tilida, chet tillari Farg'onada, kompyuter kurslari Farg'ona",
-
-
+  metadataBase: new URL(SITE_URL),
+  title: { default: "Smartmiz — chet tillari va kompyuter kurslari Fargʻonada", template: "%s | Smartmiz" },
+  description: DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: "Muhammad ibrohimov", url: SITE_URL }],
+  // Icons: app/icon.svg and app/apple-icon.tsx; og:image: app/opengraph-image.tsx
   openGraph: {
-    title: "Smartmiz - Chet Tillari va Kompyuter Kurslari",
-    description: "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
-    type: 'website',
-    locale: 'uz_UZ',
-    // The image comes from app/opengraph-image.tsx
-    countryName: 'Uzbekistan',
-    siteName: 'Smartmiz',
+    type: "website",
+    locale: "uz_UZ",
+    siteName: SITE_NAME,
+    countryName: "Uzbekistan",
   },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
+};
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0c0c0c" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+  ],
+};
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": ["EducationalOrganization", "LocalBusiness"],
+  "@id": `${SITE_URL}/#organization`,
+  name: "Smartmiz oʻquv markazi",
+  alternateName: "Smartmiz",
+  url: SITE_URL,
+  logo: `${SITE_URL}/SMARTMIZ.jpg`,
+  image: `${SITE_URL}/opengraph-image`,
+  description: DESCRIPTION,
+  telephone: "+998732441333",
+  areaServed: { "@type": "City", name: "Fergana" },
+  address: [44, 53].map((house) => ({
+    "@type": "PostalAddress",
+    streetAddress: `Qomus koʻchasi ${house}`,
+    addressLocality: "Fergana",
+    addressRegion: "Fergana Region",
+    addressCountry: "UZ",
+  })),
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "19:00",
+    },
+  ],
+  contactPoint: ["+998732441333", "+998732440099"].map((telephone) => ({
+    "@type": "ContactPoint",
+    telephone,
+    contactType: "customer service",
+    availableLanguage: ["uz", "ru"],
+  })),
+  sameAs: [
+    "https://www.instagram.com/smartmiz_fergana",
+    "https://t.me/Smartmiz",
+    "https://www.youtube.com/@smartmizoquvmarkazi7835",
+  ],
 };
 
 function RootLayout({ children }: ChildProps) {
   return (
     <html lang="uz" suppressHydrationWarning>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "EducationalOrganization",
-              "name": "Smartmiz O'quv Markazi",
-              "url": "https://www.smartmiz.uz",
-              "logo": "https://www.smartmiz.uz/SMARTMIZ.jpg",
-              "description": "Smartmiz o'quv markaziga xush kelibsiz. Ingliz tili, rus tili, koreys tili, arab tili, turk tili va kompyuter savodxonligi bo'yicha yuqori sifatli ta'lim beramiz.",
-              "address": [
-                { "@type": "PostalAddress", "streetAddress": "Qomus ko'chasi 44", "addressLocality": "Fergana", "addressRegion": "Fergana Region", "addressCountry": "UZ" },
-                { "@type": "PostalAddress", "streetAddress": "Qomus ko'chasi 53", "addressLocality": "Fergana", "addressRegion": "Fergana Region", "addressCountry": "UZ" }
-              ],
-              "openingHours": "Mo-Sa 08:00-19:00",
-              "contactPoint": [
-                {
-                  "@type": "ContactPoint",
-                  "telephone": "+998-73-244-13-33",
-                  "contactType": "customer service"
-                },
-                {
-                  "@type": "ContactPoint",
-                  "telephone": "+998-73-244-00-99",
-                  "contactType": "customer service"
-                }
-              ],
-              "sameAs": [
-                "https://www.instagram.com/smartmiz_fergana",
-                "https://t.me/Smartmiz",
-                "https://www.youtube.com/@smartmizoquvmarkazi7835"
-              ]
-            })
-          }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
       </head>
       <body className="overflow-x-hidden">
         <LanguageProvider>
-          <ThemeProvider attribute="class"
-            defaultTheme="dark"
-            disableTransitionOnChange >
+          <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
             {children}
             <Toaster position="top-center" />
           </ThemeProvider>
@@ -90,4 +92,4 @@ function RootLayout({ children }: ChildProps) {
     </html>
   );
 }
-export default RootLayout
+export default RootLayout;

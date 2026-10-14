@@ -6,7 +6,7 @@ import { ChildProps } from "@/types";
 import AdminNav from "../_components/adminNav";
 
 export const metadata: Metadata = {
-  title: "Admin panel - Smartmiz",
+  title: "Admin panel",
   robots: { index: false, follow: false },
 };
 

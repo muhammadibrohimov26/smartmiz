@@ -1,13 +1,14 @@
 import { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getNews, getSiteSettings } from "@/lib/data";
 import NewsContent from "./_components/newsContent";
 
-export const metadata: Metadata = {
-  title: "Muvaffaqiyatlar - Smartmiz o'quvchilarining natijalari",
-  description: "Smartmiz o'quv markazi o'quvchilarining IELTS, TOPIK, CEFR va boshqa imtihonlardagi natijalari.",
-  alternates: { canonical: "/news" },
-  keywords: "Smartmiz muvaffaqiyatlar, IELTS natijalari Farg'ona, TOPIK imtihon natijalari, CEFR C1 sertifikat Uzbekistan, EPS-TOPIK Farg'ona, Smartmiz o'quvchilar fikrlari, o'quv markazi natijalari"
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Muvaffaqiyatlar — Smartmiz oʻquvchilari natijalari",
+  description: "Smartmiz oʻquv markazi oʻquvchilarining IELTS, TOPIK, CEFR va boshqa imtihonlardagi natijalari.",
+  path: "/news",
+  keywords: ["Smartmiz natijalar", "IELTS natijalari Fargʻona", "TOPIK natijalari", "CEFR sertifikat", "EPS-TOPIK Fargʻona"],
+});
 
 // Re-rendered on demand when a result is changed in the admin panel
 export const revalidate = 3600;

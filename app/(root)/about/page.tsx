@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getCourses, getSiteSettings } from "@/lib/data";
 import { formatCount } from "@/lib/numbers";
 import { yearsActive } from "@/lib/years";
@@ -8,12 +9,12 @@ import AboutContent from "../_components/aboutContent";
 export async function generateMetadata(): Promise<Metadata> {
   const years = yearsActive();
   const students = formatCount((await getSiteSettings()).studentCount, "uz");
-  return {
-    title: "Biz haqimizda - Smartmiz o'quv markazi",
-    alternates: { canonical: "/about" },
-    description: `Smartmiz o'quv markazi tarixi, yutuqlari va o'quv faoliyati haqida batafsil ma'lumot oling. ${years} yillik ta'lim tajribasi va ${students} dan ortiq muvaffaqiyatli bitiruvchilar.`,
-    keywords: `Smartmiz haqida, Smartmiz tarixi, Smartmiz o'quv markazi jamoasi, Farg'ona chet tillari maktabi, Smartmiz yutuqlari, o'quv markazi tarixi, ${years} yillik tajriba, Farg'ona o'quv markazlari`,
-  };
+  return pageMetadata({
+    title: "Biz haqimizda — Smartmiz oʻquv markazi",
+    description: `Smartmiz — ${years} yillik tajribaga ega oʻquv markazi, ${students}+ bitiruvchi. Markaz tarixi, yutuqlari va faol kurslari bilan tanishing.`,
+    path: "/about",
+    keywords: ["Smartmiz haqida", "Smartmiz tarixi", "Fargʻona oʻquv markazi", `${years} yillik tajriba`],
+  });
 }
 
 // Re-rendered on demand when a course is changed in the admin panel

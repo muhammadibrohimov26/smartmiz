@@ -18,8 +18,8 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
     const { t, locale } = useTranslation();
 
     return (
-        <div className="mt-12 container mx-auto mb-16 px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+        <div className="mt-12 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
                 {prices.map((price, index) => {
                     const titles = courseCardTitles(price, t);
                     return (
@@ -34,19 +34,19 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 src={price.image}
-                                alt={price.courseName}
+                                alt={`${courseLabel(price)} kursi`}
                             /> : <CourseCover course={price} />}
                         </div>
 
                         {/* Card Body */}
-                        <div className="p-8 flex flex-col flex-grow">
+                        <div className="p-5 sm:p-8 flex flex-col flex-grow">
                             {/* Category & Title */}
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-[10px] uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
+                                <span className="text-xs uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
                                     {titles.label}
                                 </span>
                                 {price.chegirma && (
-                                    <span className="flex items-center gap-1 text-[9px] uppercase tracking-widest font-black bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-md border border-yellow-500/20">
+                                    <span className="flex items-center gap-1 text-[11px] uppercase tracking-widest font-black bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-md border border-yellow-500/20">
                                         <Sparkles className="w-2.5 h-2.5" />
                                         {t("promoBadge")}
                                     </span>

@@ -26,7 +26,7 @@ export default function FAQ() {
   ];
 
   return (
-    <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 max-w-7xl mx-auto">
       {/* Section Header */}
       <div className="text-center mb-14">
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
@@ -54,7 +54,7 @@ export default function FAQ() {
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : i)}
-                className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                className="w-full flex items-center justify-between gap-3 p-4 sm:p-5 text-start"
               >
                 <div className="flex items-center gap-3">
                   <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-colors duration-300 ${
@@ -80,14 +80,14 @@ export default function FAQ() {
               >
                 <div className="overflow-hidden">
                   <div className="px-5 pb-5 pt-1">
-                    <div className="ml-10 pl-1 border-l-2 border-[#FFB800]/40">
+                    <div className="ms-4 sm:ms-10 ps-1 border-s-2 border-[#FFB800]/40">
                       <p className="text-zinc-600 dark:text-zinc-300 text-sm md:text-base leading-relaxed font-medium pl-4">
                         {item.a}
                       </p>
                       {item.link && (
                         <Link
                           href={item.link.href}
-                          className="inline-flex items-center gap-1.5 mt-3 ps-4 text-sm font-black text-yellow-600 dark:text-yellow-400 hover:underline"
+                          className="inline-flex items-center gap-1.5 mt-1 py-2.5 ps-4 text-sm font-black text-yellow-600 dark:text-yellow-400 hover:underline"
                         >
                           {item.link.label}
                           <ArrowRight className="w-4 h-4 rtl:rotate-180" />

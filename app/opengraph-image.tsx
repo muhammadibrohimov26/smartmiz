@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 export const runtime = "edge";
 
 // Link preview image (Telegram, Facebook, …) for every page; generated on first request, then cached.
-export const alt = "Smartmiz — chet tillari va kompyuter kurslari, Farg'ona";
+export const alt = "Smartmiz — chet tillari va kompyuter kurslari, Fargʻona";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -64,7 +64,7 @@ export default async function OpengraphImage() {
             kompyuter kurslari
           </div>
           <div style={{ fontSize: 32, color: "#a1a1aa", marginTop: 28 }}>
-            Farg&apos;ona · smartmiz.uz
+            Fargʻona · smartmiz.uz
           </div>
         </div>
       </div>

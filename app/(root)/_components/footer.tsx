@@ -18,25 +18,25 @@ function Footer() {
         {/* Contacts */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 mb-6 border-b border-gray-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-400">
           <div className="flex items-start gap-2.5">
-            <Phone className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
-            <div className="flex flex-col gap-1">
+            <Phone className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
+            <div className="flex flex-col">
               {phones.map((p) => (
-                <a key={p.href} href={p.href} dir="ltr" className="hover:text-zinc-950 dark:hover:text-white transition-colors">
+                <a key={p.href} href={p.href} dir="ltr" className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors">
                   {p.label}
                 </a>
               ))}
             </div>
           </div>
           <div className="flex items-start gap-2.5">
-            <MapPin className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
-            <div className="flex flex-col gap-1">
+            <MapPin className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
+            <div className="flex flex-col">
               {branches.map((b, i) => (
                 <a
                   key={b.house}
                   href={b.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-zinc-950 dark:hover:text-white transition-colors"
+                  className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
                 >
                   <span className="font-bold">{t("branchLabel", { n: i + 1 })}:</span> {t("footerAddress", { house: b.house })}
                 </a>
@@ -53,14 +53,14 @@ function Footer() {
           <div className="font-bold bw-text uppercase tracking-widest text-sm text-gray-500 dark:text-gray-400">
             <p>© {new Date().getFullYear()} {t("footerRights")}</p>
           </div>
-          <div className="flex gap-6">
-            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="hover:scale-110 hover:brightness-110 transition-transform">
+          <div className="flex gap-2">
+            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
               <img src="/img/instagram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="hover:scale-110 hover:brightness-110 transition-transform">
+            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
               <img src="/img/telegram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="hover:scale-110 hover:brightness-110 transition-transform">
+            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
               <img src="/img/youtube.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
             </a>
           </div>

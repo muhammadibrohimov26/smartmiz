@@ -14,11 +14,11 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
   const activeCourses = uniqueCourses(courses).map((c) => translatedCourseLabel(c, t));
 
   return (
-    <div className="mt-28 md:mt-32 max-w-6xl mx-auto px-4 mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
       
       {/* HEADER SECTION */}
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
+        <h1 className="text-[clamp(1.75rem,8.5vw,2.25rem)] sm:text-5xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
           {t("aboutTitle")}
         </h1>
         <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full mb-6"></div>
@@ -62,7 +62,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
         
         {/* History Paragraph */}
-        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
+        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
           <div>
             <h2 className="text-2xl md:text-3xl font-black bw-text uppercase tracking-tight mb-4">
               SMARTMIZ {FOUNDING_YEAR} - {currentYear()}
@@ -108,7 +108,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
       </div>
 
       {/* ACTIVE COURSES LIST */}
-      <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
+      <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
         <h2 className="text-2xl md:text-3xl font-black bw-text uppercase tracking-tight mb-6 text-center md:text-left">
           {t("aboutCoursesTitle")}
         </h2>

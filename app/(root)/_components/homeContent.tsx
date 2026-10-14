@@ -25,7 +25,7 @@ function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }
         <div className="yellow-blob blob-2"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
         
         {/* HERO SECTION */}
         <div className="relative min-h-[80vh] flex flex-col items-center justify-center text-center pt-20">
@@ -34,7 +34,7 @@ function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }
             <span>{t("heroTag")}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight bw-text mb-6 max-w-5xl animate-in fade-in zoom-in-95 duration-700 delay-150 uppercase w-full px-2 sm:px-0 leading-[1.1] md:leading-[1.05]">
+          <h1 className="text-[clamp(1.55rem,7.2vw,2.25rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight bw-text mb-6 max-w-5xl animate-in fade-in zoom-in-95 duration-700 delay-150 uppercase w-full px-2 sm:px-0 leading-[1.1] md:leading-[1.05]">
             {t("heroTitle1")} <br />
             <span className="yellow-accent">{t("heroTitle2")}</span>
           </h1>
@@ -77,14 +77,14 @@ function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }
 
         {/* INTERACTIVE COURSE recommendation QUIZ */}
         <div className="py-24 border-t-2 border-zinc-100 dark:border-zinc-800">
-          <div className="p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
+          <div className="p-5 sm:p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
             <CourseQuiz courses={prices} />
           </div>
         </div>
 
         {/* VOCABULARY GAME */}
         <div className="py-24 border-t-2 border-zinc-100 dark:border-zinc-800">
-          <div className="p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
+          <div className="p-5 sm:p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
             <VocabGame />
           </div>
         </div>

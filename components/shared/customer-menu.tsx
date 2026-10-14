@@ -60,7 +60,7 @@ function CustomerMenu() {
       <button
         onClick={signIn}
         aria-label={t("authLoginGoogle")}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs font-black uppercase tracking-wider bg-white dark:bg-zinc-950 hover:border-[#FFB800] transition-colors"
+        className="flex items-center justify-center gap-1.5 min-w-10 px-3 h-10 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs font-black uppercase tracking-wider bg-white dark:bg-zinc-950 hover:border-[#FFB800] transition-colors"
       >
         <LogIn className="w-3.5 h-3.5 yellow-accent rtl:rotate-180" />
         <span className="hidden sm:inline">{t("authLogin")}</span>
@@ -72,7 +72,7 @@ function CustomerMenu() {
   return (
     <div className="relative" ref={ref}>
       <button onClick={() => setOpen(!open)} aria-expanded={open} aria-label={name} className="block">
-        <CustomerAvatar name={name} photo={user.photoURL} className="w-9 h-9 border-2 border-[#FFB800]" />
+        <CustomerAvatar name={name} photo={user.photoURL} className="w-10 h-10 border-2 border-[#FFB800]" />
       </button>
       {open && (
         <div className="absolute top-11 end-0 w-56 bg-white dark:bg-zinc-950 border border-zinc-900 dark:border-zinc-800 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.1)] p-3 z-50">
