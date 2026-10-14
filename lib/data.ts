@@ -151,3 +151,18 @@ export async function getApprovedReviews(): Promise<Review[]> {
 export async function getAllReviews(): Promise<Review[]> {
   return readReviews(false);
 }
+
+// ---------- Admin dashboard counts (aggregation queries: no documents downloaded) ----------
+
+export async function getAdminCounts() {
+  const db = await firestore();
+  if (!db) throw new Error("Firebase Admin is not configured");
+  const count = async (q: FirebaseFirestore.Query) => (await q.count().get()).data().count;
+  const [newLeads, pendingReviews, courses, news] = await Promise.all([
+    count(db.collection("leads").where("status", "==", "new")),
+    count(db.collection("reviews").where("status", "==", "pending")),
+    count(db.collection("courses")),
+    count(db.collection("news")),
+  ]);
+  return { newLeads, pendingReviews, courses, news };
+}

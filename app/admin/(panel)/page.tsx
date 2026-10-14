@@ -1,19 +1,17 @@
 import Link from "next/link";
 import { BookOpen, Inbox, MessageSquareQuote, Trophy } from "lucide-react";
-import { getAllReviews, getCourses, getLeads, getNews } from "@/lib/data";
+import { getAdminCounts } from "@/lib/data";
 import { ensureAdminPage } from "@/lib/auth";
 
 async function AdminDashboard() {
   await ensureAdminPage();
-  const [courses, news, leads, reviews] = await Promise.all([getCourses({ strict: true }), getNews({ strict: true }), getLeads(), getAllReviews()]);
-  const newLeads = leads.filter((l) => l.status === "new").length;
-  const pendingReviews = reviews.filter((r) => r.status === "pending").length;
+  const { newLeads, pendingReviews, courses, news } = await getAdminCounts();
 
   const cards = [
     { href: "/admin/leads", label: "Yangi arizalar", value: newLeads, icon: Inbox, highlight: newLeads > 0 },
     { href: "/admin/reviews", label: "Tasdiqlanmagan sharhlar", value: pendingReviews, icon: MessageSquareQuote, highlight: pendingReviews > 0 },
-    { href: "/admin/courses", label: "Kurslar", value: courses.length, icon: BookOpen },
-    { href: "/admin/news", label: "Natijalar", value: news.length, icon: Trophy },
+    { href: "/admin/courses", label: "Kurslar", value: courses, icon: BookOpen },
+    { href: "/admin/news", label: "Natijalar", value: news, icon: Trophy },
   ];
 
   return (
