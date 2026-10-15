@@ -22,7 +22,13 @@ export interface NewsItem {
     image: string
     date: string
     quote: string
+    status: ReviewStatus
+    // Sent through the Telegram bot: link to the channel post, video/voice kind
+    telegramLink?: string
+    media?: TelegramMediaKind
 }
+
+export type TelegramMediaKind = "video" | "video_note" | "voice" | "audio"
 
 export type LeadStatus = "new" | "contacted"
 
@@ -51,4 +57,6 @@ export interface Review {
     text: string
     status: ReviewStatus
     updatedAt: string
+    telegramLink?: string
+    media?: TelegramMediaKind
 }

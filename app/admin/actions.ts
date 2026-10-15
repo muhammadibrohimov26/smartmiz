@@ -8,6 +8,10 @@ import { deleteMediaUrl, MediaValidationError, saveMedia } from "@/lib/media";
 import { requireAdmin, SESSION_COOKIE, SESSION_MAX_AGE_MS } from "@/lib/auth";
 import { isAllowedImageUrl } from "@/lib/images";
 import { isValidVideoUrl } from "@/lib/video";
+import { SITE_URL } from "@/lib/seo";
+import { isBotConfigured, tg, webhookSecret } from "@/lib/bot/api";
+import { createAdminLinkCode, removeBotAdmin, updateBotConfig } from "@/lib/bot/config";
+import { decide, Kind } from "@/lib/bot/moderation";
 import { LeadStatus, ReviewStatus } from "@/types";
 
 type ActionResult = { success: true } | { success: false; error: string };
@@ -232,19 +236,136 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
 
 // ---------- Reviews ----------
 
-export async function setReviewStatus(id: string, status: ReviewStatus): Promise<ActionResult> {
-  return run(async () => {
-    await requireAdmin();
+// Approving a review/result sent through the Telegram bot also posts it to the
+// channel and tells the sender (lib/bot/moderation.ts); the message says how it went.
+type DecisionResult = { success: true; message: string } | { success: false; error: string };
+
+async function decideAs(kind: Kind, id: string, status: ReviewStatus): Promise<DecisionResult> {
+  try {
+    const session = await requireAdmin();
     if (!["pending", "approved", "hidden"].includes(status)) throw new Error("Noto'g'ri holat");
-    await adminDb().collection("reviews").doc(id).update({ status });
-    for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
-  });
+    const result = await decide(kind, id, status, session.email ?? "admin panel");
+    return result.ok ? { success: true, message: result.message } : { success: false, error: result.message };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error instanceof Error ? error.message : "Xatolik yuz berdi" };
+  }
+}
+
+export async function setReviewStatus(id: string, status: ReviewStatus): Promise<DecisionResult> {
+  return decideAs("review", id, status);
+}
+
+export async function setNewsStatus(id: string, status: ReviewStatus): Promise<DecisionResult> {
+  return decideAs("news", id, status);
 }
 
 export async function deleteReview(id: string): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
-    await adminDb().collection("reviews").doc(id).delete();
+    const ref = adminDb().collection("reviews").doc(id);
+    const photo = (await ref.get()).get("photo"); // Telegram reviewers' photo is stored in media
+    await ref.delete();
+    await deleteMediaUrl(photo);
     for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
+  });
+}
+
+// ---------- Telegram bot (results & reviews) ----------
+
+const BOT_COMMANDS = [
+  { command: "natija", description: "Imtihon natijasini yuborish" },
+  { command: "sharh", description: "Sharh qoldirish" },
+  { command: "cancel", description: "Bekor qilish" },
+];
+
+// Points the bot's webhook at this site and sets its commands and description
+export async function connectBot(): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    if (!isBotConfigured()) throw new Error("REVIEW_BOT_TOKEN Vercel'da qo'shilmagan");
+    await tg("setWebhook", {
+      url: `${SITE_URL}/api/telegram`,
+      secret_token: webhookSecret(),
+      allowed_updates: ["message", "callback_query"],
+    });
+    await tg("setMyCommands", { commands: BOT_COMMANDS });
+    await tg("setMyShortDescription", { short_description: "Smartmiz o'quv markazi: natijangizni yuboring yoki sharh qoldiring" });
+    await tg("setMyDescription", {
+      description:
+        "Smartmiz o'quv markazi boti.\n\n🏆 Imtihon natijangizni (sertifikat, ball) yuboring\n⭐ Markaz haqida sharh qoldiring\n🎥 Video va 🎙 ovozli xabar ham mumkin\n\nAdmin tasdiqlagach saytda va kanalimizda chiqadi.",
+    });
+    revalidatePath("/admin/bot");
+  });
+}
+
+export async function createBotAdminLink(): Promise<{ success: true; link: string } | { success: false; error: string }> {
+  try {
+    await requireAdmin();
+    const me = await tg<{ username: string }>("getMe");
+    return { success: true, link: `https://t.me/${me.username}?start=admin_${await createAdminLinkCode()}` };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error instanceof Error ? error.message : "Xatolik yuz berdi" };
+  }
+}
+
+export async function removeBotAdminAction(id: number): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    await removeBotAdmin(id);
+    revalidatePath("/admin/bot");
+  });
+}
+
+// "@smartmiz_uz", "https://t.me/smartmiz_uz" or "-100…"; the bot must be a channel admin
+export async function saveBotChannel(formData: FormData): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    let channel = str(formData, "channel").replace(/^https?:\/\/t\.me\//, "").replace(/\/$/, "");
+    if (channel && !channel.startsWith("@") && !/^-100\d+$/.test(channel)) channel = `@${channel}`;
+    if (channel) {
+      if (!/^(@[A-Za-z0-9_]{4,32}|-100\d+)$/.test(channel)) throw new Error("Kanal manzili noto'g'ri. Masalan: @smartmiz_uz");
+      const me = await tg<{ id: number }>("getMe");
+      let member: { status: string; can_post_messages?: boolean };
+      try {
+        member = await tg("getChatMember", { chat_id: channel, user_id: me.id });
+      } catch {
+        throw new Error("Kanal topilmadi yoki bot kanalga qo'shilmagan");
+      }
+      if (member.status !== "administrator" || member.can_post_messages === false) {
+        throw new Error("Botni kanalga admin qiling va \"Xabar joylash\" huquqini bering");
+      }
+    }
+    await updateBotConfig({ channel });
+    revalidatePath("/admin/bot");
+  });
+}
+
+// Premium emoji pack: t.me/addemoji/<name> → map of emoji → custom_emoji_id
+export async function saveBotEmojiPack(formData: FormData): Promise<ActionResult> {
+  return run(async () => {
+    await requireAdmin();
+    const name = str(formData, "emojiPack").replace(/^https?:\/\/t\.me\/addemoji\//, "").replace(/\/$/, "");
+    if (!name) {
+      await updateBotConfig({ emojiPack: "", emoji: {} });
+    } else {
+      if (!/^[A-Za-z0-9_]{1,64}$/.test(name)) throw new Error("Havola noto'g'ri. Masalan: https://t.me/addemoji/NomiPack");
+      let set: { sticker_type: string; stickers: { emoji?: string; custom_emoji_id?: string }[] };
+      try {
+        set = await tg("getStickerSet", { name });
+      } catch {
+        throw new Error("Bunday emoji to'plami topilmadi");
+      }
+      if (set.sticker_type !== "custom_emoji") throw new Error("Bu stiker to'plami, emoji to'plami emas (t.me/addemoji/... bo'lishi kerak)");
+      const emoji: Record<string, string> = {};
+      for (const s of set.stickers) {
+        if (!s.emoji || !s.custom_emoji_id) continue;
+        // Same emoji with and without the variation selector (⭐ / ⭐️)
+        for (const key of [s.emoji, s.emoji.replace(/️/g, "")]) if (!emoji[key]) emoji[key] = s.custom_emoji_id;
+      }
+      await updateBotConfig({ emojiPack: name, emoji });
+    }
+    revalidatePath("/admin/bot");
   });
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, ExternalLink, Inbox, LayoutDashboard, LogOut, MessageSquareQuote, Settings, Trophy } from "lucide-react";
+import { BookOpen, ExternalLink, Inbox, LayoutDashboard, LogOut, MessageSquareQuote, Send, Settings, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "../actions";
 
@@ -12,6 +12,7 @@ const links = [
   { href: "/admin/news", label: "Natijalar", icon: Trophy },
   { href: "/admin/leads", label: "Arizalar", icon: Inbox },
   { href: "/admin/reviews", label: "Sharhlar", icon: MessageSquareQuote },
+  { href: "/admin/bot", label: "Telegram bot", icon: Send },
   { href: "/admin/settings", label: "Sozlamalar", icon: Settings },
 ];
 

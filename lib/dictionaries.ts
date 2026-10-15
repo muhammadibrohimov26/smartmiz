@@ -36,6 +36,8 @@ export const dictionaries = {
     errorTitle: "Nimadir notoʻgʻri ketdi",
     errorDesc: "Sahifani koʻrsatishda xatolik yuz berdi. Qaytadan urinib koʻring.",
     errorRetry: "Qayta urinish",
+    tgWatch: "Videoni Telegramda koʻrish",
+    tgListen: "Ovozli sharhni Telegramda tinglash",
     // Course Mappings
     "Koreys tili": "Koreys tili",
     "Kompyuter kursi": "Kompyuter kursi",
@@ -225,6 +227,8 @@ export const dictionaries = {
     errorTitle: "Что-то пошло не так",
     errorDesc: "При загрузке страницы произошла ошибка. Попробуйте ещё раз.",
     errorRetry: "Повторить",
+    tgWatch: "Смотреть видео в Telegram",
+    tgListen: "Слушать в Telegram",
     // Course Mappings
     "Koreys tili": "Корейский язык",
     "Kompyuter kursi": "Компьютерные курсы",
@@ -411,6 +415,8 @@ export const dictionaries = {
     errorTitle: "Something went wrong",
     errorDesc: "There was an error showing this page. Please try again.",
     errorRetry: "Try again",
+    tgWatch: "Watch the video on Telegram",
+    tgListen: "Listen on Telegram",
     // Course Mappings
     "Koreys tili": "Korean Language",
     "Kompyuter kursi": "Computer Courses",
@@ -600,6 +606,8 @@ export const dictionaries = {
     errorTitle: "Bir şeyler ters gitti",
     errorDesc: "Sayfa gösterilirken bir hata oluştu. Lütfen tekrar deneyin.",
     errorRetry: "Tekrar dene",
+    tgWatch: "Videoyu Telegram'da izle",
+    tgListen: "Telegram'da dinle",
     // Course Mappings
     "Koreys tili": "Korece",
     "Kompyuter kursi": "Bilgisayar Kursu",
@@ -789,6 +797,8 @@ export const dictionaries = {
     errorTitle: "문제가 발생했습니다",
     errorDesc: "페이지를 표시하는 중 오류가 발생했습니다. 다시 시도해 주세요.",
     errorRetry: "다시 시도",
+    tgWatch: "텔레그램에서 영상 보기",
+    tgListen: "텔레그램에서 듣기",
     // Course Mappings
     "Koreys tili": "한국어",
     "Kompyuter kursi": "컴퓨터 과정",
@@ -978,6 +988,8 @@ export const dictionaries = {
     errorTitle: "حدث خطأ ما",
     errorDesc: "حدث خطأ أثناء عرض هذه الصفحة. يرجى المحاولة مرة أخرى.",
     errorRetry: "إعادة المحاولة",
+    tgWatch: "شاهد الفيديو على تيليجرام",
+    tgListen: "استمع على تيليجرام",
     // Course Mappings
     "Koreys tili": "اللغة الكورية",
     "Kompyuter kursi": "دورة الكمبيوتر",

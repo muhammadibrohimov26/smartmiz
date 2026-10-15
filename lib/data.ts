@@ -1,4 +1,4 @@
-import { Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings } from "@/types";
+import { Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings, TelegramMediaKind } from "@/types";
 import { DEFAULT_ABOUT_VIDEO_IMAGE, DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 import { isAllowedImageUrl } from "@/lib/images";
 // Bundled into the server code, so the fallback also works in serverless functions
@@ -50,12 +50,19 @@ export async function getCourses(options: Options = {}): Promise<Price[]> {
   }, localCourses as Price[], options);
 }
 
-export async function getNews(options: Options = {}): Promise<NewsItem[]> {
+const REVIEW_STATUSES: ReviewStatus[] = ["pending", "approved", "hidden"];
+const MEDIA_KINDS: TelegramMediaKind[] = ["video", "video_note", "voice", "audio"];
+
+// Results added in the admin panel have no status (= on the site); results sent
+// through the Telegram bot start "pending" until an admin approves them.
+// The public site gets approved ones only; { all: true } is for the admin panel.
+export async function getNews(options: Options & { all?: boolean } = {}): Promise<NewsItem[]> {
   return withFallback<NewsItem[]>(async () => {
     const db = await firestore();
     if (!db) return null;
+    // Filtered here, not in the query: old results have no status field at all
     const snap = await db.collection("news").orderBy("date", "desc").get();
-    return snap.docs.map((doc) => {
+    const items = snap.docs.map((doc): NewsItem => {
       const d = doc.data();
       return {
         id: doc.id,
@@ -66,9 +73,13 @@ export async function getNews(options: Options = {}): Promise<NewsItem[]> {
         image: d.image ?? "",
         date: d.date ?? "",
         quote: d.quote ?? "",
+        status: REVIEW_STATUSES.includes(d.status) ? d.status : "approved",
+        telegramLink: d.telegramLink || undefined,
+        media: MEDIA_KINDS.includes(d.media?.kind) ? d.media.kind : undefined,
       };
     });
-  }, localNews as NewsItem[], options);
+    return options.all ? items : items.filter((item) => item.status === "approved");
+  }, (localNews as Omit<NewsItem, "status">[]).map((item) => ({ ...item, status: "approved" as const })), options);
 }
 
 export async function getLeads(): Promise<Lead[]> {
@@ -118,8 +129,6 @@ export async function getSiteSettings(options: Options = {}): Promise<SiteSettin
 
 // ---------- Reviews (customers sign in with Google; admin approves) ----------
 
-const REVIEW_STATUSES: ReviewStatus[] = ["pending", "approved", "hidden"];
-
 async function readReviews(onlyApproved: boolean): Promise<Review[]> {
   const db = await firestore();
   if (!db) return [];
@@ -139,6 +148,8 @@ async function readReviews(onlyApproved: boolean): Promise<Review[]> {
         text: String(d.text ?? ""),
         status: REVIEW_STATUSES.includes(d.status) ? (d.status as ReviewStatus) : "pending",
         updatedAt: updated,
+        telegramLink: d.telegramLink || undefined,
+        media: MEDIA_KINDS.includes(d.media?.kind) ? (d.media.kind as TelegramMediaKind) : undefined,
       };
     })
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
@@ -158,11 +169,12 @@ export async function getAdminCounts() {
   const db = await firestore();
   if (!db) throw new Error("Firebase Admin is not configured");
   const count = async (q: FirebaseFirestore.Query) => (await q.count().get()).data().count;
-  const [newLeads, pendingReviews, courses, news] = await Promise.all([
+  const [newLeads, pendingReviews, courses, news, pendingNews] = await Promise.all([
     count(db.collection("leads").where("status", "==", "new")),
     count(db.collection("reviews").where("status", "==", "pending")),
     count(db.collection("courses")),
     count(db.collection("news")),
+    count(db.collection("news").where("status", "==", "pending")),
   ]);
-  return { newLeads, pendingReviews, courses, news };
+  return { newLeads, pendingReviews, courses, news, pendingNews };
 }

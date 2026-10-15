@@ -4,7 +4,7 @@ import NewsManager from "../../_components/newsManager";
 
 async function AdminNewsPage() {
   await ensureAdminPage();
-  const news = await getNews({ strict: true });
+  const news = await getNews({ strict: true, all: true });
   return <NewsManager news={news} />;
 }
 

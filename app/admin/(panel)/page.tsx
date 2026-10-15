@@ -5,13 +5,13 @@ import { ensureAdminPage } from "@/lib/auth";
 
 async function AdminDashboard() {
   await ensureAdminPage();
-  const { newLeads, pendingReviews, courses, news } = await getAdminCounts();
+  const { newLeads, pendingReviews, courses, news, pendingNews } = await getAdminCounts();
 
   const cards = [
     { href: "/admin/leads", label: "Yangi arizalar", value: newLeads, icon: Inbox, highlight: newLeads > 0 },
     { href: "/admin/reviews", label: "Tasdiqlanmagan sharhlar", value: pendingReviews, icon: MessageSquareQuote, highlight: pendingReviews > 0 },
     { href: "/admin/courses", label: "Kurslar", value: courses, icon: BookOpen },
-    { href: "/admin/news", label: "Natijalar", value: news, icon: Trophy },
+    { href: "/admin/news", label: pendingNews > 0 ? `Natijalar · ${pendingNews} ta tasdiqlash kerak` : "Natijalar", value: news, icon: Trophy, highlight: pendingNews > 0 },
   ];
 
   return (

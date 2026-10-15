@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useTranslation } from "@/context/LanguageContext";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
 import { CustomerAvatar, useGoogleSignIn } from "@/components/shared/customer-menu";
+import TelegramMediaLink from "@/components/shared/telegram-media-link";
 import { getMyReview, submitReview } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 import { Review, ReviewStatus } from "@/types";
@@ -34,6 +35,7 @@ function ReviewCard({ review }: { review: Review }) {
     <div className="w-full p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl flex flex-col gap-4">
       <Stars value={review.rating} />
       <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line flex-grow">{review.text}</p>
+      <TelegramMediaLink link={review.telegramLink} media={review.media} />
       <div className="flex items-center gap-3">
         <CustomerAvatar name={review.name} photo={review.photo} className="w-10 h-10" />
         <div className="min-w-0">

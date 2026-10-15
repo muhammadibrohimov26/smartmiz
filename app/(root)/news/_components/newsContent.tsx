@@ -6,7 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Flag from "@/components/shared/flag";
 import { formatCount } from "@/lib/numbers";
+import TelegramMediaLink from "@/components/shared/telegram-media-link";
 import { NewsItem } from "@/types";
+
+// "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
+// dates differently, which breaks hydration
+function formatDate(date: string) {
+  const m = date.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : date;
+}
 
 
 const courseColors: Record<string, string> = {
@@ -84,7 +92,7 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
                   </span>
                   <div className="flex items-center gap-1 text-zinc-400 text-xs">
                     <Calendar className="w-3 h-3" />
-                    <span>{new Date(item.date).toLocaleDateString("uz-UZ")}</span>
+                    <span>{formatDate(item.date)}</span>
                   </div>
                 </div>
               </div>
@@ -105,6 +113,11 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
                   {t(item.quote)}
                 </p>
               </div>
+              {item.media && (
+                <div className="mt-4">
+                  <TelegramMediaLink link={item.telegramLink} media={item.media} />
+                </div>
+              )}
 
               {/* Stars */}
               <div className="flex items-center gap-0.5 mt-4">

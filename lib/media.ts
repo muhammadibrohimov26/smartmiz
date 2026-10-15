@@ -17,11 +17,18 @@ export async function saveMedia(file: File): Promise<string> {
   if (!ALLOWED_TYPES.includes(file.type)) throw new MediaValidationError("Faqat JPG, PNG, WebP yoki GIF rasm yuklash mumkin");
   if (file.size > MEDIA_MAX_BYTES) throw new MediaValidationError("Rasm juda katta (900 KB dan oshmasin)");
 
+  return saveMediaBuffer(Buffer.from(await file.arrayBuffer()), file.type);
+}
+
+// For images that do not come from a browser upload (e.g. photos sent to the Telegram bot)
+export async function saveMediaBuffer(data: Buffer, contentType: string): Promise<string> {
+  if (!ALLOWED_TYPES.includes(contentType)) throw new MediaValidationError("Faqat JPG, PNG, WebP yoki GIF rasm yuklash mumkin");
+  if (data.length > MEDIA_MAX_BYTES) throw new MediaValidationError("Rasm juda katta (900 KB dan oshmasin)");
   const id = randomUUID();
   await adminDb().collection("media").doc(id).set({
-    data: Buffer.from(await file.arrayBuffer()),
-    contentType: file.type,
-    size: file.size,
+    data,
+    contentType,
+    size: data.length,
     createdAt: FieldValue.serverTimestamp(),
   });
   return `/media/${id}`;

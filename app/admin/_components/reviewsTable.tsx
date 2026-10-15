@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Check, EyeOff, Star, Trash2 } from "lucide-react";
+import { Check, EyeOff, Send, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatTashkent } from "@/lib/dates";
@@ -32,7 +32,7 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
     startTransition(async () => {
       const res = await callAction(() => setReviewStatus(review.id, status));
       if (!res.success) return void toast.error(res.error);
-      toast.success(status === "approved" ? "Sharh saytga chiqarildi" : "Sharh yashirildi");
+      toast.success(res.message);
     });
   }
 
@@ -86,7 +86,18 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
                 </div>
                 <span className="text-xs text-zinc-500">
                   {formatTashkent(review.updatedAt)} · {statusLabel[review.status]}
+                  {review.id.startsWith("tg_") && " · Telegram bot"}
                 </span>
+                {review.media && (
+                  <span className="text-xs font-bold text-zinc-500">
+                    {review.media === "voice" || review.media === "audio" ? "🎙 Ovozli xabar" : "🎥 Video"}
+                  </span>
+                )}
+                {review.telegramLink && (
+                  <a href={review.telegramLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 hover:underline">
+                    <Send className="w-3 h-3" /> Kanalda
+                  </a>
+                )}
               </div>
               <p className="text-sm whitespace-pre-line mb-3">{review.text}</p>
               <div className="flex flex-wrap gap-2">
