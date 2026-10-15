@@ -5,6 +5,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { NewsItem } from "@/types";
 import { deleteNews, saveNews } from "../actions";
+import { callAction } from "./callAction";
 import { Field, FormActions, ImageField, PageHeader, TextArea } from "./fields";
 
 function NewsManager({ news }: { news: NewsItem[] }) {
@@ -16,7 +17,7 @@ function NewsManager({ news }: { news: NewsItem[] }) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
-      const res = await saveNews(formData);
+      const res = await callAction(() => saveNews(formData));
       if (!res.success) return void toast.error(res.error);
       toast.success("Natija saqlandi");
       setEditing(null);
@@ -26,7 +27,7 @@ function NewsManager({ news }: { news: NewsItem[] }) {
   function onDelete(item: NewsItem) {
     if (!confirm(`${item.name} natijasini o'chirasizmi?`)) return;
     startTransition(async () => {
-      const res = await deleteNews(item.id);
+      const res = await callAction(() => deleteNews(item.id));
       if (!res.success) return void toast.error(res.error);
       toast.success("Natija o'chirildi");
     });

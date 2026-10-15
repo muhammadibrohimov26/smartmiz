@@ -5,6 +5,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Price } from "@/types";
 import { deleteCourse, saveCourse } from "../actions";
+import { callAction } from "./callAction";
 import { Field, FormActions, ImageField, PageHeader } from "./fields";
 
 function CourseManager({ courses }: { courses: Price[] }) {
@@ -16,7 +17,7 @@ function CourseManager({ courses }: { courses: Price[] }) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
-      const res = await saveCourse(formData);
+      const res = await callAction(() => saveCourse(formData));
       if (!res.success) return void toast.error(res.error);
       toast.success("Kurs saqlandi");
       setEditing(null);
@@ -26,7 +27,7 @@ function CourseManager({ courses }: { courses: Price[] }) {
   function onDelete(course: Price) {
     if (!course.id || !confirm(`"${course.courseName}" kursini o'chirasizmi?`)) return;
     startTransition(async () => {
-      const res = await deleteCourse(course.id!);
+      const res = await callAction(() => deleteCourse(course.id!));
       if (!res.success) return void toast.error(res.error);
       toast.success("Kurs o'chirildi");
     });

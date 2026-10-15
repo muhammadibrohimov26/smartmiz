@@ -20,7 +20,7 @@ function AdminNav({ email }: { email: string }) {
   const router = useRouter();
 
   async function onLogout() {
-    await logout();
+    await logout().catch(() => {}); // the cookie is cleared on the server; go to login either way
     router.replace("/admin/login");
     router.refresh();
   }

@@ -33,6 +33,9 @@ export const dictionaries = {
     notFoundTitle: "Sahifa topilmadi",
     notFoundDesc: "Bu sahifa oʻchirilgan yoki manzil notoʻgʻri yozilgan.",
     notFoundHome: "Bosh sahifaga qaytish",
+    errorTitle: "Nimadir notoʻgʻri ketdi",
+    errorDesc: "Sahifani koʻrsatishda xatolik yuz berdi. Qaytadan urinib koʻring.",
+    errorRetry: "Qayta urinish",
     // Course Mappings
     "Koreys tili": "Koreys tili",
     "Kompyuter kursi": "Kompyuter kursi",
@@ -219,6 +222,9 @@ export const dictionaries = {
     notFoundTitle: "Страница не найдена",
     notFoundDesc: "Эта страница удалена или адрес введён неверно.",
     notFoundHome: "На главную",
+    errorTitle: "Что-то пошло не так",
+    errorDesc: "При загрузке страницы произошла ошибка. Попробуйте ещё раз.",
+    errorRetry: "Повторить",
     // Course Mappings
     "Koreys tili": "Корейский язык",
     "Kompyuter kursi": "Компьютерные курсы",
@@ -402,6 +408,9 @@ export const dictionaries = {
     notFoundTitle: "Page not found",
     notFoundDesc: "This page was removed or the address is wrong.",
     notFoundHome: "Back to home",
+    errorTitle: "Something went wrong",
+    errorDesc: "There was an error showing this page. Please try again.",
+    errorRetry: "Try again",
     // Course Mappings
     "Koreys tili": "Korean Language",
     "Kompyuter kursi": "Computer Courses",
@@ -588,6 +597,9 @@ export const dictionaries = {
     notFoundTitle: "Sayfa bulunamadı",
     notFoundDesc: "Bu sayfa kaldırılmış veya adres yanlış yazılmış.",
     notFoundHome: "Ana sayfaya dön",
+    errorTitle: "Bir şeyler ters gitti",
+    errorDesc: "Sayfa gösterilirken bir hata oluştu. Lütfen tekrar deneyin.",
+    errorRetry: "Tekrar dene",
     // Course Mappings
     "Koreys tili": "Korece",
     "Kompyuter kursi": "Bilgisayar Kursu",
@@ -774,6 +786,9 @@ export const dictionaries = {
     notFoundTitle: "페이지를 찾을 수 없습니다",
     notFoundDesc: "페이지가 삭제되었거나 주소가 잘못되었습니다.",
     notFoundHome: "홈으로 돌아가기",
+    errorTitle: "문제가 발생했습니다",
+    errorDesc: "페이지를 표시하는 중 오류가 발생했습니다. 다시 시도해 주세요.",
+    errorRetry: "다시 시도",
     // Course Mappings
     "Koreys tili": "한국어",
     "Kompyuter kursi": "컴퓨터 과정",
@@ -960,6 +975,9 @@ export const dictionaries = {
     notFoundTitle: "الصفحة غير موجودة",
     notFoundDesc: "تمت إزالة هذه الصفحة أو أن العنوان غير صحيح.",
     notFoundHome: "العودة إلى الرئيسية",
+    errorTitle: "حدث خطأ ما",
+    errorDesc: "حدث خطأ أثناء عرض هذه الصفحة. يرجى المحاولة مرة أخرى.",
+    errorRetry: "إعادة المحاولة",
     // Course Mappings
     "Koreys tili": "اللغة الكورية",
     "Kompyuter kursi": "دورة الكمبيوتر",

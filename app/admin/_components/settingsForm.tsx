@@ -6,6 +6,7 @@ import { SiteSettings } from "@/types";
 import { formatCount } from "@/lib/numbers";
 import { videoPlatform } from "@/lib/video";
 import { saveSettings } from "../actions";
+import { callAction } from "./callAction";
 import { Field, ImageField, PageHeader } from "./fields";
 
 function SettingsForm({ settings }: { settings: SiteSettings }) {
@@ -15,7 +16,7 @@ function SettingsForm({ settings }: { settings: SiteSettings }) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
-      const res = await saveSettings(formData);
+      const res = await callAction(() => saveSettings(formData));
       if (!res.success) return void toast.error(res.error);
       toast.success("Saqlandi. Saytda bir necha soniyada yangilanadi.");
     });

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { formatTashkent } from "@/lib/dates";
 import { Review, ReviewStatus } from "@/types";
 import { deleteReview, setReviewStatus } from "../actions";
+import { callAction } from "./callAction";
 import { PageHeader } from "./fields";
 
 const filters: { value: ReviewStatus | "all"; label: string }[] = [
@@ -29,7 +30,7 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
 
   function change(review: Review, status: ReviewStatus) {
     startTransition(async () => {
-      const res = await setReviewStatus(review.id, status);
+      const res = await callAction(() => setReviewStatus(review.id, status));
       if (!res.success) return void toast.error(res.error);
       toast.success(status === "approved" ? "Sharh saytga chiqarildi" : "Sharh yashirildi");
     });
@@ -38,7 +39,7 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
   function remove(review: Review) {
     if (!confirm(`${review.name} sharhini o'chirasizmi?`)) return;
     startTransition(async () => {
-      const res = await deleteReview(review.id);
+      const res = await callAction(() => deleteReview(review.id));
       if (!res.success) return void toast.error(res.error);
       toast.success("Sharh o'chirildi");
     });

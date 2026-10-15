@@ -53,24 +53,39 @@ export function TextArea({ label, name, defaultValue }: { label: string; name: s
   );
 }
 
+// shrinkImage aims for 850 KB; lib/media.ts accepts up to 900 KB
+const SHRUNK_MAX_BYTES = 900 * 1024;
+
 // Image either from an uploaded file (shrunk in the browser, stored in Firestore
 // — see lib/media.ts) or an existing URL.
 export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: string; label?: string }) {
   const [preview, setPreview] = useState(defaultValue ?? "");
-  const [info, setInfo] = useState("");
+  const [info, setInfo] = useState<{ text: string; error?: boolean } | null>(null);
 
   async function onFile(input: HTMLInputElement) {
     const original = input.files?.[0];
-    if (!original) return;
-    setInfo("Rasm kichraytirilmoqda...");
+    input.setCustomValidity("");
+    if (!original) return setInfo(null);
+    // Until the shrunk copy is in place the browser refuses to submit the form,
+    // otherwise the full-size photo goes out (and can exceed Vercel's request limit)
+    input.setCustomValidity("Rasm tayyorlanmoqda, biroz kuting...");
+    setInfo({ text: "Rasm kichraytirilmoqda..." });
     const file = await shrinkImage(original);
+    if (file.size > SHRUNK_MAX_BYTES) {
+      // The browser could not read or shrink it (e.g. an iPhone HEIC photo)
+      input.value = "";
+      input.setCustomValidity("");
+      setPreview(defaultValue ?? "");
+      return setInfo({ text: "Bu rasmni kichraytirib boʻlmadi. JPG yoki PNG formatdagi rasm tanlang.", error: true });
+    }
     // Put the shrunk file back into the input so the form submits it
     const dt = new DataTransfer();
     dt.items.add(file);
     input.files = dt.files;
+    input.setCustomValidity("");
     setPreview(URL.createObjectURL(file));
     const img = await createImageBitmap(file).catch(() => null);
-    setInfo(`${img ? `${img.width}×${img.height}, ` : ""}${Math.round(file.size / 1024)} KB`);
+    setInfo({ text: `${img ? `${img.width}×${img.height}, ` : ""}${Math.round(file.size / 1024)} KB` });
   }
 
   return (
@@ -91,7 +106,7 @@ export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: st
             className={inputClass}
             onChange={(e) => onFile(e.currentTarget)}
           />
-          {info && <p className="text-xs font-bold text-emerald-600">{info}</p>}
+          {info && <p className={`text-xs font-bold ${info.error ? "text-red-500" : "text-emerald-600"}`}>{info.text}</p>}
           <Input
             name="image"
             defaultValue={defaultValue}

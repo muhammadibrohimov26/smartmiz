@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { formatTashkent } from "@/lib/dates";
 import { Lead, LeadStatus } from "@/types";
 import { deleteLead, setLeadStatus } from "../actions";
+import { callAction } from "./callAction";
 import { PageHeader } from "./fields";
 
 const filters: { value: LeadStatus | "all"; label: string }[] = [
@@ -22,7 +23,7 @@ function LeadsTable({ leads }: { leads: Lead[] }) {
 
   function toggle(lead: Lead) {
     startTransition(async () => {
-      const res = await setLeadStatus(lead.id, lead.status === "new" ? "contacted" : "new");
+      const res = await callAction(() => setLeadStatus(lead.id, lead.status === "new" ? "contacted" : "new"));
       if (!res.success) toast.error(res.error);
     });
   }
@@ -30,7 +31,7 @@ function LeadsTable({ leads }: { leads: Lead[] }) {
   function onDelete(lead: Lead) {
     if (!confirm(`${lead.name} arizasini o'chirasizmi?`)) return;
     startTransition(async () => {
-      const res = await deleteLead(lead.id);
+      const res = await callAction(() => deleteLead(lead.id));
       if (!res.success) return void toast.error(res.error);
       toast.success("Ariza o'chirildi");
     });
