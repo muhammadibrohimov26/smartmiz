@@ -42,7 +42,7 @@ const organization = {
   name: "Smartmiz oʻquv markazi",
   alternateName: "Smartmiz",
   url: SITE_URL,
-  logo: `${SITE_URL}/SMARTMIZ.jpg`,
+  logo: `${SITE_URL}/logo.png`,
   image: `${SITE_URL}/opengraph-image`,
   description: DESCRIPTION,
   telephone: "+998732441333",
