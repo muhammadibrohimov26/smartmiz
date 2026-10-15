@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { MessageSquareQuote, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "@/context/LanguageContext";
@@ -31,7 +31,7 @@ function monthYear(iso: string) {
 function ReviewCard({ review }: { review: Review }) {
   const date = review.updatedAt ? monthYear(review.updatedAt) : "";
   return (
-    <div className="p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl flex flex-col gap-4">
+    <div className="w-full p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl flex flex-col gap-4">
       <Stars value={review.rating} />
       <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line flex-grow">{review.text}</p>
       <div className="flex items-center gap-3">
@@ -163,6 +163,43 @@ function WriteReview() {
   );
 }
 
+// Review cards drop in from above one after another (with a small bounce)
+// when the section scrolls into view.
+function DropInGrid({ reviews }: { reviews: Review[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [play, setPlay] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPlay(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      {reviews.map((r, i) => (
+        <div
+          key={r.id}
+          className={cn("flex", play ? "review-drop" : "opacity-0 motion-reduce:opacity-100")}
+          style={play ? { animationDelay: `${Math.min(i, 8) * 160}ms` } : undefined}
+        >
+          <ReviewCard review={r} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Reviews({ reviews }: { reviews: Review[] }) {
   const { t } = useTranslation();
 
@@ -181,9 +218,7 @@ function Reviews({ reviews }: { reviews: Review[] }) {
       {reviews.length === 0 ? (
         <p className="text-center text-zinc-500 font-medium mb-10">{t("reviewsEmpty")}</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {reviews.map((r) => <ReviewCard key={r.id} review={r} />)}
-        </div>
+        <DropInGrid reviews={reviews} />
       )}
 
       <div className="max-w-2xl mx-auto">

@@ -319,4 +319,17 @@ body {
 .blob-2 { bottom: -20%; right: -20%; }
 .dark .yellow-blob {
   background: radial-gradient(circle, rgba(255,184,0,0.05) 0%, rgba(255,184,0,0) 70%);
-}
+}
+/* Review cards falling in from above (app/(root)/_components/reviews.tsx) */
+@keyframes review-drop {
+  0% { opacity: 0; transform: translateY(-160px) rotate(-4deg); }
+  55% { opacity: 1; transform: translateY(12px) rotate(0.8deg); }
+  75% { transform: translateY(-4px) rotate(-0.2deg); }
+  100% { opacity: 1; transform: none; }
+}
+.review-drop {
+  animation: review-drop 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .review-drop { animation: none; }
+}
