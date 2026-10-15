@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
 import { Locale } from "@/lib/dictionaries";
 import ModeToogle from "@/components/shared/mode-toggle";
+import Logo from "@/components/shared/logo";
 
 const Mobile = () => {
   const pathName = usePathname();
@@ -37,7 +38,7 @@ const Mobile = () => {
           {/* Logo + Theme Toggle row */}
           <div className="flex items-center justify-between mb-4">
             <Link href={"/"} onClick={handleLinkClick}>
-              <img className="logo" src="/smartlogo.png" alt="smartmiz" />
+              <Logo className="h-7 text-zinc-950 dark:text-white" />
             </Link>
             <ModeToogle />
           </div>

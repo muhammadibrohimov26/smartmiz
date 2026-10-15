@@ -9,7 +9,9 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OpengraphImage() {
-  const logo = await fetch(new URL("../public/smartlogo.png", import.meta.url)).then((res) => res.arrayBuffer());
+  // The SVG wordmark (same artwork as components/shared/logo.tsx), white for the dark card
+  const logo = await fetch(new URL("../public/logo-dark.svg", import.meta.url)).then((res) => res.text());
+  const logoSrc = `data:image/svg+xml,${encodeURIComponent(logo)}`;
 
   return new ImageResponse(
     (
@@ -49,11 +51,8 @@ export default async function OpengraphImage() {
           }}
         />
 
-        {/* Logo (the PNG has wide transparent margins, so it is cropped by its box) */}
-        <div style={{ display: "flex", width: 720, height: 210, overflow: "hidden", marginLeft: -40 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo as unknown as string} width={760} height={507} style={{ marginTop: -150 }} alt="" />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} width={560} height={101} alt="" />
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ width: 120, height: 10, background: "#FFB800", borderRadius: 9999, marginBottom: 28 }} />

@@ -9,6 +9,7 @@ import { Globe, ChevronDown } from "lucide-react"
 import { Locale } from "@/lib/dictionaries"
 import { useState, useEffect, useRef } from "react"
 import ModeToogle from "@/components/shared/mode-toggle"
+import Logo from "@/components/shared/logo"
 import CustomerMenu from "@/components/shared/customer-menu"
 
 const Navbar = () => {
@@ -35,7 +36,7 @@ const Navbar = () => {
     <div className='container max-w-6xl mx-auto h-[10vh] w-full flex items-center justify-between'>
        <Link href={'/'}>
         {/* <h1 className='text-4xl font-creteRound'>Smartmiz</h1> */}
-        <img className="logo" src="/smartlogo.png" alt="smartmiz" />
+        <Logo className="h-5 min-[360px]:h-6 sm:h-7 md:h-8 text-zinc-950 dark:text-white" />
        </Link>
        <div className='gap-2 hidden md:flex'>
        {navLink.map(nav =>(
@@ -91,7 +92,8 @@ const Navbar = () => {
                 )}
               </div>
 
-              <ModeToogle />
+              {/* on phones the theme switch lives in the menu sheet */}
+              <div className="hidden sm:block"><ModeToogle /></div>
               <CustomerMenu />
               <Mobile/>
             </div>

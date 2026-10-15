@@ -142,17 +142,9 @@
 	  display: flex;
 	  gap: 1rem;
   }
-  .logo{
-	height: 48px;
-	width: auto;
-	object-fit: contain;
-	/* Invert in light mode so white logo is visible on light backgrounds */
-	filter: invert(1);
-	transition: filter 0.3s ease;
-  }
-  .dark .logo {
-	filter: invert(0);
-  }
+  /* Logo accent green (components/shared/logo.tsx): deeper on light for contrast */
+  :root { --logo-accent: #2E9E1F; }
+  .dark { --logo-accent: #4BE033; }
 
 
 	  @media only screen and (max-width: 768px) {
@@ -186,10 +178,6 @@
 		.cardName {
 			flex-direction: column;
 			align-items: flex-start;
-		  }
-		  .logo{
-			height: 40px;
-			width: auto;
 		  }
 		
 	  }
