@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   authors: [{ name: "Muhammad ibrohimov", url: SITE_URL }],
-  // Icons: app/icon.svg and app/apple-icon.tsx; og:image: app/opengraph-image.tsx
+  // Icons: app/icon.svg, app/favicon.ico and app/apple-icon.tsx; og:image: app/opengraph-image.tsx
   openGraph: {
     type: "website",
     locale: "uz_UZ",

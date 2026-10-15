@@ -12,10 +12,6 @@ const nextConfig = {
             { source: '/__/firebase/:path*', destination: 'https://yangi-3cf87.firebaseapp.com/__/firebase/:path*' },
         ];
     },
-    // Browsers and crawlers still ask for /favicon.ico
-    async redirects() {
-        return [{ source: '/favicon.ico', destination: '/icon.svg', permanent: true }];
-    },
     experimental: {
         serverComponentsExternalPackages: ['firebase-admin'],
         // Admin panel uploads images through server actions (limit: 4MB per image)
