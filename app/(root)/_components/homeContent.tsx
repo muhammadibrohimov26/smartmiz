@@ -9,7 +9,6 @@ import CourseQuiz from "./courseQuiz";
 import VocabGame from "./vocabGame";
 import FAQ from "./faq";
 import Reviews from "./reviews";
-import HeroField from "./heroField";
 
 function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }) {
   const { t } = useTranslation();
@@ -25,9 +24,6 @@ function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }
         <div className="yellow-blob blob-1"></div>
         <div className="yellow-blob blob-2"></div>
       </div>
-
-      {/* Interactive dash field behind the hero (follows the pointer) */}
-      <HeroField />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         

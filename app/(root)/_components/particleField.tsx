@@ -2,14 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
-// Interactive hero background, inspired by antigravity.google:
-// a vortex ring of short radial dashes that floats after the pointer on a
-// spring (outer particles trail behind when it moves fast), slowly swirls and
-// "breathes", coloured from brand yellow (inside) to the logo green (outside).
-// A click/tap makes the ring burst outward and gather back. Without a pointer
-// (phones, idle) the ring drifts on its own, smaller and softer so the hero
-// text stays readable. A faint dot grid sits behind it.
-// Pauses off-screen and in background tabs; static for prefers-reduced-motion.
+// Site-wide interactive background, inspired by antigravity.google.
+// A fixed, full-viewport canvas behind all public pages: a vortex ring of short
+// radial dashes floats after the pointer on a soft spring (outer particles
+// trail behind on fast moves), slowly swirls and "breathes", coloured from
+// brand yellow (inside) to the logo green (outside), over a faint dot grid.
+// - click/tap: the ring bursts outward and gathers back
+// - scrolling: particles lag behind with inertia, then settle
+// - idle / phones: the ring drifts on its own, smaller and softer
+// Content sits above it (cards keep their own backgrounds), so it only shows
+// in the open space. Pauses in background tabs; static for reduced motion.
 
 type Particle = {
   r0: number; // home radius, 0..1 across the ring band
@@ -37,7 +39,7 @@ function mix(t: number) {
 }
 const PALETTE = Array.from({ length: COLOR_BUCKETS }, (_, i) => mix(i / (COLOR_BUCKETS - 1)));
 
-export default function HeroField() {
+export default function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -55,8 +57,8 @@ export default function HeroField() {
     let outer = 300;
     let frame = 0;
     let running = false;
-    let visible = true;
     let last = performance.now();
+    let lastScroll = window.scrollY;
 
     const pointer = { x: 0, y: 0, active: false, lastMove: 0 };
     const center = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -65,9 +67,9 @@ export default function HeroField() {
 
     function build() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = canvas!.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
+      // clientWidth excludes the scrollbar, matching the CSS size of the canvas
+      width = document.documentElement.clientWidth;
+      height = window.innerHeight;
       canvas!.width = Math.round(width * dpr);
       canvas!.height = Math.round(height * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -82,10 +84,10 @@ export default function HeroField() {
         return {
           r0,
           theta0: Math.random() * Math.PI * 2,
-          spin: (0.00006 + Math.random() * 0.00008) * (1.2 - r0 * 0.6),
+          spin: (0.000035 + Math.random() * 0.00005) * (1.2 - r0 * 0.6),
           phase: Math.random() * Math.PI * 2,
-          x: width / 2,
-          y: height / 2,
+          x: center.x || width / 2,
+          y: center.y || height / 2,
         };
       });
 
@@ -110,32 +112,34 @@ export default function HeroField() {
       const dark = document.documentElement.classList.contains("dark");
       ctx!.clearRect(0, 0, width, height);
 
-      ctx!.fillStyle = dark ? "rgba(255,255,255,0.10)" : "rgba(24,24,27,0.12)";
+      ctx!.fillStyle = dark ? "rgba(255,255,255,0.09)" : "rgba(24,24,27,0.11)";
       ctx!.fill(dotsPath);
 
       // Where the ring wants to be: the pointer, or a slow drifting path when idle
-      const following = pointer.active && now - pointer.lastMove < 3000;
-      presence += ((following ? 1 : 0) - presence) * 0.04;
-      const tx = following ? pointer.x : width * (0.5 + 0.3 * Math.sin(now * 0.00021));
-      const ty = following ? pointer.y : height * (0.45 + 0.22 * Math.sin(now * 0.00029 + 1.1));
+      const following = pointer.active && now - pointer.lastMove < 3500;
+      presence += ((following ? 1 : 0) - presence) * 0.03;
+      const tx = following ? pointer.x : width * (0.5 + 0.3 * Math.sin(now * 0.00013));
+      const ty = following ? pointer.y : height * (0.45 + 0.22 * Math.sin(now * 0.00019 + 1.1));
 
-      // Spring-follow (slightly underdamped → a soft overshoot)
-      center.vx = (center.vx + (tx - center.x) * 0.045) * 0.84;
-      center.vy = (center.vy + (ty - center.y) * 0.045) * 0.84;
+      // Soft spring-follow (slightly underdamped → a gentle overshoot)
+      const k = 0.028 * (dt / 16);
+      center.vx = (center.vx + (tx - center.x) * k) * 0.87;
+      center.vy = (center.vy + (ty - center.y) * k) * 0.87;
       center.x += center.vx;
       center.y += center.vy;
-      burst *= 0.94;
+      burst *= 0.955;
 
+      const small = width < 640;
       const scale = 0.72 + presence * 0.28; // idle ring is smaller…
-      const intensity = (width < 640 ? 0.5 : 0.65) + presence * (width < 640 ? 0.35 : 0.35); // …and softer
+      const intensity = (small ? 0.45 : 0.6) + presence * 0.32; // …and softer
       const band = outer - inner;
 
-      // Bucket particles by colour and alpha so ~900 dashes need ~40 stroke calls
+      // Bucket particles by colour and alpha so ~600 dashes need ~40 stroke calls
       const paths: Path2D[][] = PALETTE.map(() => Array.from({ length: ALPHA_BUCKETS }, () => new Path2D()));
 
       for (const p of particles) {
         const theta = p.theta0 + now * p.spin;
-        const breathe = 1 + 0.06 * Math.sin(now * 0.0011 + p.phase);
+        const breathe = 1 + 0.06 * Math.sin(now * 0.0007 + p.phase);
         const r = (inner + p.r0 * band) * scale * breathe + burst * (60 + p.r0 * 140);
         const cos = Math.cos(theta);
         const sin = Math.sin(theta);
@@ -144,7 +148,7 @@ export default function HeroField() {
         const lag = 3 + p.r0 * 9;
         const hx = center.x + cos * r - center.vx * lag;
         const hy = center.y + sin * r - center.vy * lag;
-        const ease = (0.14 - p.r0 * 0.08) * (dt / 16);
+        const ease = (0.1 - p.r0 * 0.055) * (dt / 16);
         p.x += (hx - p.x) * ease;
         p.y += (hy - p.y) * ease;
 
@@ -162,7 +166,7 @@ export default function HeroField() {
       }
 
       ctx!.lineCap = "round";
-      ctx!.lineWidth = width < 640 ? 1.7 : 1.9;
+      ctx!.lineWidth = small ? 1.7 : 1.9;
       for (let ci = 0; ci < COLOR_BUCKETS; ci++) {
         const [r, g, b] = PALETTE[ci];
         for (let ai = 0; ai < ALPHA_BUCKETS; ai++) {
@@ -177,7 +181,7 @@ export default function HeroField() {
       frame = requestAnimationFrame(loop);
     }
     function start() {
-      if (running || reduceMotion || !visible || document.hidden) return;
+      if (running || reduceMotion || document.hidden) return;
       running = true;
       last = performance.now();
       frame = requestAnimationFrame(loop);
@@ -188,18 +192,29 @@ export default function HeroField() {
     }
 
     function track(e: PointerEvent) {
-      const rect = canvas!.getBoundingClientRect();
-      pointer.x = e.clientX - rect.left;
-      pointer.y = e.clientY - rect.top;
-      pointer.active = pointer.y >= -40 && pointer.y <= height + 40;
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      pointer.active = true;
       pointer.lastMove = performance.now();
     }
     function onDown(e: PointerEvent) {
       track(e);
-      if (pointer.active) burst = 1;
+      burst = 1;
     }
     function onLeave() {
       pointer.active = false;
+    }
+    // Content scrolls but the canvas is fixed: shift particles against the
+    // scroll so they lag behind and spring back (inertia)
+    function onScroll() {
+      const delta = window.scrollY - lastScroll;
+      lastScroll = window.scrollY;
+      const kick = Math.max(-60, Math.min(60, delta)) * 0.45;
+      for (const p of particles) p.y -= kick * (0.4 + p.r0);
+    }
+    function onResize() {
+      build();
+      if (!running) draw(performance.now());
     }
     const onVisibility = () => (document.hidden ? stop() : start());
 
@@ -215,42 +230,27 @@ export default function HeroField() {
     draw(performance.now());
     start();
 
-    const resize = new ResizeObserver(() => {
-      build();
-      if (!running) draw(performance.now());
-    });
-    resize.observe(canvas);
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (visible) start();
-      else stop();
-    });
-    io.observe(canvas);
     const theme = new MutationObserver(() => !running && draw(performance.now()));
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
     window.addEventListener("pointermove", track, { passive: true });
     window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
     document.documentElement.addEventListener("pointerleave", onLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       stop();
-      resize.disconnect();
-      io.disconnect();
       theme.disconnect();
       window.removeEventListener("pointermove", track);
       window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       document.documentElement.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-0 h-[100svh] w-full [mask-image:linear-gradient(to_bottom,black_70%,transparent)]"
-    />
-  );
+  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full" />;
 }
