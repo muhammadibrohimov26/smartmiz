@@ -1,12 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- The chevron "A" with the green triangle from the Smartmiz wordmark
-       (components/shared/logo.tsx), same geometry, centered -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <!-- The Smartmiz wordmark (components/shared/logo.tsx), stacked SMART / MIZ
+       to fit a square. Same paths; the clip cuts A/R leg ends at the baseline. -->
   <defs>
-    <clipPath id="base"><rect x="0" y="0" width="64" height="52"/></clipPath>
+    <clipPath id="base"><rect x="-4" y="0" width="252" height="46"/></clipPath>
   </defs>
-  <rect width="64" height="64" rx="14" fill="#0c0c0c"/>
-  <g clip-path="url(#base)">
-    <path d="M16 54l16-38 16 38" fill="none" stroke="#ffffff" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="2"/>
-    <path d="M32 37l7 15H25z" fill="#4BE033"/>
+  <rect width="180" height="180" rx="40" fill="#0c0c0c"/>
+  <g fill="none" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="2">
+    <g transform="translate(9.5 37)" clip-path="url(#base)">
+      <g stroke="#ffffff">
+        <path d="M25 13.5H10.75a7.25 7.25 0 0 0 0 14.5h5.5a7.25 7.25 0 0 1 0 14.5H2"/>
+        <path d="M34.5 46V12L47 30l12.5-18v34"/>
+        <path d="M67 48l16-38 16 38"/>
+        <path d="M108.5 46V13.5H120a7.25 7.25 0 0 1 0 14.5h-11.5M118.5 28l10 19"/>
+        <path d="M133 13.5h26M146 13.5V46"/>
+      </g>
+      <path d="M83 31l7 15H76z" fill="#4BE033"/>
+    </g>
+    <g transform="translate(-113.5 88)" clip-path="url(#base)" stroke="#4BE033">
+      <path d="M170.5 46V12L183 30l12.5-18v34"/>
+      <path d="M206.5 10v36"/>
+      <path d="M214 13.5h25L215 42.5h25"/>
+    </g>
   </g>
 </svg>
