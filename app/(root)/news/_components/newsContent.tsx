@@ -1,33 +1,21 @@
 "use client";
 
 import { useTranslation } from "@/context/LanguageContext";
-import { Trophy, Star, Quote, Calendar, Sparkles } from "lucide-react";
+import { Trophy, Sparkles } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
-import Flag from "@/components/shared/flag";
 import { formatCount } from "@/lib/numbers";
-import TelegramMediaLink from "@/components/shared/telegram-media-link";
+import ResultCard, { examColor } from "./resultCard";
 import { NewsItem } from "@/types";
-
-// "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
-// dates differently, which breaks hydration
-function formatDate(date: string) {
-  const m = date.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  return m ? `${m[3]}.${m[2]}.${m[1]}` : date;
-}
-
-
-const courseColors: Record<string, string> = {
-  "IELTS": "bg-blue-500",
-  "TOPIK": "bg-red-500",
-  "CEFR": "bg-purple-500",
-  "EPS-TOPIK": "bg-emerald-500",
-  "C1 Rus tili": "bg-orange-500",
-  "Robototexnika": "bg-yellow-500",
-};
 
 function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: number }) {
   const { t, locale } = useTranslation();
+  // Results per exam, most first (e.g. IELTS · 3 ta natija)
+  const counts = new Map<string, number>();
+  for (const item of news) {
+    const exam = item.course.trim().toUpperCase();
+    if (exam) counts.set(exam, (counts.get(exam) ?? 0) + 1);
+  }
+  const stats = Array.from(counts).sort((a, b) => b[1] - a[1]).slice(0, 4);
 
   return (
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -56,77 +44,23 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
         </div>
       )}
 
-      {/* STATS BAR — hardcoded totals, hidden until real results are published */}
-      {news.length > 0 && (
-      <div className="grid grid-cols-3 gap-4 mb-16">
-        {[
-          { label: "IELTS 7+", count: "23", icon: <Flag code="gb" className="w-8 mx-auto rounded-sm" /> },
-          { label: "TOPIK 4-6", count: "47", icon: <Flag code="kr" className="w-8 mx-auto rounded-sm border border-zinc-200" /> },
-          { label: "CEFR C1+", count: "31", icon: "🌍" },
-        ].map((stat) => (
-          <div key={stat.label} className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl p-4 text-center hover:shadow-[3px_3px_0px_0px_rgba(255,184,0,1)] transition-all duration-300">
-            <div className="text-2xl mb-1">{stat.icon}</div>
-            <div className="text-2xl md:text-3xl font-black bw-text">{stat.count}</div>
-            <div className="text-xs font-bold text-zinc-500 uppercase tracking-wider">{stat.label}</div>
-          </div>
-        ))}
-      </div>
+      {/* STATS — counted from the published results */}
+      {stats.length > 1 && (
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          {stats.map(([exam, n]) => (
+            <div key={exam} className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl">
+              <span className={`w-2.5 h-2.5 rounded-full ${examColor(exam)}`} />
+              <span className="font-black uppercase tracking-wider bw-text">{t(exam)}</span>
+              <span className="text-sm font-bold text-zinc-500">{t("newsStatCount", { n })}</span>
+            </div>
+          ))}
+        </div>
       )}
 
-      {/* SUCCESS CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* RESULTS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {news.map((item) => (
-          <div
-            key={item.id}
-            className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:-translate-y-1 flex flex-col"
-          >
-            {/* Card Header */}
-            <div className="relative p-6 pb-4">
-              <div className="flex items-start justify-between mb-4">
-                <div className="relative w-14 h-14 rounded-2xl border-3 border-zinc-900 dark:border-zinc-700 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0">
-                  {item.image && <Image fill sizes="56px" src={item.image} alt={item.course} className="object-contain p-2" />}
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${courseColors[item.course] || "bg-zinc-800"}`}>
-                    {t(item.course)}
-                  </span>
-                  <div className="flex items-center gap-1 text-zinc-400 text-xs">
-                    <Calendar className="w-3 h-3" />
-                    <span>{formatDate(item.date)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Name & Result */}
-              <h3 className="font-black text-lg bw-text mb-1">{item.name}</h3>
-              <div className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-[#FFB800]" />
-                <span className="font-bold text-sm text-[#FFB800]">{t(item.result)}</span>
-              </div>
-            </div>
-
-            {/* Quote */}
-            <div className="px-6 pb-6 flex-1 flex flex-col justify-between">
-              <div className="relative bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
-                <Quote className="w-4 h-4 text-[#FFB800] mb-2 opacity-60" />
-                <p className="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium italic">
-                  {t(item.quote)}
-                </p>
-              </div>
-              {item.media && (
-                <div className="mt-4">
-                  <TelegramMediaLink link={item.telegramLink} media={item.media} />
-                </div>
-              )}
-
-              {/* Stars */}
-              <div className="flex items-center gap-0.5 mt-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-[#FFB800] text-[#FFB800]" />
-                ))}
-              </div>
-            </div>
-          </div>
+          <ResultCard key={item.id} item={item} />
         ))}
       </div>
 
