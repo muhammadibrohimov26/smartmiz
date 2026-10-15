@@ -7,7 +7,10 @@ import { useEffect, useRef } from "react";
 // radial dashes floats after the pointer on a soft spring (outer particles
 // trail behind on fast moves), slowly swirls and "breathes", coloured from
 // brand yellow (inside) to the logo green (outside), over a faint dot grid.
-// - click/tap: the ring bursts outward and gathers back
+// - click/tap: the ring bursts outward and gathers back, and a "code" ripple
+//   (like claude.ai/code) spreads from the click: random letters and digits
+//   on a monospace grid that keep scrambling, yellow at the wave front,
+//   fading out behind it
 // - scrolling: particles lag behind with inertia, then settle
 // - idle / phones: the ring drifts on its own, smaller and softer
 // Content sits above it (cards keep their own backgrounds), so it only shows
@@ -39,6 +42,15 @@ function mix(t: number) {
 }
 const PALETTE = Array.from({ length: COLOR_BUCKETS }, (_, i) => mix(i / (COLOR_BUCKETS - 1)));
 
+// Click ripple of scrambling characters
+type Ripple = { x: number; y: number; start: number };
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const RIPPLE_MS = 1400;
+const RIPPLE_BAND = 150; // px of characters behind the wave front
+const MAX_RIPPLES = 4;
+const CELL = 14; // monospace grid step
+const hash = (x: number, y: number) => (Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0;
+
 export default function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -64,6 +76,63 @@ export default function ParticleField() {
     const center = { x: 0, y: 0, vx: 0, vy: 0 };
     let burst = 0; // 1 right after a click, decays to 0
     let presence = 0; // 0 idle → 1 following a real pointer (smoothed)
+    const ripples: Ripple[] = [];
+
+    function drawRipples(now: number, dark: boolean) {
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        if (now - ripples[i].start > RIPPLE_MS) ripples.splice(i, 1);
+      }
+      if (!ripples.length) return;
+
+      const maxR = Math.min(width < 640 ? 320 : 560, Math.max(width, height) * 0.6);
+      // Glyphs grouped by colour (front / middle / tail) × 6 alpha levels
+      const groups: [number, number, string][][] = Array.from({ length: 18 }, () => []);
+
+      for (const rp of ripples) {
+        const p = (now - rp.start) / RIPPLE_MS;
+        const R = (1 - Math.pow(1 - p, 3)) * maxR; // ease-out front radius
+        const fade = Math.pow(1 - p, 0.8);
+        const lo = Math.max(0, R - RIPPLE_BAND);
+        const hi = R + 6;
+        const x0 = Math.max(0, Math.floor((rp.x - hi) / CELL));
+        const x1 = Math.min(Math.ceil(width / CELL), Math.ceil((rp.x + hi) / CELL));
+        const y0 = Math.max(0, Math.floor((rp.y - hi) / CELL));
+        const y1 = Math.min(Math.ceil(height / CELL), Math.ceil((rp.y + hi) / CELL));
+
+        for (let gy = y0; gy <= y1; gy++) {
+          for (let gx = x0; gx <= x1; gx++) {
+            const cx = gx * CELL + CELL / 2;
+            const cy = gy * CELL + CELL / 2;
+            const dist = Math.hypot(cx - rp.x, cy - rp.y);
+            if (dist < lo || dist > hi) continue;
+            const h = hash(gx, gy);
+            if (h % 7 === 0) continue; // a few gaps, like real text
+            const behind = Math.max(0, R - dist); // 0 at the front
+            const a = Math.pow(1 - behind / RIPPLE_BAND, 1.6) * fade;
+            if (a < 0.06) continue;
+            // each cell re-rolls its character every ~70 ms (scramble)
+            const ch = CHARS[(h + Math.floor(now / 70 + (h & 15))) % CHARS.length];
+            const tone = behind < 20 ? 0 : behind < 64 ? 1 : 2;
+            groups[tone * 6 + Math.min(5, Math.floor(a * 6))].push([cx, cy, ch]);
+          }
+        }
+      }
+
+      const tones = [
+        [255, 184, 0], // front: brand yellow
+        [75, 224, 51], // then: logo green
+        dark ? [148, 163, 184] : [82, 82, 91], // tail: slate / zinc
+      ];
+      ctx!.font = `600 ${width < 640 ? 11 : 12}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+      ctx!.textAlign = "center";
+      ctx!.textBaseline = "middle";
+      groups.forEach((glyphs, gi) => {
+        if (!glyphs.length) return;
+        const [r, g, b] = tones[Math.floor(gi / 6)];
+        ctx!.fillStyle = `rgba(${r},${g},${b},${(((gi % 6) + 0.5) / 6).toFixed(2)})`;
+        for (const [x, y, ch] of glyphs) ctx!.fillText(ch, x, y);
+      });
+    }
 
     function build() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -174,6 +243,8 @@ export default function ParticleField() {
           ctx!.stroke(paths[ci][ai]);
         }
       }
+
+      drawRipples(now, dark);
     }
 
     function loop(now: number) {
@@ -199,7 +270,10 @@ export default function ParticleField() {
     }
     function onDown(e: PointerEvent) {
       track(e);
-      burst = 1;
+      burst = 0.7;
+      if (reduceMotion) return;
+      ripples.push({ x: e.clientX, y: e.clientY, start: performance.now() });
+      if (ripples.length > MAX_RIPPLES) ripples.shift();
     }
     function onLeave() {
       pointer.active = false;
@@ -211,6 +285,8 @@ export default function ParticleField() {
       lastScroll = window.scrollY;
       const kick = Math.max(-60, Math.min(60, delta)) * 0.45;
       for (const p of particles) p.y -= kick * (0.4 + p.r0);
+      // ripples stay attached to the spot on the page that was clicked
+      for (const rp of ripples) rp.y -= delta;
     }
     function onResize() {
       build();
