@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const students = formatCount((await getSiteSettings()).studentCount, "uz");
   return pageMetadata({
     title: "Biz haqimizda — Smartmiz oʻquv markazi",
-    description: `Smartmiz — ${years} yillik tajribaga ega oʻquv markazi, ${students}+ bitiruvchi. Markaz tarixi, yutuqlari va faol kurslari bilan tanishing.`,
+    description: `Smartmiz — ${years} yillik tajribaga ega oʻquv markazi, ${students}+ bitiruvchi. Markaz tarixi va yutuqlari bilan tanishing.`,
     path: "/about",
     keywords: ["Smartmiz haqida", "Smartmiz tarixi", "Fargʻona oʻquv markazi", `${years} yillik tajriba`],
   });

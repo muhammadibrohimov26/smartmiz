@@ -59,7 +59,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
       </div>
 
       {/* CORE DETAILS ROW */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         
         {/* History Paragraph */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
@@ -105,24 +105,6 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
           </div>
         </a>
 
-      </div>
-
-      {/* ACTIVE COURSES LIST */}
-      <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
-        <h2 className="text-2xl md:text-3xl font-black bw-text uppercase tracking-tight mb-6 text-center md:text-left">
-          {t("aboutCoursesTitle")}
-        </h2>
-        <div className="flex flex-wrap gap-2.5">
-          {activeCourses.map((course) => (
-            <div 
-              key={course}
-              className="px-4 py-2 border-2 border-zinc-900 dark:border-zinc-800 rounded-full bg-zinc-50 dark:bg-zinc-950 font-extrabold text-sm bw-text hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors shadow-[1px_1px_0px_0px_rgba(255,184,0,1)] flex items-center gap-1.5"
-            >
-              <div className="w-2 h-2 rounded-full bg-[#FFB800]"></div>
-              <span>{course}</span>
-            </div>
-          ))}
-        </div>
       </div>
 
     </div>
