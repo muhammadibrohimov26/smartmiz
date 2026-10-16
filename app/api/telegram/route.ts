@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "crypto";
-import { isBotConfigured, webhookSecret } from "@/lib/bot/api";
+import { isBotConfigured, tg, webhookSecret } from "@/lib/bot/api";
 import { handleUpdate } from "@/lib/bot/flow";
 
 // Telegram webhook of the results/reviews bot (set up from the admin panel:
@@ -14,6 +14,18 @@ function validSecret(header: string | null) {
   const a = Buffer.from(header);
   const b = Buffer.from(webhookSecret());
   return a.length === b.length && timingSafeEqual(a, b);
+}
+
+// Setup check (no secrets): is REVIEW_BOT_TOKEN set on this deployment and
+// does Telegram accept it? Answers with the bot's public username only.
+export async function GET() {
+  if (!isBotConfigured()) return Response.json({ configured: false });
+  try {
+    const me = await tg<{ username: string }>("getMe");
+    return Response.json({ configured: true, valid: true, bot: me.username });
+  } catch {
+    return Response.json({ configured: true, valid: false });
+  }
 }
 
 export async function POST(request: Request) {
