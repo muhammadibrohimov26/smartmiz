@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { MessageSquareQuote, Star } from "lucide-react";
+import { CheckCircle2, MessageSquareQuote, Pencil, Share2, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "@/context/LanguageContext";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
@@ -61,6 +61,7 @@ function WriteReview() {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   // Load the signed-in customer's own review (if any) to show its status / edit it
   useEffect(() => {
@@ -97,6 +98,18 @@ function WriteReview() {
     );
   }
 
+  // Once approved: a thank-you card instead of the form (the form returns on "Tahrirlash")
+  if (mine?.status === "approved" && !editing) {
+    return (
+      <ThanksCard
+        review={mine}
+        name={user.displayName ?? ""}
+        photo={user.photoURL ?? ""}
+        onEdit={() => setEditing(true)}
+      />
+    );
+  }
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (rating < 1) return void toast.error(t("errReviewRating"));
@@ -107,10 +120,20 @@ function WriteReview() {
       const res = await submitReview(token ?? "", rating, text);
       if (!res.success) return void toast.error(t(res.error));
       setMine({ rating, text, status: "pending" });
+      setEditing(false);
       toast.success(t("reviewsSent"));
+    } catch {
+      toast.error(t("errorMsg"));
     } finally {
       setSending(false);
     }
+  }
+
+  function cancelEdit() {
+    if (!mine) return;
+    setRating(mine.rating);
+    setText(mine.text);
+    setEditing(false);
   }
 
   return (
@@ -155,13 +178,82 @@ function WriteReview() {
         className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-3 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-[#FFB800]"
       />
 
+      {editing && <p className="text-xs font-medium text-zinc-500">{t("reviewsEditNote")}</p>}
+
       <div className="flex items-center justify-between gap-4">
         <span className="text-xs text-zinc-500" dir="ltr">{text.trim().length}/1000</span>
-        <button type="submit" disabled={sending} className="px-6 py-3 bw-button-solid font-bold disabled:opacity-50">
-          {sending ? t("loading") : t("reviewsSubmit")}
-        </button>
+        <div className="flex items-center gap-2">
+          {editing && (
+            <button type="button" onClick={cancelEdit} disabled={sending} className="px-5 py-3 bw-button-outline font-bold">
+              {t("close")}
+            </button>
+          )}
+          <button type="submit" disabled={sending} className="px-6 py-3 bw-button-solid font-bold disabled:opacity-50">
+            {sending ? t("loading") : t("reviewsSubmit")}
+          </button>
+        </div>
       </div>
     </form>
+  );
+}
+
+const SHARE_URL = "https://www.smartmiz.uz/#reviews";
+
+// Shown to the author once their review is on the site
+function ThanksCard({
+  review,
+  name,
+  photo,
+  onEdit,
+}: {
+  review: { rating: number; text: string };
+  name: string;
+  photo: string;
+  onEdit: () => void;
+}) {
+  const { t } = useTranslation();
+
+  async function share() {
+    const text = t("reviewsShareText");
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Smartmiz", text, url: SHARE_URL });
+      } catch {
+        // the visitor closed the share sheet
+      }
+      return;
+    }
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+  }
+
+  return (
+    <div className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-emerald-500/40 rounded-2xl text-center">
+      <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-emerald-500/10 flex items-center justify-center">
+        <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+      </div>
+      <h3 className="font-black text-xl mb-1">{t("reviewsThanksTitle")}</h3>
+      <p className="text-sm text-zinc-500 font-medium mb-6">{t("reviewsThanksDesc")}</p>
+
+      <div className="text-left p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 mb-6">
+        <Stars value={review.rating} />
+        <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-medium whitespace-pre-line line-clamp-4">{review.text}</p>
+        <div className="flex items-center gap-2 mt-3">
+          <CustomerAvatar name={name} photo={photo} className="w-7 h-7" />
+          <span className="text-xs font-black truncate">{name}</span>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button onClick={share} className="inline-flex items-center gap-2 px-6 py-3 bw-button-solid font-bold">
+          <Share2 className="w-4 h-4" />
+          {t("reviewsShare")}
+        </button>
+        <button onClick={onEdit} className="inline-flex items-center gap-1.5 px-4 py-3 text-sm font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
+          <Pencil className="w-4 h-4" />
+          {t("reviewsEdit")}
+        </button>
+      </div>
+    </div>
   );
 }
 
