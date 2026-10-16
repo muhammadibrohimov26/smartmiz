@@ -53,7 +53,7 @@ export async function submitReview(idToken: string, rating: number, text: string
       throw new Error("errReviewTooFast");
     }
 
-    const name = user.name || user.email?.split("@")[0] || "Mijoz";
+    const name = user.name || user.email?.split("@")[0] || "Oʻquvchi";
     await ref.set(
       {
         name,
