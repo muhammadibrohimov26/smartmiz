@@ -1,4 +1,4 @@
-import { getApprovedReviews, getCourses } from "@/lib/data";
+import { getApprovedReviews, getCourses, getSiteSettings } from "@/lib/data";
 import { Metadata } from "next";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import { dictionaries } from "@/lib/dictionaries";
@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
   keywords: ["Smartmiz", "oʻquv markazi Fargʻona", "ingliz tili kursi Fargʻona", "IELTS Fargʻona", "CEFR", "rus tili kursi", "koreys tili kursi", "EPS-TOPIK", "arab tili kursi", "turk tili kursi", "kompyuter kursi Fargʻona"],
 });
 
-// Re-rendered on demand when a course or review is changed in the admin panel
+// Re-rendered on demand when a course, review or setting is changed in the admin panel
 export const revalidate = 3600;
 
 // Structured data for search engines: the course list and the FAQ (in Uzbek).
@@ -47,11 +47,11 @@ function homeJsonLd(prices: Price[]) {
 }
 
 async function Homepage() {
-  const [prices, reviews] = await Promise.all([getCourses(), getApprovedReviews()]);
+  const [prices, reviews, settings] = await Promise.all([getCourses(), getApprovedReviews(), getSiteSettings()]);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd(prices)) }} />
-      <HomeContent prices={prices} reviews={reviews} />
+      <HomeContent prices={prices} reviews={reviews} settings={settings} />
     </>
   );
 }

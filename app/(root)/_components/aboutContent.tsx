@@ -13,15 +13,17 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
   const vars = { students: formatCount(studentCount, locale) };
   const activeCourses = uniqueCourses(courses).map((c) => translatedCourseLabel(c, t));
 
+  // The last section of the home page (it used to be its own /about page,
+  // which now redirects to /#about)
   return (
-    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
-      
+    <section id="about" className="py-24 scroll-mt-24">
+
       {/* HEADER SECTION */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-[clamp(1.75rem,8.5vw,2.25rem)] sm:text-5xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
+      <div className="text-center max-w-3xl mx-auto mb-12">
+        <h2 className="text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
           {t("aboutTitle")}
-        </h1>
-        <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full mb-6"></div>
+        </h2>
+        <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full"></div>
       </div>
 
       {/* STATS SECTION */}
@@ -107,7 +109,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
 
       </div>
 
-    </div>
+    </section>
   );
 }
 

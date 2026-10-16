@@ -39,10 +39,10 @@ function SettingsForm({ settings }: { settings: SiteSettings }) {
         />
         <p className="-mt-2 text-xs text-zinc-500">
           Saytda &quot;{formatCount(settings.studentCount, "uz")}+&quot; ko&apos;rinishida chiqadi:
-          &quot;Biz haqimizda&quot; va &quot;Muvaffaqiyatlar&quot; sahifalarida, barcha tillarda.
+          bosh sahifadagi &quot;Biz haqimizda&quot; boʻlimida va &quot;Muvaffaqiyatlar&quot; sahifasida, barcha tillarda.
         </p>
         <Field
-          label={'"Biz haqimizda" sahifasidagi video havolasi'}
+          label={'Bosh sahifadagi "Biz haqimizda" boʻlimining video havolasi'}
           name="aboutVideoUrl"
           type="url"
           defaultValue={settings.aboutVideoUrl}

@@ -92,7 +92,7 @@ function str(formData: FormData, key: string) {
 
 // Every public page that shows the course list
 function revalidateCoursePages() {
-  for (const path of ["/", "/about", "/contact", "/admin/courses"]) revalidatePath(path);
+  for (const path of ["/", "/contact", "/admin/courses"]) revalidatePath(path);
 }
 
 export async function saveCourse(formData: FormData): Promise<ActionResult> {
@@ -233,7 +233,7 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
     );
     if (oldImage !== aboutVideoImage) await deleteMediaUrl(oldImage);
 
-    for (const path of ["/about", "/news", "/admin/settings"]) revalidatePath(path);
+    for (const path of ["/", "/news", "/admin/settings"]) revalidatePath(path);
   });
 }
 

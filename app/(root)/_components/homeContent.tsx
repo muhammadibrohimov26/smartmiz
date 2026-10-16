@@ -1,6 +1,6 @@
 "use client";
 
-import { Price, Review } from "@/types";
+import { Price, Review, SiteSettings } from "@/types";
 import CardItems from "./cardItems";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
@@ -9,8 +9,9 @@ import CourseQuiz from "./courseQuiz";
 import VocabGame from "./vocabGame";
 import FAQ from "./faq";
 import Reviews from "./reviews";
+import AboutContent from "./aboutContent";
 
-function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }) {
+function HomeContent({ prices, reviews, settings }: { prices: Price[]; reviews: Review[]; settings: SiteSettings }) {
   const { t } = useTranslation();
 
   const scrollToCourses = () => {
@@ -97,6 +98,16 @@ function HomeContent({ prices, reviews }: { prices: Price[]; reviews: Review[] }
         {/* FAQ ACCORDION */}
         <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
           <FAQ />
+        </div>
+
+        {/* ABOUT (history, stats, video) */}
+        <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
+          <AboutContent
+            courses={prices}
+            studentCount={settings.studentCount}
+            videoUrl={settings.aboutVideoUrl}
+            videoImage={settings.aboutVideoImage}
+          />
         </div>
 
       </div>
