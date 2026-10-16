@@ -173,7 +173,10 @@ async function onStep(msg: Message, s: Session, config: BotConfig) {
       s.data.score = text;
       s.step = "photo";
       await save(userId, s);
-      return say("4/5. 📄 Sertifikat rasmini yuboring.", keyboard([BTN.skipPhoto]));
+      return say(
+        "4/5. 📄 Sertifikat rasmini yuboring.\n\n<i>Pasport seriyasi-raqami va QR kod saytda koʻrsatilmaydi — admin ularni yashiradi.</i>",
+        keyboard([BTN.skipPhoto])
+      );
 
     case "photo": {
       const photo = photoOf(msg);

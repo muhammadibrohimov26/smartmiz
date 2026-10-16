@@ -161,8 +161,11 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
     const col = adminDb().collection("news");
     if (id) {
       const oldImage = (await col.doc(id).get()).get("image");
-      await col.doc(id).update(data);
-      if (oldImage !== data.image) await deleteMediaUrl(oldImage);
+      // A new/edited certificate (e.g. passport number hidden) must also be what
+      // the channel gets, not the original photo the bot received
+      const imageChanged = oldImage !== data.image;
+      await col.doc(id).update(imageChanged ? { ...data, photoFileId: null } : data);
+      if (imageChanged) await deleteMediaUrl(oldImage);
     }
     else await col.add({ ...data, createdAt: FieldValue.serverTimestamp() });
 

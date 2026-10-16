@@ -65,7 +65,7 @@ function NewsManager({ news }: { news: NewsItem[] }) {
           <p className="sm:col-span-2 -mt-2 text-xs text-zinc-500">
             &quot;result1&quot;, &quot;quote1&quot; kabi qiymatlar — barcha tillarga tarjima qilingan matn kalitlari. Oddiy matn yozsangiz, u barcha tillarda shunday ko&apos;rinadi.
           </p>
-          <ImageField defaultValue={current?.image} />
+          <ImageField label="Sertifikat rasmi" defaultValue={current?.image} redact />
           <FormActions pending={pending} onCancel={() => setEditing(null)} />
         </form>
       )}

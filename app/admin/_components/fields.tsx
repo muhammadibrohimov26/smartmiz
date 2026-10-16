@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { shrinkImage } from "@/lib/shrinkImage";
+import Redactor from "./redactor";
 
 const inputClass = "rounded-xl bg-zinc-50 dark:bg-zinc-950";
 
@@ -57,10 +59,28 @@ export function TextArea({ label, name, defaultValue }: { label: string; name: s
 const SHRUNK_MAX_BYTES = 900 * 1024;
 
 // Image either from an uploaded file (shrunk in the browser, stored in Firestore
-// — see lib/media.ts) or an existing URL.
-export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: string; label?: string }) {
+// — see lib/media.ts) or an existing URL. With `redact`, a button opens an
+// editor to hide the passport number, QR code etc. (certificates).
+export function ImageField({ defaultValue, label = "Rasm", redact }: { defaultValue?: string; label?: string; redact?: boolean }) {
   const [preview, setPreview] = useState(defaultValue ?? "");
   const [info, setInfo] = useState<{ text: string; error?: boolean } | null>(null);
+  const [editing, setEditing] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const closeEditor = useCallback(() => setEditing(false), []);
+
+  // The edited image goes into the file input, so the form uploads it
+  async function onRedacted(file: File) {
+    setEditing(false);
+    const input = fileRef.current;
+    if (!input) return;
+    if (file.size > SHRUNK_MAX_BYTES) return setInfo({ text: "Rasm juda katta boʻlib qoldi, boshqa rasm tanlang.", error: true });
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    input.setCustomValidity("");
+    setPreview(URL.createObjectURL(file));
+    setInfo({ text: `🔒 Shaxsiy maʼlumotlar yashirildi · ${Math.round(file.size / 1024)} KB — «Saqlash»ni bosing` });
+  }
 
   async function onFile(input: HTMLInputElement) {
     const original = input.files?.[0];
@@ -100,6 +120,7 @@ export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: st
         </div>
         <div className="flex-1 space-y-2">
           <Input
+            ref={fileRef}
             name="imageFile"
             type="file"
             accept="image/*"
@@ -107,6 +128,16 @@ export function ImageField({ defaultValue, label = "Rasm" }: { defaultValue?: st
             onChange={(e) => onFile(e.currentTarget)}
           />
           {info && <p className={`text-xs font-bold ${info.error ? "text-red-500" : "text-emerald-600"}`}>{info.text}</p>}
+          {redact && preview && (
+            <button
+              type="button"
+              onClick={() => setEditing(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-[#FFB800] hover:text-black"
+            >
+              <EyeOff className="w-3.5 h-3.5" /> Pasport raqami, QR kodni yashirish
+            </button>
+          )}
+          {editing && <Redactor src={preview} onDone={onRedacted} onCancel={closeEditor} />}
           <Input
             name="image"
             defaultValue={defaultValue}

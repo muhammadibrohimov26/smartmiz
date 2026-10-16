@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb } from "@/lib/firebase/admin";
 import { ReviewStatus, TelegramMediaKind } from "@/types";
-import { escapeHtml, isBotConfigured, sendHtml, tg } from "./api";
+import { escapeHtml, isBotConfigured, sendHtml, tg, tgUpload, Upload } from "./api";
 import { getBotConfig } from "./config";
 
 // What the Telegram bot collects, and what happens when an admin decides on it
@@ -69,12 +69,19 @@ export async function notifyAdmins(kind: Kind, id: string) {
   const title = kind === "news" ? "🆕 <b>Yangi natija</b> — tasdiqlash kerak" : "🆕 <b>Yangi sharh</b> — tasdiqlash kerak";
   const from = d.tgUsername ? `@${escapeHtml(d.tgUsername)}` : `<a href="tg://user?id=${d.tgUserId}">profil</a>`;
   const media = d.media ? `\n📎 ${MEDIA_LABEL[d.media.kind as TelegramMediaKind]} — yuqorida` : "";
-  const text = `${title}\n\n${summary(kind, d)}\n\nYuborgan: ${from}${media}`;
+  const certificate = kind === "news" && d.photoFileId;
+  const privacy = certificate
+    ? "\n\n⚠️ Sertifikatda pasport raqami yoki QR kod boʻlsa, tasdiqlashdan oldin admin panelda yashiring (Natijalar → ✏️ → «Pasport raqami, QR kodni yashirish»)."
+    : "";
+  const text = `${title}\n\n${summary(kind, d)}\n\nYuborgan: ${from}${media}${privacy}`;
   const keyboard = {
-    inline_keyboard: [[
-      { text: "✅ Tasdiqlash", callback_data: `ok:${kind === "news" ? "n" : "r"}:${id}` },
-      { text: "❌ Rad etish", callback_data: `no:${kind === "news" ? "n" : "r"}:${id}` },
-    ]],
+    inline_keyboard: [
+      [
+        { text: "✅ Tasdiqlash", callback_data: `ok:${kind === "news" ? "n" : "r"}:${id}` },
+        { text: "❌ Rad etish", callback_data: `no:${kind === "news" ? "n" : "r"}:${id}` },
+      ],
+      ...(certificate ? [[{ text: "✏️ Admin panelda ochish", url: `${SITE}/admin/news` }]] : []),
+    ],
   };
 
   const sent: { chat: number; id: number }[] = [];
@@ -105,18 +112,34 @@ async function channelLink(channel: string, messageId: number) {
   return `https://t.me/c/${String(chat.id).replace(/^-100/, "")}/${messageId}`;
 }
 
+// The site's copy of an uploaded image (/media/<id>), for uploading to Telegram
+async function siteImage(url: unknown): Promise<Upload | null> {
+  const id = typeof url === "string" ? url.match(/^\/media\/([0-9a-f-]{36})$/)?.[1] : undefined;
+  if (!id) return null;
+  const doc = await adminDb().collection("media").doc(id).get();
+  const data = doc.get("data");
+  if (!data) return null;
+  const type = String(doc.get("contentType") ?? "image/jpeg");
+  return { data: Buffer.from(data), type, filename: `sertifikat.${type.split("/")[1] ?? "jpg"}` };
+}
+
 // Posts the approved item: the certificate photo and/or video/voice with the
 // caption. Returns the link of the main post.
 async function postToChannel(kind: Kind, d: Doc, channel: string) {
   const caption = channelCaption(kind, d);
   const html = { parse_mode: "HTML" };
   const media = d.media as TelegramMedia | undefined;
-  const photo = d.photoFileId as string | undefined;
+  // The certificate as shown on the site (an admin may have hidden the
+  // passport number there), else the photo the bot received
+  const upload = await siteImage(d.image);
+  const photo: string | undefined = upload ? "attach://cert" : d.photoFileId || undefined;
+  const call = <T,>(method: string, params: Record<string, unknown>) =>
+    upload ? tgUpload<T>(method, params, { cert: upload }) : tg<T>(method, params);
   let mainId: number;
 
   if (photo && media?.kind === "video") {
     // Photo + video as one album, caption under the album
-    const msgs = await tg<{ message_id: number }[]>("sendMediaGroup", {
+    const msgs = await call<{ message_id: number }[]>("sendMediaGroup", {
       chat_id: channel,
       media: [
         { type: "photo", media: photo, caption, ...html },
@@ -125,7 +148,11 @@ async function postToChannel(kind: Kind, d: Doc, channel: string) {
     });
     mainId = msgs[0].message_id;
   } else if (photo) {
-    mainId = (await tg("sendPhoto", { chat_id: channel, photo, caption, ...html })).message_id;
+    const params = { chat_id: channel, caption, ...html };
+    const sent = upload
+      ? await tgUpload<{ message_id: number }>("sendPhoto", params, { photo: upload })
+      : await tg<{ message_id: number }>("sendPhoto", { ...params, photo });
+    mainId = sent.message_id;
     if (media) await sendMedia(channel, media, { reply_parameters: { message_id: mainId } });
   } else if (media && media.kind !== "video_note") {
     mainId = (await sendMedia(channel, media, { caption, ...html })).message_id;

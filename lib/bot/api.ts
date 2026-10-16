@@ -41,6 +41,30 @@ export async function tg<T = any>(method: string, params: Record<string, unknown
   return data.result as T;
 }
 
+export interface Upload {
+  data: Buffer;
+  filename: string;
+  type: string;
+}
+
+// Same as tg(), but sends files from the server (multipart). A file is used in
+// params as the field itself, or as "attach://<name>" inside sendMediaGroup.
+export async function tgUpload<T = any>(method: string, params: Record<string, unknown>, files: Record<string, Upload>): Promise<T> {
+  const token = botToken();
+  if (!token) throw new TelegramError(method, "REVIEW_BOT_TOKEN is not set");
+  const form = new FormData();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined) form.append(key, typeof value === "string" ? value : JSON.stringify(value));
+  }
+  for (const [key, file] of Object.entries(files)) {
+    form.append(key, new Blob([new Uint8Array(file.data)], { type: file.type }), file.filename);
+  }
+  const res = await fetch(`${API}/bot${token}/${method}`, { method: "POST", body: form, cache: "no-store" });
+  const data = await res.json().catch(() => ({ ok: false, description: res.statusText }));
+  if (!data.ok) throw new TelegramError(method, String(data.description ?? "unknown error"));
+  return data.result as T;
+}
+
 // Downloads a file the bot received (Telegram allows up to 20 MB via the Bot API)
 export async function downloadFile(fileId: string): Promise<Buffer> {
   const file = await tg<{ file_path: string }>("getFile", { file_id: fileId });
