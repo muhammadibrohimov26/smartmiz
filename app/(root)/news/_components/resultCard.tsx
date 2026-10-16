@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
-import { Calendar, Quote, Trophy, X, ZoomIn } from "lucide-react";
+import { Calendar, Loader2, Quote, Trophy, X, ZoomIn } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import TelegramMediaLink from "@/components/shared/telegram-media-link";
 import { NewsItem } from "@/types";
@@ -23,9 +24,12 @@ const examColors: Record<string, string> = {
 
 export const examColor = (course: string) => examColors[course.trim().toUpperCase()] ?? "bg-zinc-800";
 
-// The certificate full screen, so visitors can read it themselves
+// The certificate full screen, so visitors can read it themselves. Rendered
+// into <body> through a portal: inside the card, the card's hover transform
+// would make "fixed" relative to the card (the viewer opened inside it).
 function CertificateViewer({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   const { t } = useTranslation();
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -37,30 +41,40 @@ function CertificateViewer({ src, alt, onClose }: { src: string; alt: string; on
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-label={alt}
       onClick={onClose}
-      className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-200"
     >
       <button
         onClick={onClose}
+        autoFocus
         aria-label={t("close")}
         className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
       >
         <X className="w-6 h-6" />
       </button>
+      {!loaded && <Loader2 className="absolute w-10 h-10 text-white/70 animate-spin" aria-hidden="true" />}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()} />
-    </div>
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        onClick={(e) => e.stopPropagation()}
+        className={`max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
+      />
+    </div>,
+    document.body
   );
 }
 
 export default function ResultCard({ item }: { item: NewsItem }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
   const exam = t(item.course);
   const score = item.score.trim();
   // The admin form's "Natija matni" — shown when it adds something to the score
@@ -138,7 +152,7 @@ export default function ResultCard({ item }: { item: NewsItem }) {
         <TelegramMediaLink link={item.telegramLink} media={item.media} />
       </div>
 
-      {open && item.image && <CertificateViewer src={item.image} alt={alt} onClose={() => setOpen(false)} />}
+      {open && item.image && <CertificateViewer src={item.image} alt={alt} onClose={close} />}
     </article>
   );
 }
