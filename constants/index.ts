@@ -1,9 +1,11 @@
-import { Contact2, Newspaper, Home } from "lucide-react";
+import { Contact2, Newspaper, Home, MessageSquareQuote } from "lucide-react";
 
 
 export const navLink = [
     { name: 'Home', route: '/', icon: Home, translationKey: 'navHome' },
     { name: 'News', route: '/news', icon: Newspaper, translationKey: 'navNews' },
+    // Reviews section of the home page
+    { name: 'Reviews', route: '/#reviews', icon: MessageSquareQuote, translationKey: 'navReviews' },
     { name: 'Contact', route: '/contact', icon: Contact2, translationKey: 'navContact' },
 ]
 

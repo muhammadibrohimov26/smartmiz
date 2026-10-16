@@ -206,7 +206,7 @@ function Reviews({ reviews }: { reviews: Review[] }) {
   const { t } = useTranslation();
 
   return (
-    <div className="py-24">
+    <div id="reviews" className="py-24 scroll-mt-24">
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
           <MessageSquareQuote className="w-4 h-4 yellow-accent" />
