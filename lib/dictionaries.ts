@@ -76,7 +76,7 @@ export const dictionaries = {
     aboutTeam: "Smartmiz oʻquv markazi professional jamoasi",
     navHome: "Bosh sahifa",
     navNews: "Muvaffaqiyatlar",
-    navReviews: "Sharhlar",
+    navReviews: "Izohlar",
     navContact: "Aloqa",
     navMenu: "Menyu",
     langSelect: "Tilni tanlash",
