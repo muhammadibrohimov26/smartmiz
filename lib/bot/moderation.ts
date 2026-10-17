@@ -45,6 +45,13 @@ const tr = (s: unknown) => {
   return escapeHtml(uz[text] ?? text);
 };
 
+// "O'quvchimizdan izoh" heading of a review post (says when it is a video/voice one)
+function reviewHeading(media?: TelegramMediaKind) {
+  if (media === "voice" || media === "audio") return "🎙 <b>Oʻquvchimizdan ovozli izoh</b>";
+  if (media === "video" || media === "video_note") return "🎥 <b>Oʻquvchimizdan video izoh</b>";
+  return "💬 <b>Oʻquvchimizdan izoh</b>";
+}
+
 function summary(kind: Kind, d: Doc) {
   const score = tr(d.score);
   const result = tr(d.result);
@@ -55,14 +62,20 @@ function summary(kind: Kind, d: Doc) {
           `\n👤 <b>${tr(d.name)}</b>`,
           score ? `📚 ${tr(d.course)}: <b>${score}</b>` : `📚 ${tr(d.course)}`,
           result && result !== score ? `🎯 ${result}` : "",
-          d.quote ? `\n💬 <i>${tr(d.quote)}</i>` : "",
+          d.quote ? `\n💬 <b>Oʻquvchimizdan izoh:</b>\n<i>«${tr(d.quote)}»</i>` : "",
         ]
-      : ["⭐".repeat(d.rating), `\n💬 <i>${escapeHtml(d.text)}</i>`, `— <b>${escapeHtml(d.name)}</b>`];
+      : [
+          reviewHeading(d.media?.kind),
+          `\n${"⭐".repeat(d.rating)}`,
+          `\n<i>«${escapeHtml(d.text)}»</i>`,
+          `\n👤 <b>${escapeHtml(d.name)}</b>`,
+          "🎓 Smartmiz oʻquv markazi oʻquvchisi",
+        ];
   return lines.filter((l) => l !== "").join("\n").replace(/\n{3,}/g, "\n\n");
 }
 
 function channelCaption(kind: Kind, d: Doc) {
-  const tags = kind === "news" ? "#natija #smartmiz" : "#sharh #smartmiz";
+  const tags = `🌐 <a href="${SITE}">smartmiz.uz</a>\n${kind === "news" ? "#natija #smartmiz" : "#izoh #smartmiz"}`;
   const text = `${summary(kind, d)}\n\n${tags}`;
   // Media captions are limited to 1024 characters
   if (text.length <= 1024) return text;
@@ -139,6 +152,7 @@ async function siteImage(url: unknown): Promise<Upload | null> {
 async function postToChannel(kind: Kind, d: Doc, channel: string) {
   const caption = channelCaption(kind, d);
   const html = { parse_mode: "HTML" };
+  const noPreview = { link_preview_options: { is_disabled: true } };
   const media = d.media as TelegramMedia | undefined;
   // The certificate as shown on the site (an admin may have hidden the
   // passport number there), else the photo the bot received
@@ -174,9 +188,9 @@ async function postToChannel(kind: Kind, d: Doc, channel: string) {
   } else if (media) {
     // Round videos cannot have a caption: the text goes right under them
     mainId = (await sendMedia(channel, media)).message_id;
-    await tg("sendMessage", { chat_id: channel, text: caption, ...html, reply_parameters: { message_id: mainId } });
+    await tg("sendMessage", { chat_id: channel, text: caption, ...html, ...noPreview, reply_parameters: { message_id: mainId } });
   } else {
-    mainId = (await tg("sendMessage", { chat_id: channel, text: caption, ...html })).message_id;
+    mainId = (await tg("sendMessage", { chat_id: channel, text: caption, ...html, ...noPreview })).message_id;
   }
   return { messageId: mainId, link: await channelLink(channel, mainId).catch(() => "") };
 }
