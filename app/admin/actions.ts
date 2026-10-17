@@ -11,7 +11,7 @@ import { isValidVideoUrl } from "@/lib/video";
 import { SITE_URL } from "@/lib/seo";
 import { isBotConfigured, tg, webhookSecret } from "@/lib/bot/api";
 import { createAdminLinkCode, removeBotAdmin, updateBotConfig } from "@/lib/bot/config";
-import { decide, Kind } from "@/lib/bot/moderation";
+import { decide, Kind, postNewsToChannel } from "@/lib/bot/moderation";
 import { LeadStatus, ReviewStatus } from "@/types";
 
 type ActionResult = { success: true } | { success: false; error: string };
@@ -261,6 +261,17 @@ export async function setReviewStatus(id: string, status: ReviewStatus): Promise
 
 export async function setNewsStatus(id: string, status: ReviewStatus): Promise<DecisionResult> {
   return decideAs("news", id, status);
+}
+
+export async function sendNewsToChannel(id: string): Promise<DecisionResult> {
+  try {
+    await requireAdmin();
+    const result = await postNewsToChannel(id);
+    return result.ok ? { success: true, message: result.message } : { success: false, error: result.message };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error instanceof Error ? error.message : "Xatolik yuz berdi" };
+  }
 }
 
 export async function deleteReview(id: string): Promise<ActionResult> {

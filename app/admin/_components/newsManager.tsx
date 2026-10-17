@@ -5,7 +5,7 @@ import { Check, EyeOff, Pencil, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { NewsItem, ReviewStatus } from "@/types";
-import { deleteNews, saveNews, setNewsStatus } from "../actions";
+import { deleteNews, saveNews, sendNewsToChannel, setNewsStatus } from "../actions";
 import { callAction } from "./callAction";
 import { Field, FormActions, ImageField, PageHeader, TextArea } from "./fields";
 
@@ -28,6 +28,15 @@ function NewsManager({ news }: { news: NewsItem[] }) {
   function changeStatus(item: NewsItem, status: ReviewStatus) {
     startTransition(async () => {
       const res = await callAction(() => setNewsStatus(item.id, status));
+      if (!res.success) return void toast.error(res.error);
+      toast.success(res.message);
+    });
+  }
+
+  function sendToChannel(item: NewsItem) {
+    if (item.telegramLink && !confirm(`${item.name} natijasi kanalda bor. Yana bir marta joylaysizmi?`)) return;
+    startTransition(async () => {
+      const res = await callAction(() => sendNewsToChannel(item.id));
       if (!res.success) return void toast.error(res.error);
       toast.success(res.message);
     });
@@ -114,6 +123,16 @@ function NewsManager({ news }: { news: NewsItem[] }) {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
                 >
                   <Check className="w-3.5 h-3.5" /> Tasdiqlash
+                </button>
+              )}
+              {item.status === "approved" && (
+                <button
+                  onClick={() => sendToChannel(item)}
+                  disabled={pending}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-500/10 text-sky-600 hover:bg-sky-500/20"
+                  title={item.telegramLink ? "Kanalga yana joylash" : "Telegram kanalga joylash"}
+                >
+                  <Send className="w-3.5 h-3.5" /> {item.telegramLink ? "Qayta" : "Kanalga"}
                 </button>
               )}
               {item.status !== "hidden" && (

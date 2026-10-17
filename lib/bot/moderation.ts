@@ -4,6 +4,7 @@ import { adminDb } from "@/lib/firebase/admin";
 import { ReviewStatus, TelegramMediaKind } from "@/types";
 import { escapeHtml, isBotConfigured, sendHtml, tg, tgUpload, Upload } from "./api";
 import { getBotConfig } from "./config";
+import { dictionaries } from "@/lib/dictionaries";
 
 // What the Telegram bot collects, and what happens when an admin decides on it
 // (from the Telegram buttons or from the admin panel — same code path).
@@ -36,17 +37,27 @@ type Doc = FirebaseFirestore.DocumentData;
 
 // ---------- Text of the posts ----------
 
+// Results added in the admin panel may hold translation keys ("quote1") —
+// the channel gets the Uzbek text
+const uz = dictionaries.uz as Record<string, string>;
+const tr = (s: unknown) => {
+  const text = String(s ?? "").trim();
+  return escapeHtml(uz[text] ?? text);
+};
+
 function summary(kind: Kind, d: Doc) {
+  const score = tr(d.score);
+  const result = tr(d.result);
   const lines =
     kind === "news"
       ? [
           "🏆 <b>Yangi natija!</b>",
-          "",
-          `👤 <b>${escapeHtml(d.name)}</b>`,
-          `📚 ${escapeHtml(d.course)}: <b>${escapeHtml(d.score)}</b>`,
-          d.quote ? `\n💬 <i>${escapeHtml(d.quote)}</i>` : "",
+          `\n👤 <b>${tr(d.name)}</b>`,
+          score ? `📚 ${tr(d.course)}: <b>${score}</b>` : `📚 ${tr(d.course)}`,
+          result && result !== score ? `🎯 ${result}` : "",
+          d.quote ? `\n💬 <i>${tr(d.quote)}</i>` : "",
         ]
-      : ["⭐".repeat(d.rating), "", `💬 <i>${escapeHtml(d.text)}</i>`, `— <b>${escapeHtml(d.name)}</b>`];
+      : ["⭐".repeat(d.rating), `\n💬 <i>${escapeHtml(d.text)}</i>`, `— <b>${escapeHtml(d.name)}</b>`];
   return lines.filter((l) => l !== "").join("\n").replace(/\n{3,}/g, "\n\n");
 }
 
@@ -132,7 +143,11 @@ async function postToChannel(kind: Kind, d: Doc, channel: string) {
   // The certificate as shown on the site (an admin may have hidden the
   // passport number there), else the photo the bot received
   const upload = await siteImage(d.image);
-  const photo: string | undefined = upload ? "attach://cert" : d.photoFileId || undefined;
+  const image = typeof d.image === "string" ? d.image : "";
+  // Uploaded image → sent as a file; else the bot's photo, else an image URL
+  const photo: string | undefined = upload
+    ? "attach://cert"
+    : d.photoFileId || (image.startsWith("https://") ? image : image.startsWith("/") ? `${SITE}${image}` : undefined);
   const call = <T,>(method: string, params: Record<string, unknown>) =>
     upload ? tgUpload<T>(method, params, { cert: upload }) : tg<T>(method, params);
   let mainId: number;
@@ -175,6 +190,27 @@ export interface Decision {
 
 // Sets the status; on first approval of a bot submission also posts it to the
 // channel and tells the sender. Safe to call twice (never posts twice).
+// Admin panel → Natijalar → "Kanalga": posts any result that is on the site
+// (also ones added by hand), or posts it again
+export async function postNewsToChannel(id: string): Promise<Decision> {
+  if (!isBotConfigured()) return { ok: false, message: "Telegram bot ulanmagan — admin panel → Telegram bot" };
+  const { channel } = await getBotConfig();
+  if (!channel) return { ok: false, message: "Kanal sozlanmagan — admin panel → Telegram bot → Kanal" };
+  const ref = collection("news").doc(id);
+  const d = (await ref.get()).data();
+  if (!d) return { ok: false, message: "Natija topilmadi" };
+  if ((d.status ?? "approved") !== "approved") return { ok: false, message: "Avval natijani tasdiqlang — kanalga faqat saytdagi natijalar chiqadi" };
+  try {
+    const post = await postToChannel("news", d, channel);
+    await ref.update({ channelMessageId: post.messageId, telegramLink: post.link });
+    revalidate("news");
+    return { ok: true, message: "Kanalga joylandi" };
+  } catch (error) {
+    console.error("postNewsToChannel failed:", error);
+    return { ok: false, message: `Kanalga joylab boʻlmadi: ${error instanceof Error ? error.message : error}` };
+  }
+}
+
 export async function decide(kind: Kind, id: string, status: ReviewStatus, by: string): Promise<Decision> {
   const ref = collection(kind).doc(id);
   const snap = await ref.get();
