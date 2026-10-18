@@ -1,21 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "@/context/LanguageContext";
 import { Trophy, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { formatCount } from "@/lib/numbers";
-import ResultCard, { examColor } from "./resultCard";
+import { resultLanguage } from "@/lib/results";
+import { cn } from "@/lib/utils";
+import ResultCard, { languageColor } from "./resultCard";
 import { NewsItem } from "@/types";
+
+const OTHER = "other";
 
 function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: number }) {
   const { t, locale } = useTranslation();
-  // Results per exam, most first (e.g. IELTS · 3 ta natija)
+  const [filter, setFilter] = useState("all");
+  // Filter groups by language (Ingliz tili, Turk tili, Koreys tili…), most results first
+  const groupOf = (item: NewsItem) => resultLanguage(item) || OTHER;
   const counts = new Map<string, number>();
-  for (const item of news) {
-    const exam = item.course.trim().toUpperCase();
-    if (exam) counts.set(exam, (counts.get(exam) ?? 0) + 1);
-  }
-  const stats = Array.from(counts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  for (const item of news) counts.set(groupOf(item), (counts.get(groupOf(item)) ?? 0) + 1);
+  const groups = Array.from(counts).sort((a, b) => (a[0] === OTHER ? 1 : b[0] === OTHER ? -1 : b[1] - a[1]));
+  const shown = filter === "all" ? news : news.filter((item) => groupOf(item) === filter);
+  const groupLabel = (g: string) => (g === OTHER ? t("newsFilterOther") : g === "Koreys tili" ? `${t(g)} (TOPIK)` : t(g));
 
   return (
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -44,22 +50,32 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
         </div>
       )}
 
-      {/* STATS — counted from the published results */}
-      {stats.length > 1 && (
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {stats.map(([exam, n]) => (
-            <div key={exam} className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl">
-              <span className={`w-2.5 h-2.5 rounded-full ${examColor(exam)}`} />
-              <span className="font-black uppercase tracking-wider bw-text">{t(exam)}</span>
-              <span className="text-sm font-bold text-zinc-500">{t("newsStatCount", { n })}</span>
-            </div>
+      {/* FILTER BY LANGUAGE — with the number of published results in each */}
+      {groups.length > 1 && (
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12" role="group">
+          {[["all", news.length] as [string, number], ...groups].map(([g, n]) => (
+            <button
+              key={g}
+              onClick={() => setFilter(g)}
+              aria-pressed={filter === g}
+              className={cn(
+                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-colors",
+                filter === g
+                  ? "bg-[#FFB800] border-[#FFB800] text-black"
+                  : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-800 bw-text hover:border-[#FFB800]"
+              )}
+            >
+              {g !== "all" && <span className={`w-2.5 h-2.5 rounded-full ${languageColor(g === OTHER ? "" : g)}`} />}
+              {g === "all" ? t("newsFilterAll") : groupLabel(g)}
+              <span className={cn("text-xs font-bold", filter === g ? "text-black/60" : "text-zinc-500")}>{n}</span>
+            </button>
           ))}
         </div>
       )}
 
-      {/* RESULTS */}
+      {/* RESULTS — best first (lib/results.ts) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-        {news.map((item) => (
+        {shown.map((item) => (
           <ResultCard key={item.id} item={item} />
         ))}
       </div>

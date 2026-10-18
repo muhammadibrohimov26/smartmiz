@@ -69,6 +69,13 @@ function NewsManager({ news }: { news: NewsItem[] }) {
           <Field label="Imtihon / kurs" name="course" defaultValue={current?.course} placeholder="IELTS, TOPIK, CEFR..." />
           <Field label="Ball" name="score" defaultValue={current?.score} placeholder="7.5" />
           <Field label="Sana" name="date" type="date" defaultValue={current?.date} />
+          <div className="sm:col-span-2 space-y-1">
+            <Field label="Tartib raqami (tepaga qadash)" name="order" type="number" defaultValue={current?.order} placeholder="Bo'sh — avtomatik" />
+            <p className="text-xs text-zinc-500">
+              1 — eng tepada, 2 — undan keyin… Bo&apos;sh qolsa, natijalar avtomatik tartiblanadi: avval daraja (C1 → B2 → B1,
+              TOPIK 4 → 3 → 2), keyin ball, keyin sana.
+            </p>
+          </div>
           <TextArea label="Natija matni" name="result" defaultValue={current?.result} />
           <TextArea label="O'quvchi fikri" name="quote" defaultValue={current?.quote} />
           <p className="sm:col-span-2 -mt-2 text-xs text-zinc-500">
@@ -99,7 +106,10 @@ function NewsManager({ news }: { news: NewsItem[] }) {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-black truncate">{item.name}</p>
+                <p className="font-black truncate">
+                  {item.order && <span className="mr-1.5 text-[#FFB800]" title="Tepaga qadalgan">📌 {item.order}</span>}
+                  {item.name}
+                </p>
                 <p className="text-sm text-zinc-500">
                   {item.course} · {item.score} · {item.date}
                 </p>

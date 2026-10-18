@@ -23,6 +23,8 @@ export interface NewsItem {
     date: string
     quote: string
     status: ReviewStatus
+    // "Tartib raqami" from the admin panel: pinned to the top in this order
+    order?: number
     // Sent through the Telegram bot: link to the channel post, video/voice kind
     telegramLink?: string
     media?: TelegramMediaKind

@@ -1,6 +1,7 @@
 import { Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings, TelegramMediaKind } from "@/types";
 import { DEFAULT_ABOUT_VIDEO_IMAGE, DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 import { isAllowedImageUrl } from "@/lib/images";
+import { compareResults } from "@/lib/results";
 // Bundled into the server code, so the fallback also works in serverless functions
 import localCourses from "@/public/db.json";
 import localNews from "@/public/news.json";
@@ -74,10 +75,13 @@ export async function getNews(options: Options & { all?: boolean } = {}): Promis
         date: d.date ?? "",
         quote: d.quote ?? "",
         status: REVIEW_STATUSES.includes(d.status) ? d.status : "approved",
+        order: Number.isInteger(d.order) && d.order > 0 ? d.order : undefined,
         telegramLink: d.telegramLink || undefined,
         media: MEDIA_KINDS.includes(d.media?.kind) ? d.media.kind : undefined,
       };
     });
+    // Best results first (lib/results.ts), not just the newest
+    items.sort(compareResults);
     return options.all ? items : items.filter((item) => item.status === "approved");
   }, (localNews as Omit<NewsItem, "status">[]).map((item) => ({ ...item, status: "approved" as const })), options);
 }

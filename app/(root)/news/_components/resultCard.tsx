@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Calendar, Loader2, Quote, Trophy, X, ZoomIn } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import TelegramMediaLink from "@/components/shared/telegram-media-link";
+import { resultLanguage, resultLevel } from "@/lib/results";
 import { NewsItem } from "@/types";
 
 // "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
@@ -15,14 +16,16 @@ function formatDate(date: string) {
   return m ? `${m[3]}.${m[2]}.${m[1]}` : date;
 }
 
-const examColors: Record<string, string> = {
-  IELTS: "bg-blue-600",
-  TOPIK: "bg-red-600",
-  CEFR: "bg-purple-600",
-  "EPS-TOPIK": "bg-emerald-600",
+// One colour per language (filter dots and the card's language chip)
+const languageColors: Record<string, string> = {
+  "Ingliz tili": "bg-blue-600",
+  "Turk tili": "bg-red-600",
+  "Koreys tili": "bg-emerald-600",
+  "Rus tili": "bg-orange-600",
+  "Arab tili": "bg-teal-600",
 };
 
-export const examColor = (course: string) => examColors[course.trim().toUpperCase()] ?? "bg-zinc-800";
+export const languageColor = (language: string) => languageColors[language] ?? "bg-zinc-700";
 
 // The certificate full screen, so visitors can read it themselves. Rendered
 // into <body> through a portal: inside the card, the card's hover transform
@@ -77,14 +80,23 @@ export default function ResultCard({ item }: { item: NewsItem }) {
   const close = useCallback(() => setOpen(false), []);
   const exam = t(item.course);
   const score = item.score.trim();
+  // Short exam level for the badge ("CEFR B2", "TOPIK 4"), the language for the chip
+  const level = resultLevel(item).label;
+  const language = resultLanguage(item);
   // The admin form's "Natija matni" — shown when it adds something to the score
   const resultText = item.result && item.result !== item.score ? t(item.result) : "";
   const alt = `${item.name} — ${exam} ${score}`;
 
-  const scoreBadge = score && (
+  const scoreBadge = (score || level) && (
     <div className="flex items-baseline gap-2 px-4 py-2 rounded-2xl bg-[#FFB800] text-black shadow-lg">
-      <span className="text-xs font-black uppercase tracking-wider">{exam}</span>
-      <span className="text-3xl font-black leading-none">{score}</span>
+      {score ? (
+        <>
+          <span className="text-xs font-black uppercase tracking-wider">{level || exam}</span>
+          <span className="text-3xl font-black leading-none">{score}</span>
+        </>
+      ) : (
+        <span className="text-2xl font-black leading-none">{level}</span>
+      )}
     </div>
   );
 
@@ -130,8 +142,8 @@ export default function ResultCard({ item }: { item: NewsItem }) {
             )}
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider ${examColor(item.course)}`}>
-              {exam}
+            <span className={`px-3 py-1 rounded-full text-white text-xs font-black uppercase tracking-wider whitespace-nowrap ${languageColor(language)}`}>
+              {language ? t(language) : exam}
             </span>
             {item.date && (
               <span className="flex items-center gap-1 text-zinc-400 text-xs" dir="ltr">

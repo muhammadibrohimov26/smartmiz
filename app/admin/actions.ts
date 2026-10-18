@@ -147,6 +147,13 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
     const name = str(formData, "name");
     if (!name) throw new Error("O'quvchi ismi kiritilmagan");
 
+    // "Tartib raqami": 1 = very top; empty = ordered by level and score
+    const orderText = str(formData, "order");
+    const order = orderText ? Number(orderText) : null;
+    if (order !== null && (!Number.isInteger(order) || order < 1 || order > 999)) {
+      throw new Error("Tartib raqami 1 dan 999 gacha butun son bo'lsin (yoki bo'sh qoldiring)");
+    }
+
     const data = {
       name,
       course: str(formData, "course"),
@@ -164,10 +171,14 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
       // A new/edited certificate (e.g. passport number hidden) must also be what
       // the channel gets, not the original photo the bot received
       const imageChanged = oldImage !== data.image;
-      await col.doc(id).update(imageChanged ? { ...data, photoFileId: null } : data);
+      await col.doc(id).update({
+        ...data,
+        order: order ?? FieldValue.delete(),
+        ...(imageChanged ? { photoFileId: null } : {}),
+      });
       if (imageChanged) await deleteMediaUrl(oldImage);
     }
-    else await col.add({ ...data, createdAt: FieldValue.serverTimestamp() });
+    else await col.add({ ...data, ...(order ? { order } : {}), createdAt: FieldValue.serverTimestamp() });
 
     revalidatePath("/news");
     revalidatePath("/admin/news");

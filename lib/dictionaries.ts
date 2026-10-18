@@ -39,6 +39,8 @@ export const dictionaries = {
     tgListen: "Ovozli sharhni Telegramda tinglash",
     newsViewCert: "Sertifikatni koʻrish",
     newsStatCount: "{n} ta natija",
+    newsFilterAll: "Hammasi",
+    newsFilterOther: "Boshqa",
     close: "Yopish",
     // Course Mappings
     "Koreys tili": "Koreys tili",
@@ -238,6 +240,8 @@ export const dictionaries = {
     tgListen: "Слушать в Telegram",
     newsViewCert: "Смотреть сертификат",
     newsStatCount: "Результатов: {n}",
+    newsFilterAll: "Все",
+    newsFilterOther: "Другие",
     close: "Закрыть",
     // Course Mappings
     "Koreys tili": "Корейский язык",
@@ -434,6 +438,8 @@ export const dictionaries = {
     tgListen: "Listen on Telegram",
     newsViewCert: "View certificate",
     newsStatCount: "{n} results",
+    newsFilterAll: "All",
+    newsFilterOther: "Other",
     close: "Close",
     // Course Mappings
     "Koreys tili": "Korean Language",
@@ -633,6 +639,8 @@ export const dictionaries = {
     tgListen: "Telegram'da dinle",
     newsViewCert: "Sertifikayı gör",
     newsStatCount: "{n} sonuç",
+    newsFilterAll: "Tümü",
+    newsFilterOther: "Diğer",
     close: "Kapat",
     // Course Mappings
     "Koreys tili": "Korece",
@@ -832,6 +840,8 @@ export const dictionaries = {
     tgListen: "텔레그램에서 듣기",
     newsViewCert: "인증서 보기",
     newsStatCount: "결과 {n}개",
+    newsFilterAll: "전체",
+    newsFilterOther: "기타",
     close: "닫기",
     // Course Mappings
     "Koreys tili": "한국어",
@@ -1031,6 +1041,8 @@ export const dictionaries = {
     tgListen: "استمع على تيليجرام",
     newsViewCert: "عرض الشهادة",
     newsStatCount: "{n} نتائج",
+    newsFilterAll: "الكل",
+    newsFilterOther: "أخرى",
     close: "إغلاق",
     // Course Mappings
     "Koreys tili": "اللغة الكورية",
