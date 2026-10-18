@@ -3,7 +3,7 @@
 import { Price } from "@/types"
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Phone, Sparkles } from "lucide-react";
+import { Clock, Phone } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseCardTitles, courseLabel, formatHours } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
@@ -41,16 +41,10 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                         {/* Card Body */}
                         <div className="p-5 sm:p-8 flex flex-col flex-grow">
                             {/* Category & Title */}
-                            <div className="flex items-center justify-between mb-3">
+                            <div className="mb-3">
                                 <span className="text-xs uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
                                     {titles.label}
                                 </span>
-                                {price.chegirma && (
-                                    <span className="flex items-center gap-1 text-[11px] uppercase tracking-widest font-black bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 px-2 py-1 rounded-md border border-yellow-500/20">
-                                        <Sparkles className="w-2.5 h-2.5" />
-                                        {t("promoBadge")}
-                                    </span>
-                                )}
                             </div>
                             
                             <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300 mb-6">
