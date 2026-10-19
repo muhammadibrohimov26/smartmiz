@@ -19,7 +19,7 @@ export interface TelegramMedia {
 }
 
 const SITE = "https://www.smartmiz.uz";
-const PHONE = "+998 73 244 13 33";
+const PHONE = "+998 73 244 00 99";
 const collection = (kind: Kind) => adminDb().collection(kind === "news" ? "news" : "reviews");
 const sitePath = (kind: Kind) => (kind === "news" ? "/news" : "/");
 
