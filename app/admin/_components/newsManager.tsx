@@ -4,13 +4,58 @@ import { FormEvent, useState, useTransition } from "react";
 import { Check, EyeOff, Pencil, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { resultLanguage } from "@/lib/results";
 import { NewsItem, ReviewStatus } from "@/types";
 import { deleteNews, saveNews, sendNewsToChannel, setNewsStatus } from "../actions";
 import { callAction } from "./callAction";
 import { Field, FormActions, ImageField, PageHeader, TextArea } from "./fields";
 
+const OTHER = "other";
+
+function FilterRow({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string; count: number }[];
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="w-12 text-xs font-bold text-zinc-500">{label}:</span>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          aria-pressed={value === o.value}
+          className={cn(
+            "px-3 py-1.5 rounded-full text-xs font-bold border border-zinc-200 dark:border-zinc-800",
+            value === o.value && "bg-[#FFB800] text-black border-[#FFB800]"
+          )}
+        >
+          {o.label} <span className="opacity-60">{o.count}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function NewsManager({ news }: { news: NewsItem[] }) {
   const [editing, setEditing] = useState<NewsItem | "new" | null>(null);
+  // List filters: language (as on the public results page) and channel status
+  const [langFilter, setLangFilter] = useState("all");
+  const [channelFilter, setChannelFilter] = useState("all");
+  const langOf = (item: NewsItem) => resultLanguage(item) || OTHER;
+  const langCounts = new Map<string, number>();
+  for (const item of news) langCounts.set(langOf(item), (langCounts.get(langOf(item)) ?? 0) + 1);
+  const languages = Array.from(langCounts).sort((a, b) => (a[0] === OTHER ? 1 : b[0] === OTHER ? -1 : b[1] - a[1]));
+  const byLanguage = langFilter === "all" ? news : news.filter((item) => langOf(item) === langFilter);
+  const visible =
+    channelFilter === "all" ? byLanguage : byLanguage.filter((item) => (channelFilter === "sent") === !!item.telegramLink);
   const [pending, startTransition] = useTransition();
   const current = editing === "new" ? undefined : editing ?? undefined;
 
@@ -86,11 +131,37 @@ function NewsManager({ news }: { news: NewsItem[] }) {
         </form>
       )}
 
+      {news.length > 0 && (
+        <div className="space-y-2 mb-5">
+          <FilterRow
+            label="Til"
+            value={langFilter}
+            onChange={setLangFilter}
+            options={[
+              { value: "all", label: "Hammasi", count: news.length },
+              ...languages.map(([lang, n]) => ({ value: lang, label: lang === OTHER ? "Boshqa" : lang, count: n })),
+            ]}
+          />
+          <FilterRow
+            label="Kanal"
+            value={channelFilter}
+            onChange={setChannelFilter}
+            options={[
+              { value: "all", label: "Hammasi", count: byLanguage.length },
+              { value: "sent", label: "Yuborilgan", count: byLanguage.filter((i) => i.telegramLink).length },
+              { value: "unsent", label: "Yuborilmagan", count: byLanguage.filter((i) => !i.telegramLink).length },
+            ]}
+          />
+        </div>
+      )}
+
       {news.length === 0 ? (
         <p className="text-zinc-500">Hozircha natijalar yo&apos;q.</p>
+      ) : visible.length === 0 ? (
+        <p className="text-zinc-500">Bu filtr boʻyicha natija yoʻq.</p>
       ) : (
         <div className="grid gap-3">
-          {news.map((item) => (
+          {visible.map((item) => (
             <div
               key={item.id}
               className={cn(
