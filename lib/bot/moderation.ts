@@ -132,6 +132,8 @@ function newsPost(d: Doc) {
       `👉 Bepul sinov darsiga yoziling: <a href="${SITE}/contact">smartmiz.uz</a>`,
       `☎️ ${PHONE}`,
       "",
+      `🏆 Qolgan natijalarni shu yerdan koʻrishingiz mumkin: <a href="${SITE}/news">smartmiz.uz/news</a>`,
+      "",
       tags,
     ],
   };
