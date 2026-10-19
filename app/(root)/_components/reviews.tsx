@@ -11,7 +11,7 @@ import { getMyReview, submitReview } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 import { Review, ReviewStatus } from "@/types";
 
-function Stars({ value, size = "w-4 h-4" }: { value: number; size?: string }) {
+export function Stars({ value, size = "w-4 h-4" }: { value: number; size?: string }) {
   return (
     <div className="flex gap-0.5" aria-label={`${value}/5`}>
       {[1, 2, 3, 4, 5].map((n) => (
@@ -29,7 +29,7 @@ function monthYear(iso: string) {
   return `${String(d.getUTCMonth() + 1).padStart(2, "0")}.${d.getUTCFullYear()}`;
 }
 
-function ReviewCard({ review }: { review: Review }) {
+export function ReviewCard({ review }: { review: Review }) {
   const date = review.updatedAt ? monthYear(review.updatedAt) : "";
   return (
     <div className="w-full p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl flex flex-col gap-4">
@@ -53,7 +53,8 @@ const STATUS_KEYS: Record<ReviewStatus, string> = {
   hidden: "reviewsStatusHidden",
 };
 
-function WriteReview() {
+// courseSlug: rate that course (course page); without it: review of the centre
+export function WriteReview({ courseSlug }: { courseSlug?: string } = {}) {
   const { t } = useTranslation();
   const { user, ready, enabled, getIdToken } = useCustomerAuth();
   const signIn = useGoogleSignIn();
@@ -69,7 +70,7 @@ function WriteReview() {
     let cancelled = false;
     (async () => {
       const token = await getIdToken();
-      const review = token ? await getMyReview(token) : null;
+      const review = token ? await getMyReview(token, courseSlug) : null;
       if (cancelled || !review) return;
       setMine(review);
       setRating(review.rating);
@@ -84,7 +85,7 @@ function WriteReview() {
   if (!user) {
     return (
       <div className="p-6 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 text-center">
-        <p className="font-bold mb-4">{t("reviewsLoginPrompt")}</p>
+        <p className="font-bold mb-4">{t(courseSlug ? "courseRateLogin" : "reviewsLoginPrompt")}</p>
         <button onClick={signIn} className="inline-flex items-center gap-2 px-6 py-3 bw-button-solid font-bold">
           <svg viewBox="0 0 48 48" className="w-5 h-5" aria-hidden="true">
             <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
@@ -106,6 +107,7 @@ function WriteReview() {
         name={user.displayName ?? ""}
         photo={user.photoURL ?? ""}
         onEdit={() => setEditing(true)}
+        shareUrl={courseSlug ? `${SITE}/courses/${courseSlug}` : `${SITE}/#reviews`}
       />
     );
   }
@@ -117,7 +119,7 @@ function WriteReview() {
     setSending(true);
     try {
       const token = await getIdToken();
-      const res = await submitReview(token ?? "", rating, text);
+      const res = await submitReview(token ?? "", rating, text, courseSlug);
       if (!res.success) return void toast.error(t(res.error));
       setMine({ rating, text, status: "pending" });
       setEditing(false);
@@ -139,7 +141,7 @@ function WriteReview() {
   return (
     <form onSubmit={onSubmit} className="p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="font-black text-lg">{t(mine ? "reviewsEditTitle" : "reviewsWriteTitle")}</h3>
+        <h3 className="font-black text-lg">{t(mine ? "reviewsEditTitle" : courseSlug ? "courseRateTitle" : "reviewsWriteTitle")}</h3>
         {mine && (
           <span className={cn(
             "px-3 py-1 rounded-full text-xs font-bold",
@@ -197,7 +199,7 @@ function WriteReview() {
   );
 }
 
-const SHARE_URL = "https://www.smartmiz.uz/#reviews";
+const SITE = "https://www.smartmiz.uz";
 
 // Shown to the author once their review is on the site
 function ThanksCard({
@@ -205,11 +207,13 @@ function ThanksCard({
   name,
   photo,
   onEdit,
+  shareUrl,
 }: {
   review: { rating: number; text: string };
   name: string;
   photo: string;
   onEdit: () => void;
+  shareUrl: string;
 }) {
   const { t } = useTranslation();
 
@@ -217,13 +221,13 @@ function ThanksCard({
     const text = t("reviewsShareText");
     if (navigator.share) {
       try {
-        await navigator.share({ title: "Smartmiz", text, url: SHARE_URL });
+        await navigator.share({ title: "Smartmiz", text, url: shareUrl });
       } catch {
         // the visitor closed the share sheet
       }
       return;
     }
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -259,7 +263,7 @@ function ThanksCard({
 
 // Review cards drop in from above one after another (with a small bounce)
 // when the section scrolls into view.
-function DropInGrid({ reviews }: { reviews: Review[] }) {
+export function DropInGrid({ reviews }: { reviews: Review[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [play, setPlay] = useState(false);
 

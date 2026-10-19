@@ -3,11 +3,14 @@
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
 import { notifyTelegram } from "@/lib/telegram";
+import { getCourses } from "@/lib/data";
+import { courseLabel, courseSlug } from "@/lib/courses";
 import { Review, ReviewStatus } from "@/types";
 
 // Customer reviews. The browser sends the customer's Firebase ID token (Google
 // sign-in); it is verified here, so a review is always tied to a real account.
-// One review per account (doc id = uid). New or edited reviews wait for approval.
+// One review of the centre per account (doc id = uid) and one rating per course
+// per account (doc id = uid__<course slug>). New or edited ones wait for approval.
 
 type Result = { success: true } | { success: false; error: string };
 
@@ -24,10 +27,19 @@ async function verifyCustomer(idToken: string) {
   }
 }
 
-export async function getMyReview(idToken: string): Promise<Pick<Review, "rating" | "text" | "status"> | null> {
+// The course a slug belongs to (only courses that exist can be rated)
+async function courseFor(slug: string) {
+  const course = (await getCourses()).find((c) => courseSlug(c) === slug);
+  if (!course) throw new Error("errorMsg");
+  return course;
+}
+
+const docId = (uid: string, slug?: string) => (slug ? `${uid}__${slug}` : uid);
+
+export async function getMyReview(idToken: string, slug?: string): Promise<Pick<Review, "rating" | "text" | "status"> | null> {
   try {
     const user = await verifyCustomer(idToken);
-    const doc = await adminDb().collection("reviews").doc(user.uid).get();
+    const doc = await adminDb().collection("reviews").doc(docId(user.uid, slug)).get();
     if (!doc.exists) return null;
     const d = doc.data()!;
     return { rating: Number(d.rating) || 5, text: String(d.text ?? ""), status: (d.status as ReviewStatus) ?? "pending" };
@@ -37,7 +49,8 @@ export async function getMyReview(idToken: string): Promise<Pick<Review, "rating
   }
 }
 
-export async function submitReview(idToken: string, rating: number, text: string): Promise<Result> {
+// slug: rate that course (course page); without it: review of the centre (home page)
+export async function submitReview(idToken: string, rating: number, text: string, slug?: string): Promise<Result> {
   try {
     const user = await verifyCustomer(idToken);
 
@@ -45,8 +58,9 @@ export async function submitReview(idToken: string, rating: number, text: string
     const stars = Math.round(Number(rating));
     if (!Number.isInteger(stars) || stars < 1 || stars > 5) throw new Error("errReviewRating");
     if (cleanText.length < MIN_TEXT || cleanText.length > MAX_TEXT) throw new Error("errReviewText");
+    const course = slug ? await courseFor(slug) : null;
 
-    const ref = adminDb().collection("reviews").doc(user.uid);
+    const ref = adminDb().collection("reviews").doc(docId(user.uid, slug));
     const existing = await ref.get();
     const last = existing.get("updatedAt");
     if (last instanceof Timestamp && Date.now() - last.toMillis() < EDIT_COOLDOWN_MS) {
@@ -62,14 +76,16 @@ export async function submitReview(idToken: string, rating: number, text: string
         rating: stars,
         text: cleanText,
         status: "pending",
+        ...(course ? { courseSlug: slug, courseLabel: courseLabel(course) } : {}),
         updatedAt: FieldValue.serverTimestamp(),
         ...(existing.exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
       },
       { merge: true }
     );
 
+    const what = course ? `«${courseLabel(course)}» kursiga baho` : "sharh";
     await notifyTelegram(
-      `${existing.exists ? "Sharh tahrirlandi" : "Yangi sharh"} (tasdiqlash kerak):\n${name} — ${"★".repeat(stars)}\n${cleanText}`
+      `${existing.exists ? `Tahrirlangan ${what}` : `Yangi ${what}`} (tasdiqlash kerak):\n${name} — ${"★".repeat(stars)}\n${cleanText}`
     );
     return { success: true };
   } catch (error) {

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Price } from "@/types";
 import { deleteCourse, saveCourse } from "../actions";
 import { callAction } from "./callAction";
-import { Field, FormActions, ImageField, PageHeader } from "./fields";
+import { Field, FormActions, ImageField, PageHeader, TextArea } from "./fields";
 
 function CourseManager({ courses }: { courses: Price[] }) {
   const [editing, setEditing] = useState<Price | "new" | null>(null);
@@ -49,10 +49,12 @@ function CourseManager({ courses }: { courses: Price[] }) {
           <input type="hidden" name="id" value={current?.id ?? ""} />
           <Field label="Kurs nomi" name="courseName" defaultValue={current?.courseName} required />
           <Field label="Yo'nalish (turi)" name="courseType" defaultValue={current?.courseType} placeholder="masalan: IT" />
-          <Field label="Asl narxi (ming so'm)" name="coursePrice" type="number" defaultValue={current?.coursePrice} />
-          <Field label="Chegirmali narxi (ming so'm)" name="courseChegirma" type="number" defaultValue={current?.courseChegirma} />
+          <Field label="Asl narxi (ming so'mda: 450 = 450 000)" name="coursePrice" type="number" defaultValue={current?.coursePrice} />
+          <Field label="Chegirmali narxi (ming so'mda: 400 = 400 000)" name="courseChegirma" type="number" defaultValue={current?.courseChegirma} />
           <Field label="Davomiyligi (soat)" name="courseTime" defaultValue={current?.courseTime} placeholder="1.5" />
           <Field label="Chegirma matni" name="chegirma" defaultValue={current?.chegirma} />
+          <TextArea label="Kurs haqida (kurs sahifasida chiqadi)" name="description" defaultValue={current?.description} />
+          <TextArea label="Nimalarni o'rganasiz (har bir qatorda bittasi)" name="highlights" defaultValue={current?.highlights?.join("\n")} />
           <ImageField defaultValue={current?.image} />
           <FormActions pending={pending} onCancel={() => setEditing(null)} />
         </form>

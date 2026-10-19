@@ -7,10 +7,8 @@ export function formatCount(n: number, locale: string) {
   return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
 }
 
-// Course prices are stored in thousands of so'm (400 = 400 000).
-// Korean has no natural "thousand" unit word here, so it shows the full amount.
-const FULL_PRICE_LOCALES = new Set(["ko"]);
-
+// Course prices are stored in thousands of soʻm (400 = 400 000) and shown in
+// full: "400 000 soʻm".
 export function formatPrice(thousands: number, locale: string) {
-  return FULL_PRICE_LOCALES.has(locale) ? formatCount(thousands * 1000, locale) : String(thousands);
+  return formatCount(thousands * 1000, locale);
 }

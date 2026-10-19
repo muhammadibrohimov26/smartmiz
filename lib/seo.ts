@@ -13,12 +13,16 @@ export function pageMetadata({
   description,
   path,
   keywords,
+  image,
 }: {
   title: string;
   description: string;
   path: string;
   keywords?: string[];
+  // Own share picture (e.g. a course photo) instead of the site-wide one
+  image?: { url: string; alt: string };
 }): Metadata {
+  const ogImage = image ?? OG_IMAGE;
   return {
     title: { absolute: title },
     description,
@@ -31,9 +35,9 @@ export function pageMetadata({
       siteName: SITE_NAME,
       locale: "uz_UZ",
       type: "website",
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
-    twitter: { card: "summary_large_image", title, description, images: [OG_IMAGE.url] },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage.url] },
   };
 }
 

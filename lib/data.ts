@@ -46,6 +46,8 @@ export async function getCourses(options: Options = {}): Promise<Price[]> {
         courseType: d.courseType ?? "",
         chegirma: d.chegirma ?? "",
         image: d.image ?? "",
+        description: typeof d.description === "string" ? d.description : "",
+        highlights: Array.isArray(d.highlights) ? d.highlights.filter((h: unknown) => typeof h === "string") : [],
       };
     });
   }, localCourses as Price[], options);
@@ -146,6 +148,8 @@ async function readReviews(onlyApproved: boolean): Promise<Review[]> {
       const updated = d.updatedAt instanceof Timestamp ? d.updatedAt.toDate().toISOString() : "";
       return {
         id: doc.id,
+        courseSlug: typeof d.courseSlug === "string" && d.courseSlug ? d.courseSlug : undefined,
+        courseLabel: typeof d.courseLabel === "string" && d.courseLabel ? d.courseLabel : undefined,
         name: String(d.name ?? ""),
         photo: String(d.photo ?? ""),
         rating: Math.min(5, Math.max(1, Number(d.rating) || 5)),
@@ -159,8 +163,14 @@ async function readReviews(onlyApproved: boolean): Promise<Review[]> {
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
+// Home page: reviews of the centre (course ratings are on their course pages)
 export async function getApprovedReviews(): Promise<Review[]> {
-  return withFallback<Review[]>(() => readReviews(true), [], {});
+  return withFallback<Review[]>(async () => (await readReviews(true)).filter((r) => !r.courseSlug), [], {});
+}
+
+// One course page's approved ratings
+export async function getCourseReviews(slug: string): Promise<Review[]> {
+  return withFallback<Review[]>(async () => (await readReviews(true)).filter((r) => r.courseSlug === slug), [], {});
 }
 
 export async function getAllReviews(): Promise<Review[]> {

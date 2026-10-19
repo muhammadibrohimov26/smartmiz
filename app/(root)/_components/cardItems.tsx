@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { Price } from "@/types"
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Phone } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { courseCardTitles, courseLabel, formatHours } from "@/lib/courses";
+import { courseCardTitles, courseLabel, courseSlug, formatHours } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
 import { isTemplateCourseImage } from "@/lib/images";
+import { cn } from "@/lib/utils";
 import CourseCover from "./courseCover";
 
 interface PricesItemProps{
@@ -16,15 +18,43 @@ interface PricesItemProps{
 
 const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
     const { t, locale } = useTranslation();
+    // Filter by language / subject ("Ingliz tili", "Koreys tili", "Kompyuter kursi"…)
+    const [filter, setFilter] = useState("all");
+    const groups = Array.from(
+        prices.reduce((m, p) => m.set(p.courseName, (m.get(p.courseName) ?? 0) + 1), new Map<string, number>())
+    );
+    const shown = filter === "all" ? prices : prices.filter((p) => p.courseName === filter);
 
     return (
         <div className="mt-12 mb-16">
+            {groups.length > 1 && (
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10" role="group">
+                    {[["all", prices.length] as [string, number], ...groups].map(([g, n]) => (
+                        <button
+                            key={g}
+                            onClick={() => setFilter(g)}
+                            aria-pressed={filter === g}
+                            className={cn(
+                                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-colors",
+                                filter === g
+                                    ? "bg-[#FFB800] border-[#FFB800] text-black"
+                                    : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-800 bw-text hover:border-[#FFB800]"
+                            )}
+                        >
+                            {g === "all" ? t("courseFilterAll") : t(g)}
+                            {n > 1 && <span className={cn("text-xs font-bold", filter === g ? "text-black/60" : "text-zinc-500")}>{n}</span>}
+                        </button>
+                    ))}
+                </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
-                {prices.map((price, index) => {
+                {shown.map((price, index) => {
                     const titles = courseCardTitles(price, t);
+                    const href = `/courses/${courseSlug(price)}`;
                     return (
-                    <div 
-                        key={price.id ?? index} 
+                    <div
+                        key={price.id ?? index}
                         className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
                     >
                         {/* Course Image & Hero Area */}
@@ -40,15 +70,16 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
 
                         {/* Card Body */}
                         <div className="p-5 sm:p-8 flex flex-col flex-grow">
-                            {/* Category & Title */}
-                            <div className="mb-3">
-                                <span className="text-xs uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
-                                    {titles.label}
-                                </span>
-                            </div>
-                            
+                            {/* Category & Title — the title links to the course page and,
+                                stretched over the card, makes the whole card clickable */}
+                            <span className="block min-h-[1rem] mb-3 text-xs uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
+                                {titles.label}
+                            </span>
+
                             <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300 mb-6">
-                                {titles.heading}
+                                <Link href={href} className="after:absolute after:inset-0 after:content-['']">
+                                    {titles.heading}
+                                </Link>
                             </h2>
 
                             {/* Pricing Section */}
@@ -57,7 +88,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                     <p className="text-2xl font-black text-gray-900 dark:text-white">
                                         {formatPrice(price.courseChegirma, locale)} <span className="text-xs font-medium text-gray-400">{t("courseCurrency")}</span>
                                     </p>
-                                    {price.coursePrice && (
+                                    {price.coursePrice > price.courseChegirma && (
                                         <p className="text-xs font-bold line-through text-gray-400 dark:text-zinc-500 mt-0.5">
                                             {formatPrice(price.coursePrice, locale)} {t("courseCurrency")}
                                         </p>
@@ -76,14 +107,17 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                 </div>
                             )}
 
-                            {/* Enroll Button */}
-                            <div className="mt-auto">
-                                <Link 
-                                    className="w-full py-4 px-6 bg-black dark:bg-white text-white dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-500 hover:text-black dark:hover:text-black font-bold flex items-center justify-center gap-2 rounded-2xl transition-all duration-300 tracking-wide text-sm shadow-lg shadow-black/5 dark:shadow-white/5 active:scale-[0.98]" 
+                            {/* Enroll Button (above the stretched link, so it keeps its own target) */}
+                            <div className="mt-auto relative z-10 flex flex-col gap-3">
+                                <Link
+                                    className="w-full py-4 px-6 bg-black dark:bg-white text-white dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-500 hover:text-black dark:hover:text-black font-bold flex items-center justify-center gap-2 rounded-2xl transition-all duration-300 tracking-wide text-sm shadow-lg shadow-black/5 dark:shadow-white/5 active:scale-[0.98]"
                                     href={`/contact?course=${encodeURIComponent(courseLabel(price))}`}
                                 >
-                                    <Phone className="w-4 h-4" />
                                     {t("btnEnroll")}
+                                </Link>
+                                <Link href={href} className="flex items-center justify-center gap-1.5 text-sm font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
+                                    {t("courseDetails")}
+                                    <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                                 </Link>
                             </div>
                         </div>

@@ -11,6 +11,9 @@ export interface Price {
     courseType: string
     chegirma: string
     image: string
+    // Course page (/courses/<slug>): what the course is, what students learn
+    description?: string
+    highlights?: string[]
 }
 
 export interface NewsItem {
@@ -53,6 +56,9 @@ export type ReviewStatus = "pending" | "approved" | "hidden"
 
 export interface Review {
     id: string
+    // Set for a review of one course (shown on that course page)
+    courseSlug?: string
+    courseLabel?: string
     name: string
     photo: string
     rating: number

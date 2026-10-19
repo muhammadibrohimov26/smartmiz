@@ -64,3 +64,13 @@ export function compareResults(a: NewsItem, b: NewsItem) {
   if (la.percent !== lb.percent) return lb.percent - la.percent;
   return (b.date || "").localeCompare(a.date || "");
 }
+
+// Results to show on a course page: same language, and for an exam course
+// (IELTS, CEFR, EPS-TOPIK) only that exam. Already in best-first order.
+export function resultsForCourse(news: NewsItem[], course: { courseName: string; label: string; spec: string }) {
+  const language = resultLanguage({ course: course.label, result: "", score: "" });
+  if (!language) return [];
+  const spec = course.spec.toUpperCase();
+  const exam = spec.includes("IELTS") ? /ielts/i : spec.includes("CEFR") ? /cefr/i : spec.includes("EPS") ? /eps/i : spec.includes("TOPIK") ? /topik/i : null;
+  return news.filter((item) => resultLanguage(item) === language && (!exam || exam.test(`${item.course} ${item.result}`)));
+}

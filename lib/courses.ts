@@ -55,3 +55,12 @@ export function courseCardTitles(course: CourseRef, t: (key: string) => string) 
   const repeats = !label || heading.toLowerCase().startsWith(label.toLowerCase());
   return { heading, label: repeats ? "" : label };
 }
+
+// URL part of a course page: "Ingliz tili — IELTS" → "ingliz-tili-ielts"
+export function courseSlug(course: CourseRef) {
+  return courseLabel(course)
+    .toLowerCase()
+    .replace(/[ʻʼ'‘’`]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}

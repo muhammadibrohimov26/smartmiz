@@ -2,7 +2,7 @@ import { getApprovedReviews, getCourses, getSiteSettings } from "@/lib/data";
 import { Metadata } from "next";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import { dictionaries } from "@/lib/dictionaries";
-import { courseLabel, formatHours, uniqueCourses } from "@/lib/courses";
+import { courseLabel, courseSlug, formatHours, uniqueCourses } from "@/lib/courses";
 import { Price } from "@/types";
 import HomeContent from "../_components/homeContent";
 
@@ -30,7 +30,7 @@ function homeJsonLd(prices: Price[]) {
       name: courseLabel(c),
       description: `${courseLabel(c)} kursi — Smartmiz oʻquv markazi, Fargʻona. Bitta dars ${formatHours(c.courseTime, "uz")} soat.`,
       provider,
-      url: `${SITE_URL}/#courses-section`,
+      url: `${SITE_URL}/courses/${courseSlug(c)}`,
     },
   }));
   const faq = [1, 2, 3, 4, 5, 6, 7]

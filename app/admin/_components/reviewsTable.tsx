@@ -87,6 +87,11 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
                 <span className="text-xs text-zinc-500">
                   {formatTashkent(review.updatedAt)} · {statusLabel[review.status]}
                   {review.id.startsWith("tg_") && " · Telegram bot"}
+                  {review.courseLabel && (
+                    <a href={`/courses/${review.courseSlug}`} target="_blank" rel="noopener noreferrer" className="ml-1 font-bold text-sky-600 hover:underline">
+                      · 📚 {review.courseLabel} kursi
+                    </a>
+                  )}
                 </span>
                 {review.media && (
                   <span className="text-xs font-bold text-zinc-500">

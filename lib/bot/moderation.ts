@@ -26,6 +26,7 @@ const sitePath = (kind: Kind) => (kind === "news" ? "/news" : "/");
 function revalidate(kind: Kind) {
   const paths = kind === "news" ? ["/news", "/admin/news", "/admin"] : ["/", "/admin/reviews", "/admin"];
   for (const path of paths) revalidatePath(path);
+  if (kind === "news") revalidatePath("/courses/[slug]", "page"); // course pages list their results
 }
 
 const MEDIA_LABEL: Record<TelegramMediaKind, string> = {
@@ -306,6 +307,7 @@ export async function decide(kind: Kind, id: string, status: ReviewStatus, by: s
 
   await ref.update({ status, decidedBy: by, decidedAt: FieldValue.serverTimestamp() });
   revalidate(kind);
+  if (d.courseSlug) revalidatePath(`/courses/${d.courseSlug}`); // a course rating
 
   const fromBot = d.source === "telegram" && isBotConfigured();
   if (!fromBot) return { ok: true, message: status === "approved" ? "Saytga chiqarildi" : "Yashirildi" };

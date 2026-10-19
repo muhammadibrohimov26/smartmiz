@@ -93,6 +93,7 @@ function str(formData: FormData, key: string) {
 // Every public page that shows the course list
 function revalidateCoursePages() {
   for (const path of ["/", "/contact", "/admin/courses"]) revalidatePath(path);
+  revalidatePath("/courses/[slug]", "page");
 }
 
 export async function saveCourse(formData: FormData): Promise<ActionResult> {
@@ -110,6 +111,13 @@ export async function saveCourse(formData: FormData): Promise<ActionResult> {
       courseChegirma: Number(str(formData, "courseChegirma")) || 0,
       courseTime: str(formData, "courseTime"),
       chegirma: str(formData, "chegirma"),
+      description: str(formData, "description").slice(0, 2000),
+      // "Nimalarni oʻrganasiz": one point per line
+      highlights: str(formData, "highlights")
+        .split(/\r?\n/)
+        .map((l) => l.replace(/^[-•*\s]+/, "").trim())
+        .filter(Boolean)
+        .slice(0, 12),
       image: await resolveImage(formData),
       updatedAt: FieldValue.serverTimestamp(),
     };
@@ -182,6 +190,7 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
 
     revalidatePath("/news");
     revalidatePath("/admin/news");
+    revalidatePath("/courses/[slug]", "page"); // course pages list their results
   });
 }
 
@@ -194,6 +203,7 @@ export async function deleteNews(id: string): Promise<ActionResult> {
     await deleteMediaUrl(oldImage);
     revalidatePath("/news");
     revalidatePath("/admin/news");
+    revalidatePath("/courses/[slug]", "page"); // course pages list their results
   });
 }
 
@@ -289,10 +299,11 @@ export async function deleteReview(id: string): Promise<ActionResult> {
   return run(async () => {
     await requireAdmin();
     const ref = adminDb().collection("reviews").doc(id);
-    const photo = (await ref.get()).get("photo"); // Telegram reviewers' photo is stored in media
+    const doc = await ref.get();
     await ref.delete();
-    await deleteMediaUrl(photo);
+    await deleteMediaUrl(doc.get("photo")); // Telegram reviewers' photo is stored in media
     for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
+    if (doc.get("courseSlug")) revalidatePath(`/courses/${doc.get("courseSlug")}`);
   });
 }
 
