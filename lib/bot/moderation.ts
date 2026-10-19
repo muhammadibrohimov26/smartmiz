@@ -5,6 +5,7 @@ import { ReviewStatus, TelegramMediaKind } from "@/types";
 import { escapeHtml, isBotConfigured, sendHtml, tg, tgUpload, Upload } from "./api";
 import { getBotConfig } from "./config";
 import { dictionaries } from "@/lib/dictionaries";
+import { resultLanguage, resultLevel } from "@/lib/results";
 
 // What the Telegram bot collects, and what happens when an admin decides on it
 // (from the Telegram buttons or from the admin panel — same code path).
@@ -18,6 +19,7 @@ export interface TelegramMedia {
 }
 
 const SITE = "https://www.smartmiz.uz";
+const PHONE = "+998 73 244 13 33";
 const collection = (kind: Kind) => adminDb().collection(kind === "news" ? "news" : "reviews");
 const sitePath = (kind: Kind) => (kind === "news" ? "/news" : "/");
 
@@ -74,13 +76,82 @@ function summary(kind: Kind, d: Doc) {
   return lines.filter((l) => l !== "").join("\n").replace(/\n{3,}/g, "\n\n");
 }
 
+// ---------- Channel post of a result: congratulations + call to action ----------
+
+const FLAGS: Record<string, string> = {
+  "Ingliz tili": "🇬🇧",
+  "Turk tili": "🇹🇷",
+  "Koreys tili": "🇰🇷",
+  "Rus tili": "🇷🇺",
+  "Arab tili": "🇸🇦",
+};
+
+const hashtag = (s: string) => "#" + s.toLowerCase().replace(/[ʻʼ'‘’`]/g, "").replace(/[^a-z0-9а-яё]+/gi, "_").replace(/^_|_$/g, "");
+
+// 🎉 Tabriklaymiz, <name>!
+// 🇬🇧 Ingliz tili · CEFR B2 · 51 ball
+// Smartmizʼda oʻqib, B2 darajasini qoʻlga kiritdi 💪
+// (feedback) ── call to action ── #natija #ingliz_tili #cefr_b2
+function newsPost(d: Doc) {
+  const item = { course: String(d.course ?? ""), result: String(d.result ?? ""), score: String(d.score ?? "") };
+  const language = resultLanguage(item);
+  const level = resultLevel(item);
+  const score = tr(d.score);
+  const cefr = level.label.startsWith("CEFR ") ? level.label.slice(5) : "";
+
+  const facts = [
+    language ? `${FLAGS[language]} ${language}` : "🎓",
+    level.label ? `<b>${escapeHtml(level.label.replace(/^TOPIK (\d)$/, "TOPIK $1-daraja"))}</b>` : tr(d.course),
+    score ? `${score} ball` : "",
+  ].filter(Boolean);
+  const factLine = language ? facts.join(" · ") : `${facts[0]} ${facts.slice(1).join(" · ")}`;
+  const achieved = cefr
+    ? `${cefr} darajasini`
+    : level.label.startsWith("TOPIK") && level.level
+      ? `TOPIK ${level.level}-darajasini`
+      : level.label === "IELTS" && score
+        ? `IELTS ${score} ballni`
+        : "ushbu natijani";
+  // Without a known level the result text says what was achieved
+  const resultLine = !level.label && d.result && tr(d.result) !== score ? `🎯 ${tr(d.result)}` : "";
+
+  const tags = ["#natija", language && hashtag(language), level.label && hashtag(level.label)].filter(Boolean).join(" ");
+  return {
+    head: [
+      `🎉 <b>Tabriklaymiz, ${tr(d.name)}!</b>`,
+      "",
+      factLine,
+      resultLine,
+      "",
+      `Smartmizʼda oʻqib, ${achieved} qoʻlga kiritdi 💪`,
+    ],
+    quote: d.quote ? tr(d.quote) : "",
+    tail: [
+      "━━━━━━━━━━━━",
+      "Siz ham shunday natijaga erishmoqchimisiz?",
+      `👉 Bepul sinov darsiga yoziling: <a href="${SITE}/contact">smartmiz.uz</a>`,
+      `☎️ ${PHONE}`,
+      "",
+      tags,
+    ],
+  };
+}
+
 function channelCaption(kind: Kind, d: Doc) {
-  const tags = `🌐 <a href="${SITE}">smartmiz.uz</a>\n${kind === "news" ? "#natija #smartmiz" : "#izoh #smartmiz"}`;
+  if (kind === "news") {
+    const post = newsPost(d);
+    const build = (quote: string) =>
+      [...post.head, ...(quote ? ["", `💬 <i>«${quote}»</i>`] : []), "", ...post.tail]
+        .filter((l, i, all) => l !== "" || (all[i - 1] !== "" && all[i - 1] !== undefined))
+        .join("\n");
+    const text = build(post.quote);
+    // Media captions are limited to 1024 characters
+    return text.length <= 1024 ? text : build(post.quote.slice(0, Math.max(0, post.quote.length - (text.length - 1020))) + "…");
+  }
+  const tags = `🌐 <a href="${SITE}">smartmiz.uz</a>\n#izoh #smartmiz`;
   const text = `${summary(kind, d)}\n\n${tags}`;
-  // Media captions are limited to 1024 characters
   if (text.length <= 1024) return text;
-  const cut = (s?: string) => s && s.slice(0, 600) + "…";
-  return `${summary(kind, { ...d, quote: cut(d.quote), text: cut(d.text) })}\n\n${tags}`;
+  return `${summary(kind, { ...d, text: String(d.text).slice(0, 600) + "…" })}\n\n${tags}`;
 }
 
 // ---------- New submission → admins ----------
