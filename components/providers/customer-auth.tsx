@@ -1,13 +1,25 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithCustomToken,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  User,
+} from "firebase/auth";
 import { clientAuth, isClientFirebaseConfigured } from "@/lib/firebase/client";
+import LoginDialog from "@/components/shared/login-dialog";
 import { ChildProps } from "@/types";
 
-// Customer (visitor) login with Google. Customers see the regular site;
-// being signed in only lets them write a review. The admin panel uses its
-// own server session and is not affected.
+// Customer (visitor) login: Google, Telegram or email + password. Customers
+// see the regular site; being signed in only lets them write a review or rate
+// a course. The admin panel uses its own server session and is not affected.
 
 interface CustomerAuth {
   user: User | null;
@@ -16,7 +28,13 @@ interface CustomerAuth {
   isAdmin: boolean;
   ready: boolean;
   enabled: boolean;
-  signIn: () => Promise<void>;
+  // Opens the login dialog (all sign-in methods)
+  signIn: () => void;
+  signInWithGoogle: () => Promise<void>;
+  signInWithToken: (token: string) => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
 }
@@ -27,6 +45,9 @@ export function CustomerAuthProvider({ children }: ChildProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [ready, setReady] = useState(!isClientFirebaseConfigured);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  // Bumped after the profile changes (name set at sign-up) to re-render with it
+  const [, setVersion] = useState(0);
 
   useEffect(() => {
     if (!isClientFirebaseConfigured) return;
@@ -34,6 +55,7 @@ export function CustomerAuthProvider({ children }: ChildProps) {
       setUser(u);
       setReady(true);
       setIsAdmin(false);
+      if (u) setDialogOpen(false);
       u?.getIdTokenResult()
         .then((r) => setIsAdmin(r.claims.admin === true))
         .catch(() => setIsAdmin(false));
@@ -45,16 +67,36 @@ export function CustomerAuthProvider({ children }: ChildProps) {
     isAdmin,
     ready,
     enabled: isClientFirebaseConfigured,
-    signIn: async () => {
+    signIn: () => setDialogOpen(true),
+    signInWithGoogle: async () => {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account" });
       await signInWithPopup(clientAuth(), provider);
     },
+    signInWithToken: async (token) => {
+      await signInWithCustomToken(clientAuth(), token);
+    },
+    signInWithEmail: async (email, password) => {
+      await signInWithEmailAndPassword(clientAuth(), email.trim(), password);
+    },
+    signUpWithEmail: async (name, email, password) => {
+      const cred = await createUserWithEmailAndPassword(clientAuth(), email.trim(), password);
+      await updateProfile(cred.user, { displayName: name.trim() });
+      // New ID token, so the server sees the name (reviews are signed with it)
+      await cred.user.getIdToken(true);
+      setVersion((v) => v + 1);
+    },
+    resetPassword: (email) => sendPasswordResetEmail(clientAuth(), email.trim()),
     signOut: () => signOut(clientAuth()),
     getIdToken: async () => (clientAuth().currentUser ? clientAuth().currentUser!.getIdToken() : null),
   };
 
-  return <CustomerAuthContext.Provider value={value}>{children}</CustomerAuthContext.Provider>;
+  return (
+    <CustomerAuthContext.Provider value={value}>
+      {children}
+      {dialogOpen && !user && <LoginDialog onClose={() => setDialogOpen(false)} />}
+    </CustomerAuthContext.Provider>
+  );
 }
 
 export function useCustomerAuth() {

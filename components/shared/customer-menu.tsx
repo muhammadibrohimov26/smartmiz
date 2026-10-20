@@ -9,25 +9,6 @@ import { useCustomerAuth } from "@/components/providers/customer-auth";
 import { useTranslation } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 
-// Errors that just mean the visitor closed the Google popup
-const CANCELLED = ["auth/popup-closed-by-user", "auth/cancelled-popup-request", "auth/user-cancelled"];
-
-export function useGoogleSignIn() {
-  const { signIn } = useCustomerAuth();
-  const { t } = useTranslation();
-  return async () => {
-    try {
-      await signIn();
-    } catch (error) {
-      const code = (error as { code?: string }).code ?? "";
-      if (!CANCELLED.includes(code)) {
-        console.error("Google sign-in failed:", error);
-        toast.error(t("errLogin"));
-      }
-    }
-  };
-}
-
 export function CustomerAvatar({ name, photo, className }: { name: string; photo?: string | null; className?: string }) {
   if (photo) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -41,8 +22,8 @@ export function CustomerAvatar({ name, photo, className }: { name: string; photo
 }
 
 function CustomerMenu() {
-  const { user, isAdmin, ready, enabled, signOut, getIdToken } = useCustomerAuth();
-  const signIn = useGoogleSignIn();
+  // signIn opens the login dialog (Google, Telegram, email)
+  const { user, isAdmin, ready, enabled, signIn, signOut, getIdToken } = useCustomerAuth();
   const { t } = useTranslation();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -81,7 +62,7 @@ function CustomerMenu() {
     return (
       <button
         onClick={signIn}
-        aria-label={t("authLoginGoogle")}
+        aria-label={t("authLogin")}
         className="flex items-center justify-center gap-1.5 min-w-10 px-3 h-10 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs font-black uppercase tracking-wider bg-white dark:bg-zinc-950 hover:border-[#FFB800] transition-colors"
       >
         <LogIn className="w-3.5 h-3.5 yellow-accent rtl:rotate-180" />
