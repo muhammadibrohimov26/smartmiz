@@ -1,23 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithCustomToken,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  updateProfile,
-  User,
-} from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithCustomToken, signInWithPopup, signOut, User } from "firebase/auth";
 import { clientAuth, isClientFirebaseConfigured } from "@/lib/firebase/client";
 import LoginDialog from "@/components/shared/login-dialog";
 import { ChildProps } from "@/types";
 
-// Customer (visitor) login: Google, Telegram or email + password. Customers
+// Customer (visitor) login: Google or Telegram. Customers
 // see the regular site; being signed in only lets them write a review or rate
 // a course. The admin panel uses its own server session and is not affected.
 
@@ -32,10 +21,6 @@ interface CustomerAuth {
   signIn: () => void;
   signInWithGoogle: () => Promise<void>;
   signInWithToken: (token: string) => Promise<void>;
-  signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
-  // Sends the reset email in the site's language (if Firebase has it)
-  resetPassword: (email: string, language?: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
 }
@@ -47,8 +32,6 @@ export function CustomerAuthProvider({ children }: ChildProps) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [ready, setReady] = useState(!isClientFirebaseConfigured);
   const [dialogOpen, setDialogOpen] = useState(false);
-  // Bumped after the profile changes (name set at sign-up) to re-render with it
-  const [, setVersion] = useState(0);
 
   useEffect(() => {
     if (!isClientFirebaseConfigured) return;
@@ -76,21 +59,6 @@ export function CustomerAuthProvider({ children }: ChildProps) {
     },
     signInWithToken: async (token) => {
       await signInWithCustomToken(clientAuth(), token);
-    },
-    signInWithEmail: async (email, password) => {
-      await signInWithEmailAndPassword(clientAuth(), email.trim(), password);
-    },
-    signUpWithEmail: async (name, email, password) => {
-      const cred = await createUserWithEmailAndPassword(clientAuth(), email.trim(), password);
-      await updateProfile(cred.user, { displayName: name.trim() });
-      // New ID token, so the server sees the name (reviews are signed with it)
-      await cred.user.getIdToken(true);
-      setVersion((v) => v + 1);
-    },
-    resetPassword: (email, language) => {
-      const auth = clientAuth();
-      auth.languageCode = language ?? null;
-      return sendPasswordResetEmail(auth, email.trim());
     },
     signOut: () => signOut(clientAuth()),
     getIdToken: async () => (clientAuth().currentUser ? clientAuth().currentUser!.getIdToken() : null),

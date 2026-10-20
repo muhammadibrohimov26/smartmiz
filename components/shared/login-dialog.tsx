@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, X } from "lucide-react";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
@@ -8,9 +8,8 @@ import { useTranslation } from "@/context/LanguageContext";
 import { telegramSignIn, TelegramAuthData } from "@/lib/telegramLogin";
 import { cn } from "@/lib/utils";
 
-// Sign-in dialog for visitors: Google, Telegram (Login Widget of the reviews
-// bot — its domain must be set in @BotFather with /setdomain) and email +
-// password (sign in, sign up, forgotten password).
+// Sign-in dialog for visitors: Google or Telegram (Login Widget of the reviews
+// bot — its domain must be set in @BotFather with /setdomain).
 
 export function GoogleIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -23,19 +22,6 @@ export function GoogleIcon({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
-// Firebase error code → message key
-const ERRORS: Record<string, string> = {
-  "auth/invalid-credential": "loginErrWrong",
-  "auth/invalid-login-credentials": "loginErrWrong",
-  "auth/wrong-password": "loginErrWrong",
-  "auth/user-not-found": "loginErrWrong",
-  "auth/email-already-in-use": "loginErrExists",
-  "auth/weak-password": "loginErrWeak",
-  "auth/invalid-email": "loginErrEmail",
-  "auth/missing-email": "loginErrEmail",
-  "auth/too-many-requests": "loginErrMany",
-  "auth/operation-not-allowed": "loginErrDisabled",
-};
 // The visitor just closed the Google popup
 const CANCELLED = ["auth/popup-closed-by-user", "auth/cancelled-popup-request", "auth/user-cancelled"];
 
@@ -109,14 +95,8 @@ function TelegramButton({ onError }: { onError: (key: string) => void }) {
 }
 
 export default function LoginDialog({ onClose }: { onClose: () => void }) {
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useCustomerAuth();
-  const { t, locale } = useTranslation();
-  const [info, setInfo] = useState("");
-  const [tab, setTab] = useState<"in" | "up">("in");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
+  const { signInWithGoogle } = useCustomerAuth();
+  const { t } = useTranslation();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -130,54 +110,17 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
     };
   }, [onClose]);
 
-  function fail(err: unknown) {
-    const code = (err as { code?: string })?.code ?? "";
-    if (CANCELLED.includes(code)) return;
-    if (!ERRORS[code]) console.error("Sign-in failed:", err);
-    setError(ERRORS[code] ?? "errLogin");
-  }
-
   async function google() {
     setError("");
     try {
       await signInWithGoogle();
     } catch (err) {
-      fail(err);
+      const code = (err as { code?: string })?.code ?? "";
+      if (CANCELLED.includes(code)) return;
+      console.error("Google sign-in failed:", err);
+      setError("errLogin");
     }
   }
-
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError("");
-    setInfo("");
-    setBusy(true);
-    try {
-      if (tab === "up") await signUpWithEmail(name, email, password);
-      else await signInWithEmail(email, password);
-    } catch (err) {
-      fail(err);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  // Firebase answers "sent" even when no password account has this email (so
-  // nobody can probe which emails are registered) and then sends nothing —
-  // hence the message says when the email actually arrives.
-  async function forgot() {
-    setError("");
-    setInfo("");
-    if (!email.trim()) return setError("loginResetNeedEmail");
-    try {
-      await resetPassword(email, locale);
-      setInfo(t("loginResetSent", { email: email.trim() }));
-    } catch (err) {
-      fail(err);
-    }
-  }
-
-  const input =
-    "w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFB800]";
 
   return createPortal(
     <div
@@ -189,7 +132,7 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full sm:max-w-sm max-h-[92vh] overflow-y-auto bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl"
+        className="relative w-full sm:max-w-sm bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl"
       >
         <button onClick={onClose} aria-label={t("close")} className="absolute top-4 end-4 p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800">
           <X className="w-5 h-5" />
@@ -207,58 +150,7 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
           </button>
           <TelegramButton onError={setError} />
         </div>
-
-        <div className="flex items-center gap-3 my-5 text-xs font-bold text-zinc-400 uppercase tracking-wider">
-          <span className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
-          {t("loginOrEmail")}
-          <span className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
-        </div>
-
-        <div className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-xl bg-zinc-100 dark:bg-zinc-950" role="tablist">
-          {(["in", "up"] as const).map((v) => (
-            <button
-              key={v}
-              role="tab"
-              aria-selected={tab === v}
-              onClick={() => { setTab(v); setError(""); }}
-              className={cn(
-                "py-2 rounded-lg text-sm font-bold transition-colors",
-                tab === v ? "bg-white dark:bg-zinc-800 shadow bw-text" : "text-zinc-500"
-              )}
-            >
-              {t(v === "in" ? "loginTabSignIn" : "loginTabSignUp")}
-            </button>
-          ))}
-        </div>
-
-        <form onSubmit={onSubmit} className="space-y-3">
-          {tab === "up" && (
-            <input value={name} onChange={(e) => setName(e.target.value)} required maxLength={60} autoComplete="name" placeholder={t("loginName")} aria-label={t("loginName")} className={input} />
-          )}
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder={t("loginEmail")} aria-label={t("loginEmail")} className={input} />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            autoComplete={tab === "up" ? "new-password" : "current-password"}
-            placeholder={tab === "up" ? `${t("loginPassword")} (${t("loginPasswordHint")})` : t("loginPassword")}
-            aria-label={t("loginPassword")}
-            className={input}
-          />
-          {error && <p className="text-sm font-bold text-red-500">{t(error)}</p>}
-          {info && <p className="p-3 rounded-xl bg-emerald-500/10 text-xs font-semibold text-emerald-700 dark:text-emerald-400 leading-relaxed">{info}</p>}
-          <button type="submit" disabled={busy} className="w-full py-3 bw-button-solid font-black flex items-center justify-center gap-2 disabled:opacity-60">
-            {busy && <Loader2 className="w-4 h-4 animate-spin" />}
-            {t(tab === "up" ? "loginTabSignUp" : "loginTabSignIn")}
-          </button>
-          {tab === "in" && (
-            <button type="button" onClick={forgot} className="w-full text-center text-xs font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
-              {t("loginForgot")}
-            </button>
-          )}
-        </form>
+        {error && <p className="mt-4 text-sm font-bold text-red-500 text-center">{t(error)}</p>}
       </div>
     </div>,
     document.body
