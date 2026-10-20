@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Loader2, X } from "lucide-react";
-import { toast } from "sonner";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
 import { useTranslation } from "@/context/LanguageContext";
 import { telegramSignIn, TelegramAuthData } from "@/lib/telegramLogin";
@@ -111,7 +110,8 @@ function TelegramButton({ onError }: { onError: (key: string) => void }) {
 
 export default function LoginDialog({ onClose }: { onClose: () => void }) {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useCustomerAuth();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const [info, setInfo] = useState("");
   const [tab, setTab] = useState<"in" | "up">("in");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -149,6 +149,7 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
+    setInfo("");
     setBusy(true);
     try {
       if (tab === "up") await signUpWithEmail(name, email, password);
@@ -160,12 +161,16 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
     }
   }
 
+  // Firebase answers "sent" even when no password account has this email (so
+  // nobody can probe which emails are registered) and then sends nothing —
+  // hence the message says when the email actually arrives.
   async function forgot() {
     setError("");
+    setInfo("");
     if (!email.trim()) return setError("loginResetNeedEmail");
     try {
-      await resetPassword(email);
-      toast.success(t("loginResetSent", { email: email.trim() }));
+      await resetPassword(email, locale);
+      setInfo(t("loginResetSent", { email: email.trim() }));
     } catch (err) {
       fail(err);
     }
@@ -243,6 +248,7 @@ export default function LoginDialog({ onClose }: { onClose: () => void }) {
             className={input}
           />
           {error && <p className="text-sm font-bold text-red-500">{t(error)}</p>}
+          {info && <p className="p-3 rounded-xl bg-emerald-500/10 text-xs font-semibold text-emerald-700 dark:text-emerald-400 leading-relaxed">{info}</p>}
           <button type="submit" disabled={busy} className="w-full py-3 bw-button-solid font-black flex items-center justify-center gap-2 disabled:opacity-60">
             {busy && <Loader2 className="w-4 h-4 animate-spin" />}
             {t(tab === "up" ? "loginTabSignUp" : "loginTabSignIn")}

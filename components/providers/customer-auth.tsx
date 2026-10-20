@@ -34,7 +34,8 @@ interface CustomerAuth {
   signInWithToken: (token: string) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
+  // Sends the reset email in the site's language (if Firebase has it)
+  resetPassword: (email: string, language?: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
 }
@@ -86,7 +87,11 @@ export function CustomerAuthProvider({ children }: ChildProps) {
       await cred.user.getIdToken(true);
       setVersion((v) => v + 1);
     },
-    resetPassword: (email) => sendPasswordResetEmail(clientAuth(), email.trim()),
+    resetPassword: (email, language) => {
+      const auth = clientAuth();
+      auth.languageCode = language ?? null;
+      return sendPasswordResetEmail(auth, email.trim());
+    },
     signOut: () => signOut(clientAuth()),
     getIdToken: async () => (clientAuth().currentUser ? clientAuth().currentUser!.getIdToken() : null),
   };
