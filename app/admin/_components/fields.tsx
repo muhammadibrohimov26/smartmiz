@@ -57,6 +57,8 @@ export function TextArea({ label, name, defaultValue }: { label: string; name: s
 
 // shrinkImage aims for 850 KB; lib/media.ts accepts up to 900 KB
 const SHRUNK_MAX_BYTES = 900 * 1024;
+// Longest side below this: the picture will look blurry on the site
+const LOW_RES = 1200;
 
 // Image either from an uploaded file (shrunk in the browser, stored in Firestore
 // — see lib/media.ts) or an existing URL. With `redact`, a button opens an
@@ -65,6 +67,8 @@ export function ImageField({ defaultValue, label = "Rasm", redact }: { defaultVa
   const [preview, setPreview] = useState(defaultValue ?? "");
   const [info, setInfo] = useState<{ text: string; error?: boolean } | null>(null);
   const [editing, setEditing] = useState(false);
+  // Full-quality original of the file picked now (for the redaction editor)
+  const [source, setSource] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const closeEditor = useCallback(() => setEditing(false), []);
 
@@ -79,6 +83,7 @@ export function ImageField({ defaultValue, label = "Rasm", redact }: { defaultVa
     input.files = dt.files;
     input.setCustomValidity("");
     setPreview(URL.createObjectURL(file));
+    setSource(null); // editing again continues from this version, keeping its hidden areas
     setInfo({ text: `🔒 Shaxsiy maʼlumotlar yashirildi · ${Math.round(file.size / 1024)} KB — «Saqlash»ni bosing` });
   }
 
@@ -104,8 +109,16 @@ export function ImageField({ defaultValue, label = "Rasm", redact }: { defaultVa
     input.files = dt.files;
     input.setCustomValidity("");
     setPreview(URL.createObjectURL(file));
+    // The editor works from the original (one compression only, not two)
+    setSource(URL.createObjectURL(original));
     const img = await createImageBitmap(file).catch(() => null);
-    setInfo({ text: `${img ? `${img.width}×${img.height}, ` : ""}${Math.round(file.size / 1024)} KB` });
+    const size = `${img ? `${img.width}×${img.height}, ` : ""}${Math.round(file.size / 1024)} KB`;
+    // A small picture cannot become sharp on the site — say so while there is
+    // still a chance to pick the original file
+    if (img && Math.max(img.width, img.height) < LOW_RES) {
+      return setInfo({ text: `${size} — rasm kichik, saytda xira koʻrinadi. Iloji boʻlsa, asl (kattaroq) faylni yuklang.`, error: true });
+    }
+    setInfo({ text: size });
   }
 
   return (
@@ -137,7 +150,7 @@ export function ImageField({ defaultValue, label = "Rasm", redact }: { defaultVa
               <EyeOff className="w-3.5 h-3.5" /> Pasport raqami, QR kodni yashirish
             </button>
           )}
-          {editing && <Redactor src={preview} onDone={onRedacted} onCancel={closeEditor} />}
+          {editing && <Redactor src={source ?? preview} onDone={onRedacted} onCancel={closeEditor} />}
           <Input
             name="image"
             defaultValue={defaultValue}

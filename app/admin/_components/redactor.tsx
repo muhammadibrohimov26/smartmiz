@@ -108,11 +108,10 @@ export default function Redactor({ src, onDone, onCancel }: { src: string; onDon
     setSaving(true);
     try {
       const canvas = renderRedacted(img, rects);
-      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.9));
+      // Lossless here; shrinkImage then compresses once (no double compression)
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
       if (!blob) throw new Error();
-      const type = blob.type === "image/webp" ? "image/webp" : "image/png"; // Safari has no WebP encoder
-      // Shrunk like any upload (the stored copy must fit Firestore)
-      onDone(await shrinkImage(new File([blob], `sertifikat.${type === "image/webp" ? "webp" : "png"}`, { type })));
+      onDone(await shrinkImage(new File([blob], "sertifikat.png", { type: "image/png" })));
     } catch {
       setError("Saqlab boʻlmadi");
       setSaving(false);

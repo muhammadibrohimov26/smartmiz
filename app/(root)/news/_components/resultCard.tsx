@@ -111,6 +111,7 @@ export default function ResultCard({ item }: { item: NewsItem }) {
           <Image
             fill
             sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
+            quality={90}
             src={item.image}
             alt={alt}
             className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
