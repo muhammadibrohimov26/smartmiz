@@ -128,7 +128,7 @@ export default function VocabGame() {
           <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4 max-w-md mx-auto">
             {t("gameDesc")}
           </p>
-          <div className="inline-flex items-center gap-4 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
             <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-500 uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#FFB800]" /> 10 {t("gameWords")}
             </div>
