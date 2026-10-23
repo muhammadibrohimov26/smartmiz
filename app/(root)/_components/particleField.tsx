@@ -3,26 +3,27 @@
 import { useEffect, useRef } from "react";
 
 // Site-wide interactive background, inspired by antigravity.google.
-// A fixed, full-viewport canvas behind all public pages: a vortex ring of short
-// radial dashes floats after the pointer on a soft spring (outer particles
-// trail behind on fast moves), slowly swirls and "breathes", coloured from
-// brand yellow (inside) to the logo green (outside), over a faint dot grid.
-// - click/tap: the ring bursts outward and gathers back, and a "code" ripple
-//   (like claude.ai/code) spreads from the click: random letters and digits
-//   on a monospace grid that keep scrambling, yellow at the wave front,
-//   fading out behind it
-// - scrolling: particles lag behind with inertia, then settle
-// - idle / phones: the ring drifts on its own, smaller and softer
+// A fixed, full-viewport canvas behind all public pages, covered evenly with
+// short dashes that drift in a slow wave. Where the pointer moves over them
+// they come alive: grow, light up (brand yellow at the cursor → logo green
+// further out), turn to point at the cursor and step aside a little, then
+// settle back once it has passed.
+// - click/tap: a ring of binary code (0/1, scrambling) spreads from the
+//   click, yellow at the front, and its shock wave pushes the dashes outward
+// - scrolling: dashes lag behind with inertia, then settle
+// - no pointer (phones, idle): a faint wandering glow keeps it alive
 // Content sits above it (cards keep their own backgrounds), so it only shows
 // in the open space. Pauses in background tabs; static for reduced motion.
 
-type Particle = {
-  r0: number; // home radius, 0..1 across the ring band
-  theta0: number;
-  spin: number; // rad/ms
-  phase: number;
+type Dash = {
+  hx: number; // home position
+  hy: number;
   x: number;
   y: number;
+  vx: number;
+  vy: number;
+  phase: number;
+  angle: number;
 };
 
 // yellow #FFB800 → lime → logo green #4BE033
@@ -32,7 +33,7 @@ const STOPS = [
   [75, 224, 51],
 ];
 const COLOR_BUCKETS = 8;
-const ALPHA_BUCKETS = 5;
+const ALPHA_BUCKETS = 6;
 
 function mix(t: number) {
   const s = t * (STOPS.length - 1);
@@ -42,14 +43,16 @@ function mix(t: number) {
 }
 const PALETTE = Array.from({ length: COLOR_BUCKETS }, (_, i) => mix(i / (COLOR_BUCKETS - 1)));
 
-// Click ripple of scrambling characters
+// Click ripple of scrambling binary digits
 type Ripple = { x: number; y: number; start: number };
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const RIPPLE_MS = 1400;
-const RIPPLE_BAND = 150; // px of characters behind the wave front
+const DIGITS = "01";
+const RIPPLE_MS = 1500;
+const RIPPLE_BAND = 150; // px of digits behind the wave front
 const MAX_RIPPLES = 4;
 const CELL = 14; // monospace grid step
 const hash = (x: number, y: number) => (Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0;
+
+const smooth = (t: number) => t * t * (3 - 2 * t);
 
 export default function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -63,20 +66,44 @@ export default function ParticleField() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let width = 0;
     let height = 0;
-    let particles: Particle[] = [];
-    let dotsPath = new Path2D();
-    let inner = 60;
-    let outer = 300;
+    let dashes: Dash[] = [];
+    let reach = 220; // pointer influence radius
     let frame = 0;
     let running = false;
     let last = performance.now();
     let lastScroll = window.scrollY;
 
     const pointer = { x: 0, y: 0, active: false, lastMove: 0 };
-    const center = { x: 0, y: 0, vx: 0, vy: 0 };
-    let burst = 0; // 1 right after a click, decays to 0
-    let presence = 0; // 0 idle → 1 following a real pointer (smoothed)
+    const focus = { x: 0, y: 0 }; // smoothed pointer
+    let presence = 0; // 0 idle → 1 a real pointer is moving (smoothed)
     const ripples: Ripple[] = [];
+
+    function build() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // clientWidth excludes the scrollbar, matching the CSS size of the canvas
+      width = document.documentElement.clientWidth;
+      height = window.innerHeight;
+      canvas!.width = Math.round(width * dpr);
+      canvas!.height = Math.round(height * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const small = width < 640;
+      reach = small ? 150 : 230;
+      // An even, slightly jittered grid over the whole screen
+      const gap = small ? 30 : 34;
+      dashes = [];
+      for (let y = gap / 2; y < height + gap; y += gap) {
+        for (let x = gap / 2; x < width + gap; x += gap) {
+          const hx = x + (Math.random() - 0.5) * gap * 0.7;
+          const hy = y + (Math.random() - 0.5) * gap * 0.7;
+          dashes.push({ hx, hy, x: hx, y: hy, vx: 0, vy: 0, phase: Math.random() * Math.PI * 2, angle: 0 });
+        }
+      }
+      if (!focus.x && !focus.y) {
+        focus.x = width * 0.6;
+        focus.y = height * 0.4;
+      }
+    }
 
     function drawRipples(now: number, dark: boolean) {
       for (let i = ripples.length - 1; i >= 0; i--) {
@@ -84,8 +111,8 @@ export default function ParticleField() {
       }
       if (!ripples.length) return;
 
-      const maxR = Math.min(width < 640 ? 320 : 560, Math.max(width, height) * 0.6);
-      // Glyphs grouped by colour (front / middle / tail) × 6 alpha levels
+      const maxR = rippleMax();
+      // Digits grouped by colour (front / middle / tail) × 6 alpha levels
       const groups: [number, number, string][][] = Array.from({ length: 18 }, () => []);
 
       for (const rp of ripples) {
@@ -106,14 +133,16 @@ export default function ParticleField() {
             const dist = Math.hypot(cx - rp.x, cy - rp.y);
             if (dist < lo || dist > hi) continue;
             const h = hash(gx, gy);
-            if (h % 7 === 0) continue; // a few gaps, like real text
+            if (h % 6 === 0) continue; // a few gaps, like real output
             const behind = Math.max(0, R - dist); // 0 at the front
             const a = Math.pow(1 - behind / RIPPLE_BAND, 1.6) * fade;
             if (a < 0.06) continue;
-            // each cell re-rolls its character every ~70 ms (scramble)
-            const ch = CHARS[(h + Math.floor(now / 70 + (h & 15))) % CHARS.length];
+            // each cell flips between 0 and 1 every ~80 ms (scramble)
+            // (high bits of the hash, so neighbouring cells differ — the low
+            // bit plus a shared clock would flip every cell to the same digit)
+            const digit = DIGITS[((h >>> 7) ^ Math.floor(now / 80 + (h & 31))) & 1];
             const tone = behind < 20 ? 0 : behind < 64 ? 1 : 2;
-            groups[tone * 6 + Math.min(5, Math.floor(a * 6))].push([cx, cy, ch]);
+            groups[tone * 6 + Math.min(5, Math.floor(a * 6))].push([cx, cy, digit]);
           }
         }
       }
@@ -123,7 +152,7 @@ export default function ParticleField() {
         [75, 224, 51], // then: logo green
         dark ? [148, 163, 184] : [82, 82, 91], // tail: slate / zinc
       ];
-      ctx!.font = `600 ${width < 640 ? 11 : 12}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+      ctx!.font = `700 ${width < 640 ? 11 : 13}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
       ctx!.textAlign = "center";
       ctx!.textBaseline = "middle";
       groups.forEach((glyphs, gi) => {
@@ -134,110 +163,98 @@ export default function ParticleField() {
       });
     }
 
-    function build() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      // clientWidth excludes the scrollbar, matching the CSS size of the canvas
-      width = document.documentElement.clientWidth;
-      height = window.innerHeight;
-      canvas!.width = Math.round(width * dpr);
-      canvas!.height = Math.round(height * dpr);
-      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const small = width < 640;
-      inner = small ? 56 : 110;
-      outer = Math.min(small ? 210 : 380, Math.max(width, height) * 0.42);
-      const count = small ? 300 : 620;
-      particles = Array.from({ length: count }, () => {
-        // more particles towards the outside of the band, like a galaxy disc
-        const r0 = Math.sqrt(Math.random());
-        return {
-          r0,
-          theta0: Math.random() * Math.PI * 2,
-          spin: (0.000035 + Math.random() * 0.00005) * (1.2 - r0 * 0.6),
-          phase: Math.random() * Math.PI * 2,
-          x: center.x || width / 2,
-          y: center.y || height / 2,
-        };
-      });
-
-      // faint background dot grid, prebuilt once per size
-      dotsPath = new Path2D();
-      const gap = small ? 26 : 30;
-      for (let y = gap / 2; y < height; y += gap) {
-        for (let x = gap / 2 + ((y / gap) % 2) * (gap / 2); x < width; x += gap) {
-          dotsPath.rect(x, y, 1.3, 1.3);
-        }
-      }
-
-      if (!center.x && !center.y) {
-        center.x = width * 0.62;
-        center.y = height * 0.42;
-      }
-    }
+    const rippleMax = () => Math.min(width < 640 ? 320 : 560, Math.max(width, height) * 0.6);
 
     function draw(now: number) {
       const dt = Math.min(48, now - last);
       last = now;
+      const step = dt / 16;
       const dark = document.documentElement.classList.contains("dark");
       ctx!.clearRect(0, 0, width, height);
 
-      ctx!.fillStyle = dark ? "rgba(255,255,255,0.09)" : "rgba(24,24,27,0.11)";
-      ctx!.fill(dotsPath);
-
-      // Where the ring wants to be: the pointer, or a slow drifting path when idle
-      const following = pointer.active && now - pointer.lastMove < 3500;
-      presence += ((following ? 1 : 0) - presence) * 0.03;
-      const tx = following ? pointer.x : width * (0.5 + 0.3 * Math.sin(now * 0.00013));
-      const ty = following ? pointer.y : height * (0.45 + 0.22 * Math.sin(now * 0.00019 + 1.1));
-
-      // Soft spring-follow (slightly underdamped → a gentle overshoot)
-      const k = 0.028 * (dt / 16);
-      center.vx = (center.vx + (tx - center.x) * k) * 0.87;
-      center.vy = (center.vy + (ty - center.y) * k) * 0.87;
-      center.x += center.vx;
-      center.y += center.vy;
-      burst *= 0.955;
+      // The pointer, or a slow wandering spot when there is none (phones, idle)
+      const following = pointer.active && now - pointer.lastMove < 4000;
+      presence += ((following ? 1 : 0) - presence) * 0.04 * step;
+      const tx = following ? pointer.x : width * (0.5 + 0.32 * Math.sin(now * 0.00011));
+      const ty = following ? pointer.y : height * (0.45 + 0.25 * Math.sin(now * 0.00017 + 1.1));
+      const follow = (following ? 0.22 : 0.03) * step;
+      focus.x += (tx - focus.x) * follow;
+      focus.y += (ty - focus.y) * follow;
 
       const small = width < 640;
-      const scale = 0.72 + presence * 0.28; // idle ring is smaller…
-      const intensity = (small ? 0.45 : 0.6) + presence * 0.32; // …and softer
-      const band = outer - inner;
+      const strength = 0.4 + 0.6 * presence; // the idle glow is weaker
+      const base = dark ? 0.3 : 0.32; // resting dashes: visible but quiet
+      const maxR = rippleMax();
+      const waves = ripples.map((rp) => {
+        const p = Math.min(1, (now - rp.start) / RIPPLE_MS);
+        return { x: rp.x, y: rp.y, R: (1 - Math.pow(1 - p, 3)) * maxR, fade: 1 - p };
+      });
 
-      // Bucket particles by colour and alpha so ~600 dashes need ~40 stroke calls
+      // Bucket by colour and alpha so ~1000 dashes need ~50 stroke calls
       const paths: Path2D[][] = PALETTE.map(() => Array.from({ length: ALPHA_BUCKETS }, () => new Path2D()));
+      const spring = 0.06 * step;
+      const damping = Math.pow(0.82, step);
 
-      for (const p of particles) {
-        const theta = p.theta0 + now * p.spin;
-        const breathe = 1 + 0.06 * Math.sin(now * 0.0007 + p.phase);
-        const r = (inner + p.r0 * band) * scale * breathe + burst * (60 + p.r0 * 140);
-        const cos = Math.cos(theta);
-        const sin = Math.sin(theta);
+      for (const d of dashes) {
+        // Slow wave over the whole field: a gently turning flow direction
+        const flow = Math.sin(d.hx * 0.006 + now * 0.0004) + Math.cos(d.hy * 0.007 - now * 0.00033);
+        let angle = flow * 0.9 + d.phase * 0.15;
+        let energy = 0; // 0 resting → 1 fully lit
 
-        // Home slot, minus a trail along the ring's velocity (outer particles lag more)
-        const lag = 3 + p.r0 * 9;
-        const hx = center.x + cos * r - center.vx * lag;
-        const hy = center.y + sin * r - center.vy * lag;
-        const ease = (0.1 - p.r0 * 0.055) * (dt / 16);
-        p.x += (hx - p.x) * ease;
-        p.y += (hy - p.y) * ease;
+        // Pointer: dashes nearby light up, point at the cursor and step aside
+        let ox = 0;
+        let oy = 0;
+        const dx = d.hx - focus.x;
+        const dy = d.hy - focus.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        if (dist < reach) {
+          const f = smooth(1 - dist / reach) * strength;
+          energy = f;
+          const toCursor = Math.atan2(-dy, -dx);
+          // blend the flow angle towards the cursor (shortest way round)
+          const diff = Math.atan2(Math.sin(toCursor - angle), Math.cos(toCursor - angle));
+          angle += diff * Math.min(1, f * 1.6);
+          const push = f * (small ? 14 : 22);
+          ox = (dx / dist) * push - (dy / dist) * push * 0.35; // outward + a little swirl
+          oy = (dy / dist) * push + (dx / dist) * push * 0.35;
+        }
 
-        // Fade in from the inner edge and out at the outer edge
-        const edge = Math.sin(Math.PI * Math.min(1, Math.max(0, p.r0 * 0.92 + 0.04)));
-        const alpha = edge * intensity;
-        if (alpha < 0.03) continue;
+        // Click shock waves: a bright band that shoves dashes outward
+        for (const w of waves) {
+          const wx = d.hx - w.x;
+          const wy = d.hy - w.y;
+          const wd = Math.hypot(wx, wy) || 1;
+          const band = 1 - Math.abs(wd - w.R) / 70;
+          if (band <= 0) continue;
+          const k = band * w.fade;
+          energy = Math.max(energy, k * 0.9);
+          ox += (wx / wd) * k * 26;
+          oy += (wy / wd) * k * 26;
+          angle = Math.atan2(wy, wx);
+        }
 
-        const len = 1.6 + p.r0 * 3.6 + burst * 5;
-        const ci = Math.min(COLOR_BUCKETS - 1, Math.floor(p.r0 * COLOR_BUCKETS));
+        // Spring towards home + offset (gentle overshoot), with scroll inertia in v
+        d.vx = (d.vx + (d.hx + ox - d.x) * spring) * damping;
+        d.vy = (d.vy + (d.hy + oy - d.y) * spring) * damping;
+        d.x += d.vx * step;
+        d.y += d.vy * step;
+        d.angle += Math.atan2(Math.sin(angle - d.angle), Math.cos(angle - d.angle)) * Math.min(1, 0.18 * step);
+
+        const alpha = base + (0.95 - base) * energy;
+        const len = 2.2 + energy * (small ? 7 : 9);
+        const ci = Math.min(COLOR_BUCKETS - 1, Math.floor((1 - energy) * COLOR_BUCKETS));
         const ai = Math.min(ALPHA_BUCKETS - 1, Math.floor(alpha * ALPHA_BUCKETS));
+        const cos = Math.cos(d.angle) * len;
+        const sin = Math.sin(d.angle) * len;
         const path = paths[ci][ai];
-        path.moveTo(p.x - cos * len, p.y - sin * len);
-        path.lineTo(p.x + cos * len, p.y + sin * len);
+        path.moveTo(d.x - cos, d.y - sin);
+        path.lineTo(d.x + cos, d.y + sin);
       }
 
       ctx!.lineCap = "round";
-      ctx!.lineWidth = small ? 1.7 : 1.9;
+      ctx!.lineWidth = small ? 1.6 : 1.8;
       for (let ci = 0; ci < COLOR_BUCKETS; ci++) {
-        const [r, g, b] = PALETTE[ci];
+        const [r, g, b] = ci === COLOR_BUCKETS - 1 && !dark ? [60, 150, 40] : PALETTE[ci];
         for (let ai = 0; ai < ALPHA_BUCKETS; ai++) {
           ctx!.strokeStyle = `rgba(${r},${g},${b},${((ai + 0.5) / ALPHA_BUCKETS).toFixed(2)})`;
           ctx!.stroke(paths[ci][ai]);
@@ -263,14 +280,15 @@ export default function ParticleField() {
     }
 
     function track(e: PointerEvent) {
+      // Touch "moves" are scrolls: only a mouse/pen hovering drives the glow
+      if (e.pointerType === "touch") return;
       pointer.x = e.clientX;
       pointer.y = e.clientY;
       pointer.active = true;
       pointer.lastMove = performance.now();
     }
     function onDown(e: PointerEvent) {
-      track(e);
-      burst = 0.7;
+      if (e.pointerType !== "touch") track(e);
       if (reduceMotion) return;
       ripples.push({ x: e.clientX, y: e.clientY, start: performance.now() });
       if (ripples.length > MAX_RIPPLES) ripples.shift();
@@ -278,13 +296,13 @@ export default function ParticleField() {
     function onLeave() {
       pointer.active = false;
     }
-    // Content scrolls but the canvas is fixed: shift particles against the
+    // Content scrolls but the canvas is fixed: kick the dashes against the
     // scroll so they lag behind and spring back (inertia)
     function onScroll() {
       const delta = window.scrollY - lastScroll;
       lastScroll = window.scrollY;
-      const kick = Math.max(-60, Math.min(60, delta)) * 0.45;
-      for (const p of particles) p.y -= kick * (0.4 + p.r0);
+      const kick = Math.max(-40, Math.min(40, delta)) * 0.35;
+      for (const d of dashes) d.vy -= kick * (0.6 + 0.4 * Math.sin(d.phase));
       // ripples stay attached to the spot on the page that was clicked
       for (const rp of ripples) rp.y -= delta;
     }
@@ -295,14 +313,6 @@ export default function ParticleField() {
     const onVisibility = () => (document.hidden ? stop() : start());
 
     build();
-    if (reduceMotion) {
-      // one settled frame
-      for (const p of particles) {
-        const r = inner + p.r0 * (outer - inner);
-        p.x = center.x + Math.cos(p.theta0) * r;
-        p.y = center.y + Math.sin(p.theta0) * r;
-      }
-    }
     draw(performance.now());
     start();
 
