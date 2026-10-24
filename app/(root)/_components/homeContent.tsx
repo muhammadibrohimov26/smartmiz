@@ -1,6 +1,6 @@
 "use client";
 
-import { Price, Review, SiteSettings } from "@/types";
+import { CourseRating, Price, Review, SiteSettings } from "@/types";
 import CardItems from "./cardItems";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
@@ -11,7 +11,7 @@ import FAQ from "./faq";
 import Reviews from "./reviews";
 import AboutContent from "./aboutContent";
 
-function HomeContent({ prices, reviews, settings }: { prices: Price[]; reviews: Review[]; settings: SiteSettings }) {
+function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; reviews: Review[]; settings: SiteSettings; ratings: Record<string, CourseRating> }) {
   const { t } = useTranslation();
 
   const scrollToCourses = () => {
@@ -72,7 +72,7 @@ function HomeContent({ prices, reviews, settings }: { prices: Price[]; reviews: 
           </div>
 
           <div className="flex flex-col space-y-24">
-            <CardItems prices={prices} />
+            <CardItems prices={prices} ratings={ratings} />
           </div>
         </div>
 

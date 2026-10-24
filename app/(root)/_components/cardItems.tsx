@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Price } from "@/types"
+import { CourseRating, Price } from "@/types"
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, Clock, Star } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseCardTitles, courseLabel, courseSlug, formatHours } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
@@ -14,9 +14,11 @@ import CourseCover from "./courseCover";
 
 interface PricesItemProps{
     prices: Price[]
+    // Average rating per course slug (courses without ratings are missing)
+    ratings?: Record<string, CourseRating>
 }
 
-const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
+const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
     const { t, locale } = useTranslation();
     // Filter by language / subject ("Ingliz tili", "Koreys tili", "Kompyuter kursi"…)
     const [filter, setFilter] = useState("all");
@@ -52,6 +54,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                 {shown.map((price, index) => {
                     const titles = courseCardTitles(price, t);
                     const href = `/courses/${courseSlug(price)}`;
+                    const rating = ratings[courseSlug(price)];
                     return (
                     <div
                         key={price.id ?? index}
@@ -66,6 +69,30 @@ const CardItems: React.FC<PricesItemProps> = ({ prices }) => {
                                 src={price.image}
                                 alt={`${courseLabel(price)} kursi`}
                             /> : <CourseCover course={price} />}
+
+                            {/* Course rating — goes to the rating part of the course page */}
+                            <Link
+                                href={`${href}#rating`}
+                                aria-label={rating ? `${rating.average.toFixed(1)} / 5` : t("courseRateShort")}
+                                className="absolute top-4 start-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-white text-xs font-black shadow-lg hover:bg-black/80 transition-colors"
+                            >
+                                <span className="flex" aria-hidden="true">
+                                    {[1, 2, 3, 4, 5].map((n) => (
+                                        <Star
+                                            key={n}
+                                            className={cn("w-3.5 h-3.5", rating && n <= Math.round(rating.average) ? "fill-[#FFB800] text-[#FFB800]" : "text-white/50")}
+                                        />
+                                    ))}
+                                </span>
+                                {rating ? (
+                                    <>
+                                        <span>{rating.average.toFixed(1)}</span>
+                                        <span className="font-bold text-white/70">· {t("courseRatingCount", { n: rating.count })}</span>
+                                    </>
+                                ) : (
+                                    <span className="font-bold text-white/80">{t("courseRateShort")}</span>
+                                )}
+                            </Link>
                         </div>
 
                         {/* Card Body */}

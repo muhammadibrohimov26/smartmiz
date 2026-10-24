@@ -1,4 +1,4 @@
-import { Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings, TelegramMediaKind } from "@/types";
+import { CourseRating, Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings, TelegramMediaKind } from "@/types";
 import { DEFAULT_ABOUT_VIDEO_IMAGE, DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 import { isAllowedImageUrl } from "@/lib/images";
 import { compareResults } from "@/lib/results";
@@ -171,6 +171,20 @@ export async function getApprovedReviews(): Promise<Review[]> {
 // One course page's approved ratings
 export async function getCourseReviews(slug: string): Promise<Review[]> {
   return withFallback<Review[]>(async () => (await readReviews(true)).filter((r) => r.courseSlug === slug), [], {});
+}
+
+// Average rating per course slug (approved ratings only)
+export async function getCourseRatings(): Promise<Record<string, CourseRating>> {
+  return withFallback<Record<string, CourseRating>>(async () => {
+    const sums: Record<string, { sum: number; count: number }> = {};
+    for (const r of await readReviews(true)) {
+      if (!r.courseSlug) continue;
+      const o = (sums[r.courseSlug] ??= { sum: 0, count: 0 });
+      o.sum += r.rating;
+      o.count++;
+    }
+    return Object.fromEntries(Object.entries(sums).map(([slug, o]) => [slug, { average: o.sum / o.count, count: o.count }]));
+  }, {}, {});
 }
 
 export async function getAllReviews(): Promise<Review[]> {

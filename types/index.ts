@@ -52,6 +52,12 @@ export interface SiteSettings {
     aboutVideoImage: string
 }
 
+// Average of a course's approved ratings (home page course cards)
+export interface CourseRating {
+    average: number
+    count: number
+}
+
 export type ReviewStatus = "pending" | "approved" | "hidden"
 
 export interface Review {

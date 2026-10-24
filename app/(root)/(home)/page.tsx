@@ -1,4 +1,4 @@
-import { getApprovedReviews, getCourses, getSiteSettings } from "@/lib/data";
+import { getApprovedReviews, getCourseRatings, getCourses, getSiteSettings } from "@/lib/data";
 import { Metadata } from "next";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import { dictionaries } from "@/lib/dictionaries";
@@ -47,11 +47,11 @@ function homeJsonLd(prices: Price[]) {
 }
 
 async function Homepage() {
-  const [prices, reviews, settings] = await Promise.all([getCourses(), getApprovedReviews(), getSiteSettings()]);
+  const [prices, reviews, settings, ratings] = await Promise.all([getCourses(), getApprovedReviews(), getSiteSettings(), getCourseRatings()]);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd(prices)) }} />
-      <HomeContent prices={prices} reviews={reviews} settings={settings} />
+      <HomeContent prices={prices} reviews={reviews} settings={settings} ratings={ratings} />
     </>
   );
 }
