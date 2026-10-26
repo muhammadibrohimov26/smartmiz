@@ -37,6 +37,7 @@ const BTN = {
   review: "⭐ Sharh qoldirish",
   cancel: "❌ Bekor qilish",
   skipPhoto: "⏭ Rasmsiz davom etish",
+  skipText: "⏭ Izohsiz yuborish",
   other: "Boshqa",
 };
 
@@ -192,6 +193,16 @@ async function onStep(msg: Message, s: Session, config: BotConfig) {
 
     case "quote":
     case "quoteText": {
+      // A 5-star review may go without a comment
+      if (text === BTN.skipText && s.flow === "review" && s.data.rating === 5 && !s.data.media) {
+        s.data.text = "";
+        s.step = "confirm";
+        await save(userId, s);
+        return showConfirm(chatId, s, config);
+      }
+      if (text === BTN.skipText) {
+        return say(`Bahoyingiz 5 dan past — nima yoqmaganini kamida ${MIN_TEXT} ta belgi bilan yozing.`);
+      }
       const media = s.step === "quote" ? mediaOf(msg) : null;
       if (media) {
         s.data.media = media;
@@ -204,7 +215,13 @@ async function onStep(msg: Message, s: Session, config: BotConfig) {
         }
       } else {
         if (mediaOf(msg)) return say("Video/ovoz allaqachon bor 👍 Endi matn yozing.");
-        if (text.length < MIN_TEXT) return say(`Fikringizni kamida ${MIN_TEXT} ta belgi bilan yozing.`);
+        if (text.length < MIN_TEXT) {
+          return say(
+            s.flow === "review" && (s.data.rating ?? 5) < 5
+              ? `Bahoyingiz 5 dan past — nima yoqmaganini kamida ${MIN_TEXT} ta belgi bilan yozing.`
+              : `Fikringizni kamida ${MIN_TEXT} ta belgi bilan yozing.`
+          );
+        }
         s.data.text = text.slice(0, MAX_TEXT);
       }
       s.step = "confirm";
@@ -226,7 +243,7 @@ async function showConfirm(chatId: number, s: Session, config: BotConfig) {
   const body =
     s.flow === "news"
       ? `👤 <b>${escapeHtml(d.name!)}</b>\n📚 ${escapeHtml(d.course!)}: <b>${escapeHtml(d.score!)}</b>\n📄 Sertifikat: ${d.photoFileId ? "bor" : "yoʻq"}\n\n💬 <i>${escapeHtml(d.text!)}</i>${media}`
-      : `${"⭐".repeat(d.rating!)}\n\n💬 <i>${escapeHtml(d.text!)}</i>\n— <b>${escapeHtml(d.name!)}</b>${media}`;
+      : `${"⭐".repeat(d.rating!)}\n\n${d.text ? `💬 <i>${escapeHtml(d.text)}</i>\n` : ""}— <b>${escapeHtml(d.name!)}</b>${media}`;
   await sendHtml(chatId, "Tayyor ✅", config.emoji, { reply_markup: { remove_keyboard: true } });
   return sendHtml(chatId, `<b>Tekshirib koʻring:</b>\n\n${body}`, config.emoji, {
     reply_markup: {
@@ -270,11 +287,14 @@ async function onCallback(q: any, config: BotConfig) {
       text: `Bahoyingiz: ${"⭐".repeat(s.data.rating)}`,
     }).catch(() => {});
     await answer();
+    const five = s.data.rating === 5;
     return sendHtml(
       chatId,
-      "✍️ Smartmiz haqida fikringizni yozing.\n\n🎥 Yoki <b>video</b>, <b>dumaloq video</b> yoki 🎙 <b>ovozli xabar</b> yuboring.",
+      five
+        ? "✍️ Xohlasangiz, fikringizni yozing yoki 🎥 video / 🎙 ovozli xabar yuboring.\n\nYoki «Izohsiz yuborish»ni bosing."
+        : "✍️ Nima yoqmadi? Sababini yozing — fikringiz biz uchun muhim.\n\n🎥 Video yoki 🎙 ovozli xabar ham yuborishingiz mumkin.",
       config.emoji,
-      { reply_markup: keyboard() }
+      { reply_markup: five ? keyboard([BTN.skipText]) : keyboard() }
     );
   }
 

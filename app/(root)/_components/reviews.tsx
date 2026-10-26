@@ -34,7 +34,11 @@ export function ReviewCard({ review }: { review: Review }) {
   return (
     <div className="w-full p-6 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl flex flex-col gap-4">
       <Stars value={review.rating} />
-      <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line flex-grow">{review.text}</p>
+      {review.text ? (
+        <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line flex-grow">{review.text}</p>
+      ) : (
+        <div className="flex-grow" />
+      )}
       <TelegramMediaLink link={review.telegramLink} media={review.media} />
       <div className="flex items-center gap-3">
         <CustomerAvatar name={review.name} photo={review.photo} className="w-10 h-10" />
@@ -109,7 +113,9 @@ export function WriteReview({ courseSlug }: { courseSlug?: string } = {}) {
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (rating < 1) return void toast.error(t("errReviewRating"));
-    if (text.trim().length < 10 || text.trim().length > 1000) return void toast.error(t("errReviewText"));
+    if (text.trim().length > 1000) return void toast.error(t("errReviewText"));
+    // 5 stars: the comment is optional; fewer: say why (10+ characters)
+    if (rating < 5 && text.trim().length < 10) return void toast.error(t("errReviewTextLow"));
     setSending(true);
     try {
       const token = await getIdToken();
@@ -169,7 +175,7 @@ export function WriteReview({ courseSlug }: { courseSlug?: string } = {}) {
         onChange={(e) => setText(e.target.value)}
         rows={4}
         maxLength={1000}
-        placeholder={t("reviewsPlaceholder")}
+        placeholder={t(rating === 5 ? "reviewsPlaceholderOptional" : rating > 0 ? "reviewsPlaceholderWhy" : "reviewsPlaceholder")}
         aria-label={t("reviewsPlaceholder")}
         className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-3 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-[#FFB800]"
       />
@@ -234,7 +240,7 @@ function ThanksCard({
 
       <div className="text-left p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 mb-6">
         <Stars value={review.rating} />
-        <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-medium whitespace-pre-line line-clamp-4">{review.text}</p>
+        {review.text && <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-medium whitespace-pre-line line-clamp-4">{review.text}</p>}
         <div className="flex items-center gap-2 mt-3">
           <CustomerAvatar name={name} photo={photo} className="w-7 h-7" />
           <span className="text-xs font-black truncate">{name}</span>

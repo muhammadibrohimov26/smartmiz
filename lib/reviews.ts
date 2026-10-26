@@ -57,7 +57,9 @@ export async function submitReview(idToken: string, rating: number, text: string
     const cleanText = String(text ?? "").trim();
     const stars = Math.round(Number(rating));
     if (!Number.isInteger(stars) || stars < 1 || stars > 5) throw new Error("errReviewRating");
-    if (cleanText.length < MIN_TEXT || cleanText.length > MAX_TEXT) throw new Error("errReviewText");
+    if (cleanText.length > MAX_TEXT) throw new Error("errReviewText");
+    // A 5-star rating may come without a comment; a lower one needs the reason
+    if (stars < 5 && cleanText.length < MIN_TEXT) throw new Error("errReviewTextLow");
     const course = slug ? await courseFor(slug) : null;
 
     const ref = adminDb().collection("reviews").doc(docId(user.uid, slug));

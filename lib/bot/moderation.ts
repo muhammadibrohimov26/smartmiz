@@ -70,7 +70,7 @@ function summary(kind: Kind, d: Doc) {
       : [
           reviewHeading(d.media?.kind),
           `\n${"⭐".repeat(d.rating)}`,
-          `\n<i>«${escapeHtml(d.text)}»</i>`,
+          d.text ? `\n<i>«${escapeHtml(d.text)}»</i>` : "",
           `\n👤 <b>${escapeHtml(d.name)}</b>`,
           "🎓 Smartmiz oʻquv markazi oʻquvchisi",
         ];
