@@ -69,30 +69,6 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                                 src={price.image}
                                 alt={`${courseLabel(price)} kursi`}
                             /> : <CourseCover course={price} />}
-
-                            {/* Course rating — goes to the rating part of the course page */}
-                            <Link
-                                href={`${href}#rating`}
-                                aria-label={rating ? `${rating.average.toFixed(1)} / 5` : t("courseRateShort")}
-                                className="absolute top-4 start-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-white text-xs font-black shadow-lg hover:bg-black/80 transition-colors"
-                            >
-                                <span className="flex" aria-hidden="true">
-                                    {[1, 2, 3, 4, 5].map((n) => (
-                                        <Star
-                                            key={n}
-                                            className={cn("w-3.5 h-3.5", rating && n <= Math.round(rating.average) ? "fill-[#FFB800] text-[#FFB800]" : "text-white/50")}
-                                        />
-                                    ))}
-                                </span>
-                                {rating ? (
-                                    <>
-                                        <span>{rating.average.toFixed(1)}</span>
-                                        <span className="font-bold text-white/70">· {t("courseRatingCount", { n: rating.count })}</span>
-                                    </>
-                                ) : (
-                                    <span className="font-bold text-white/80">{t("courseRateShort")}</span>
-                                )}
-                            </Link>
                         </div>
 
                         {/* Card Body */}
@@ -103,11 +79,30 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                                 {titles.label}
                             </span>
 
-                            <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300 mb-6">
-                                <Link href={href} className="after:absolute after:inset-0 after:content-['']">
-                                    {titles.heading}
+                            {/* Name, and the course rating on its right (goes to the rating
+                                part of the course page) */}
+                            <div className="flex items-start justify-between gap-3 mb-6">
+                                <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300">
+                                    <Link href={href} className="after:absolute after:inset-0 after:content-['']">
+                                        {titles.heading}
+                                    </Link>
+                                </h2>
+                                <Link
+                                    href={`${href}#rating`}
+                                    aria-label={rating ? `${rating.average.toFixed(1)} / 5` : t("courseRateShort")}
+                                    className="relative z-10 shrink-0 mt-1 flex items-center gap-1 px-2.5 py-1 rounded-full border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-xs font-black text-gray-900 dark:text-white hover:border-[#FFB800] transition-colors"
+                                >
+                                    <Star className={cn("w-3.5 h-3.5", rating ? "fill-[#FFB800] text-[#FFB800]" : "text-gray-400 dark:text-zinc-500")} />
+                                    {rating ? (
+                                        <>
+                                            {rating.average.toFixed(1)}
+                                            <span className="font-bold text-gray-400 dark:text-zinc-500">({rating.count})</span>
+                                        </>
+                                    ) : (
+                                        <span className="font-bold text-gray-500 dark:text-zinc-400">{t("courseRateShort")}</span>
+                                    )}
                                 </Link>
-                            </h2>
+                            </div>
 
                             {/* Pricing Section */}
                             <div className="flex justify-between items-center mb-6 rounded-2xl bg-gray-50 dark:bg-zinc-900/30 p-4 border border-gray-100 dark:border-zinc-900/50">
