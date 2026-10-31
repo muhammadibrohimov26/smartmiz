@@ -5,6 +5,7 @@ import { Check, EyeOff, Send, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { formatTashkent } from "@/lib/dates";
+import { withKursi } from "@/lib/courses";
 import { Review, ReviewStatus } from "@/types";
 import { deleteReview, setReviewStatus } from "../actions";
 import { callAction } from "./callAction";
@@ -89,7 +90,7 @@ function ReviewsTable({ reviews }: { reviews: Review[] }) {
                   {review.id.startsWith("tg_") && " · Telegram bot"}
                   {review.courseLabel && (
                     <a href={`/courses/${review.courseSlug}`} target="_blank" rel="noopener noreferrer" className="ml-1 font-bold text-sky-600 hover:underline">
-                      · 📚 {review.courseLabel} kursi
+                      · 📚 {withKursi(review.courseLabel)}
                     </a>
                   )}
                 </span>

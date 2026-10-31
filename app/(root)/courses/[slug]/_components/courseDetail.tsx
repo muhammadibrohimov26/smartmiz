@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock, Phone, Star, Trophy } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { courseCardTitles, courseLabel, formatHours } from "@/lib/courses";
+import { courseCardTitles, courseLabel, formatHours, withKursi } from "@/lib/courses";
 import { isTemplateCourseImage } from "@/lib/images";
 import { formatPrice } from "@/lib/numbers";
 import { cn } from "@/lib/utils";
@@ -75,7 +75,7 @@ export default function CourseDetail({
       <div className="grid lg:grid-cols-2 gap-8 mb-16">
         <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border-4 border-zinc-900 dark:border-zinc-800 bg-[#FFB800]">
           {course.image && !isTemplateCourseImage(course.image) ? (
-            <Image fill priority sizes="(min-width: 1024px) 560px, 100vw" src={course.image} alt={`${courseLabel(course)} kursi`} className="object-cover" />
+            <Image fill priority sizes="(min-width: 1024px) 560px, 100vw" src={course.image} alt={withKursi(courseLabel(course))} className="object-cover" />
           ) : (
             <CourseCover course={course} />
           )}

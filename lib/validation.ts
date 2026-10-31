@@ -12,5 +12,5 @@ export function normalizeUzPhone(input: string): string | null {
 export const contactSchema = z.object({
     name: z.string().trim().min(2, "errName").max(100, "errName"),
     tel: z.string().trim().refine((v) => normalizeUzPhone(v) !== null, "errPhone"),
-    kurs: z.string().trim().min(1, "errCourse"),
+    kurs: z.string().trim().min(1, "errCourse").max(120, "errCourse"),
   })

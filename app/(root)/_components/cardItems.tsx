@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Clock, Star } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { courseCardTitles, courseLabel, courseSlug, formatHours } from "@/lib/courses";
+import { courseCardTitles, courseLabel, courseSlug, formatHours, withKursi } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
 import { isTemplateCourseImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
@@ -67,7 +67,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 src={price.image}
-                                alt={`${courseLabel(price)} kursi`}
+                                alt={withKursi(courseLabel(price))}
                             /> : <CourseCover course={price} />}
                         </div>
 

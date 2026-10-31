@@ -64,3 +64,9 @@ export function courseSlug(course: CourseRef) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+// "Koreys tili" → "Koreys tili kursi", but "Kompyuter kursi" stays as it is
+// (no "Kompyuter kursi kursi")
+export function withKursi(label: string) {
+  return /kurs/i.test(label) ? label : `${label} kursi`;
+}

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCourseReviews, getCourses, getNews } from "@/lib/data";
-import { courseLabel, courseSlug, courseSpecialization, uniqueCourses } from "@/lib/courses";
+import { courseLabel, courseSlug, courseSpecialization, uniqueCourses, withKursi } from "@/lib/courses";
 import { isTemplateCourseImage } from "@/lib/images";
 import { resultsForCourse } from "@/lib/results";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!course) return {};
   const label = courseLabel(course);
   return pageMetadata({
-    title: `${label} kursi Fargʻonada — Smartmiz`,
+    title: `${withKursi(label)} Fargʻonada — Smartmiz`,
     description:
       course.description?.slice(0, 160) ||
-      `${label} kursi Smartmiz oʻquv markazida: narxi, darslar, oʻquvchilar natijalari va baholari. Bepul sinov darsiga yoziling.`,
+      `${withKursi(label)} Smartmiz oʻquv markazida: narxi, darslar, oʻquvchilar natijalari va baholari. Bepul sinov darsiga yoziling.`,
     path: `/courses/${params.slug}`,
-    keywords: [`${label} kursi`, `${course.courseName} Fargʻona`, "Smartmiz"],
-    image: course.image && !isTemplateCourseImage(course.image) ? { url: course.image, alt: `${label} kursi` } : undefined,
+    keywords: [withKursi(label), `${course.courseName} Fargʻona`, "Smartmiz"],
+    image: course.image && !isTemplateCourseImage(course.image) ? { url: course.image, alt: withKursi(label) } : undefined,
   });
 }
 
@@ -48,8 +48,8 @@ export default async function CoursePage({ params }: { params: { slug: string } 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Course",
-    name: `${label} kursi`,
-    description: course.description || `${label} kursi — Smartmiz oʻquv markazi, Fargʻona.`,
+    name: withKursi(label),
+    description: course.description || `${withKursi(label)} — Smartmiz oʻquv markazi, Fargʻona.`,
     url: `${SITE_URL}/courses/${params.slug}`,
     provider: { "@id": `${SITE_URL}/#organization` },
     ...(reviews.length

@@ -2,7 +2,7 @@ import { getApprovedReviews, getCourseRatings, getCourses, getSiteSettings } fro
 import { Metadata } from "next";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import { dictionaries } from "@/lib/dictionaries";
-import { courseLabel, courseSlug, formatHours, uniqueCourses } from "@/lib/courses";
+import { courseLabel, courseSlug, formatHours, uniqueCourses, withKursi } from "@/lib/courses";
 import { Price } from "@/types";
 import HomeContent from "../_components/homeContent";
 
@@ -28,7 +28,7 @@ function homeJsonLd(prices: Price[]) {
     item: {
       "@type": "Course",
       name: courseLabel(c),
-      description: `${courseLabel(c)} kursi — Smartmiz oʻquv markazi, Fargʻona. Bitta dars ${formatHours(c.courseTime, "uz")} soat.`,
+      description: `${withKursi(courseLabel(c))} — Smartmiz oʻquv markazi, Fargʻona. Bitta dars ${formatHours(c.courseTime, "uz")} soat.`,
       provider,
       url: `${SITE_URL}/courses/${courseSlug(c)}`,
     },

@@ -6,7 +6,7 @@ import { courseLabel, translatedCourseLabel, uniqueCourses } from "@/lib/courses
 import { Price } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -47,6 +47,7 @@ const inputClass =
 
 function ContactForm({ courses }: { courses: Price[] }) {
   const [isLoading, setIsLoading] = useState(false);
+  const trapRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
   const courseParam = searchParams.get("course");
   const { t } = useTranslation();
@@ -78,7 +79,7 @@ function ContactForm({ courses }: { courses: Price[] }) {
   function onSubmit(values: z.infer<typeof contactSchema>) {
     setIsLoading(true);
 
-    const promise = sendContactMessage(values)
+    const promise = sendContactMessage({ ...values, website: trapRef.current?.value ?? "" })
       .then((res) => {
         if (!res.success) throw new Error(res.error);
         form.reset({ name: "", tel: "", kurs: "" });
@@ -88,13 +89,24 @@ function ContactForm({ courses }: { courses: Price[] }) {
     toast.promise(promise, {
       loading: t("loading"),
       success: t("successMsg"),
-      error: t("errorMsg"),
+      // "errTooFast" / "errTooMany" (anti-spam limits) have their own message
+      error: (err: Error) => t(err.message.startsWith("errToo") ? err.message : "errorMsg"),
     });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel" noValidate>
+        {/* Spam trap: hidden from people (and screen readers), bots fill it in */}
+        <input
+          ref={trapRef}
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px] w-px h-px opacity-0"
+        />
         <FormField
           control={form.control}
           name="name"
