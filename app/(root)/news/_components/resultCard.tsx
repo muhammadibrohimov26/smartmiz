@@ -7,6 +7,7 @@ import { Calendar, Loader2, Quote, Trophy, X, ZoomIn } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import TelegramMediaLink from "@/components/shared/telegram-media-link";
 import { resultLanguage, resultLevel } from "@/lib/results";
+import { isMediaUrl } from "@/lib/images";
 import { NewsItem } from "@/types";
 
 // "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
@@ -113,6 +114,7 @@ export default function ResultCard({ item }: { item: NewsItem }) {
             sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
             quality={90}
             src={item.image}
+            unoptimized={isMediaUrl(item.image)}
             alt={alt}
             className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
           />

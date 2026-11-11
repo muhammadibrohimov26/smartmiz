@@ -8,7 +8,7 @@ import { ArrowRight, Clock, Star } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseCardTitles, courseLabel, courseSlug, formatHours, withKursi } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
-import { isTemplateCourseImage } from "@/lib/images";
+import { isMediaUrl, isTemplateCourseImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
 import CourseCover from "./courseCover";
 
@@ -69,6 +69,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                                 src={price.image}
+                                unoptimized={isMediaUrl(price.image)}
                                 alt={withKursi(courseLabel(price))}
                             /> : <CourseCover course={price} />}
                         </div>
