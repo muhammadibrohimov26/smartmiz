@@ -30,27 +30,28 @@ export default function FAQ() {
     <section className="py-24 max-w-7xl mx-auto">
       {/* Section Header */}
       <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
-          <HelpCircle className="w-4 h-4 yellow-accent" />
+        <div data-reveal="down" className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
+          <HelpCircle className="w-4 h-4 yellow-accent float-slow" />
           <span>{t("faqBadge")}</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
+        <h2 className="title-glow text-3xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
           <Typewriter text={t("faqTitle1")} /> <Typewriter text={t("faqTitle2")} delay={t("faqTitle1").length * 45} className="yellow-accent" />
         </h2>
-        <div className="w-20 h-1.5 bg-[#FFB800] mx-auto rounded-full" />
+        <div data-reveal="bar" className="w-20 h-1.5 bg-[#FFB800] mx-auto rounded-full" />
       </div>
 
       {/* Accordion */}
-      <div className="max-w-3xl mx-auto space-y-3">
+      <div data-reveal-stagger className="max-w-3xl mx-auto space-y-3">
         {faqs.map((item, i) => {
           const isOpen = openIndex === i;
           return (
             <div
               key={i}
+              data-reveal
               className={`border-2 rounded-2xl overflow-hidden transition-all duration-300 ${
                 isOpen
                   ? "border-[#FFB800] shadow-[4px_4px_0px_0px_rgba(255,184,0,1)]"
-                  : "border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600"
+                  : "border-zinc-200 dark:border-zinc-800 hover:border-violet-400/60 dark:hover:border-violet-400/40 hover:shadow-[0_12px_32px_-18px_rgba(139,92,246,0.5)]"
               } bg-white dark:bg-zinc-900`}
             >
               <button
@@ -104,11 +105,12 @@ export default function FAQ() {
       </div>
 
       {/* CTA at bottom */}
-      <div className="text-center mt-12">
+      <div data-reveal className="text-center mt-12">
         <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4">
           {t("faqCta")}
         </p>
         <a
+          data-magnetic
           href="tel:+998732441333"
           className="inline-flex items-center gap-2 px-6 py-3 bw-button-solid font-black text-sm uppercase tracking-wider"
         >

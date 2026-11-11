@@ -16,18 +16,18 @@ function Footer() {
     <div className="w-full py-8 border-t border-gray-200 dark:border-zinc-800 bg-transparent mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Contacts */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 mb-6 border-b border-gray-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-          <div className="flex items-start gap-2.5">
+        <div data-reveal-stagger className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 mb-6 border-b border-gray-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+          <div data-reveal className="flex items-start gap-2.5">
             <Phone className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
             <div className="flex flex-col">
               {phones.map((p) => (
-                <a key={p.href} href={p.href} dir="ltr" className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors">
+                <a key={p.href} href={p.href} dir="ltr" className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1">
                   {p.label}
                 </a>
               ))}
             </div>
           </div>
-          <div className="flex items-start gap-2.5">
+          <div data-reveal className="flex items-start gap-2.5">
             <MapPin className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
             <div className="flex flex-col">
               {branches.map((b, i) => (
@@ -36,32 +36,32 @@ function Footer() {
                   href={b.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
+                  className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1"
                 >
                   <span className="font-bold">{t("branchLabel", { n: i + 1 })}:</span> {t("footerAddress", { house: b.house })}
                 </a>
               ))}
             </div>
           </div>
-          <div className="flex items-start gap-2.5">
+          <div data-reveal className="flex items-start gap-2.5">
             <Clock className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
             <span>{t("footerHours")}</span>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div data-reveal className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="font-bold bw-text uppercase tracking-widest text-sm text-gray-500 dark:text-gray-400">
             <p>© {new Date().getFullYear()} {t("footerRights")}</p>
           </div>
           <div className="flex gap-2">
-            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/instagram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="group p-2 rounded-full transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:shadow-[0_8px_24px_-10px_rgba(167,139,250,0.6)]">
+              <img src="/img/instagram.png" alt="" className="w-6 h-6 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:rotate-[8deg]" />
             </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/telegram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="group p-2 rounded-full transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:shadow-[0_8px_24px_-10px_rgba(167,139,250,0.6)]">
+              <img src="/img/telegram.png" alt="" className="w-6 h-6 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:rotate-[8deg]" />
             </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/youtube.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
+            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="group p-2 rounded-full transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:shadow-[0_8px_24px_-10px_rgba(167,139,250,0.6)]">
+              <img src="/img/youtube.png" alt="" className="w-6 h-6 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:rotate-[8deg]" />
             </a>
           </div>
         </div>

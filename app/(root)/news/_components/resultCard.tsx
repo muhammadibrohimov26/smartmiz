@@ -7,6 +7,7 @@ import { Calendar, Loader2, Quote, Trophy, X, ZoomIn } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import TelegramMediaLink from "@/components/shared/telegram-media-link";
 import { resultLanguage, resultLevel } from "@/lib/results";
+import { isMediaUrl } from "@/lib/images";
 import { NewsItem } from "@/types";
 
 // "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
@@ -101,7 +102,7 @@ export default function ResultCard({ item }: { item: NewsItem }) {
   );
 
   return (
-    <article className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:-translate-y-1 flex flex-col">
+    <article data-reveal data-tilt className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden flex flex-col">
       {item.image ? (
         <button
           onClick={() => setOpen(true)}
@@ -113,8 +114,9 @@ export default function ResultCard({ item }: { item: NewsItem }) {
             sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
             quality={90}
             src={item.image}
+            unoptimized={isMediaUrl(item.image)}
             alt={alt}
-            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           <div className="absolute left-4 bottom-4">{scoreBadge}</div>

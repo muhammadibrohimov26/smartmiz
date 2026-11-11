@@ -24,26 +24,26 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
   const groupLabel = (g: string) => (g === OTHER ? t("newsFilterOther") : g === "Koreys tili" ? `${t(g)} (TOPIK)` : t(g));
 
   return (
-    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24">
       
       {/* HEADER */}
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
-          <Sparkles className="w-4 h-4 yellow-accent animate-pulse" />
+        <div data-reveal="down" className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
+          <Sparkles className="w-4 h-4 yellow-accent float-slow" />
           <span>{t("newsBadge")}</span>
         </div>
-        <h1 className="text-[clamp(1.75rem,8.5vw,2.25rem)] sm:text-5xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
+        <h1 data-reveal="blur" className="title-glow text-[clamp(1.75rem,8.5vw,2.25rem)] sm:text-5xl md:text-6xl font-black bw-text tracking-tighter uppercase mb-4">
           {t("newsTitle1")} <span className="yellow-accent">{t("newsTitle2")}</span>
         </h1>
-        <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full mb-6" />
-        <p className="text-zinc-500 dark:text-zinc-400 text-base md:text-lg font-medium leading-relaxed">
+        <div data-reveal="bar" className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full mb-6" />
+        <p data-reveal className="text-zinc-500 dark:text-zinc-400 text-base md:text-lg font-medium leading-relaxed">
           {t("newsDesc")}
         </p>
       </div>
 
       {/* EMPTY STATE */}
       {news.length === 0 && (
-        <div className="max-w-xl mx-auto mb-16 p-6 sm:p-10 text-center bg-white dark:bg-zinc-900 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-3xl">
+        <div data-reveal="zoom" className="max-w-xl mx-auto mb-16 p-6 sm:p-10 text-center bg-white dark:bg-zinc-900 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-3xl">
           <Trophy className="w-10 h-10 mx-auto mb-4 yellow-accent" />
           <h2 className="text-2xl font-black bw-text uppercase tracking-tight mb-2">{t("newsEmptyTitle")}</h2>
           <p className="text-zinc-500 dark:text-zinc-400 font-medium">{t("newsEmptyDesc")}</p>
@@ -52,14 +52,14 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
 
       {/* FILTER BY LANGUAGE — with the number of published results in each */}
       {groups.length > 1 && (
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12" role="group">
+        <div data-reveal className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12" role="group">
           {[["all", news.length] as [string, number], ...groups].map(([g, n]) => (
             <button
               key={g}
               onClick={() => setFilter(g)}
               aria-pressed={filter === g}
               className={cn(
-                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-colors",
+                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-95",
                 filter === g
                   ? "bg-[#FFB800] border-[#FFB800] text-black"
                   : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-800 bw-text hover:border-[#FFB800]"
@@ -74,14 +74,14 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
       )}
 
       {/* RESULTS — best first (lib/results.ts) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+      <div data-reveal-stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {shown.map((item) => (
-          <ResultCard key={item.id} item={item} />
+          <ResultCard key={`${filter}-${item.id}`} item={item} />
         ))}
       </div>
 
       {/* CTA */}
-      <div className="mt-16 text-center bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
+      <div data-reveal="zoom" className="mt-16 text-center bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
         <h2 className="text-[clamp(1.4rem,6.6vw,1.875rem)] md:text-4xl font-black bw-text uppercase tracking-tighter mb-4 [overflow-wrap:anywhere]">
           {t("newsCtaTitle1")} <span className="yellow-accent">{t("newsCtaTitle2")}</span> {t("newsCtaTitle3")}
         </h2>
@@ -89,6 +89,7 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
           {t("newsCtaDesc", { students: formatCount(studentCount, locale) })}
         </p>
         <Link
+          data-magnetic
           href="/contact"
           className="inline-flex items-center gap-2 px-8 py-4 bw-button-solid font-black text-lg uppercase tracking-wider"
         >

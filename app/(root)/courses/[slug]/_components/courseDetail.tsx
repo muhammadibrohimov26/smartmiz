@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock, Phone, Star, Trophy } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseCardTitles, courseLabel, formatHours, withKursi } from "@/lib/courses";
-import { isTemplateCourseImage } from "@/lib/images";
+import { isMediaUrl, isTemplateCourseImage } from "@/lib/images";
 import { formatPrice } from "@/lib/numbers";
 import { cn } from "@/lib/utils";
 import { NewsItem, Price, Review } from "@/types";
@@ -20,7 +20,7 @@ function RatingSummary({ reviews }: { reviews: Review[] }) {
   const { t } = useTranslation();
   const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-6 p-6 mb-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl">
+    <div data-reveal="zoom" className="flex flex-col sm:flex-row items-center gap-6 p-6 mb-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-2xl">
       <div className="text-center shrink-0">
         <p className="text-5xl font-black bw-text leading-none">{average.toFixed(1)}</p>
         <div className="flex justify-center my-2">
@@ -65,23 +65,23 @@ export default function CourseDetail({
   const enrollHref = `/contact?course=${encodeURIComponent(courseLabel(course))}`;
 
   return (
-    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
-      <Link href="/#courses-section" className="inline-flex items-center gap-2 mb-6 text-sm font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
-        <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+    <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24">
+      <Link href="/#courses-section" data-reveal="left" className="group inline-flex items-center gap-2 mb-6 text-sm font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
+        <ArrowLeft className="w-4 h-4 rtl:rotate-180 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
         {t("courseBack")}
       </Link>
 
       {/* HERO: picture + title, price, lesson length, enrol */}
       <div className="grid lg:grid-cols-2 gap-8 mb-16">
-        <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border-4 border-zinc-900 dark:border-zinc-800 bg-[#FFB800]">
+        <div data-reveal="left" data-tilt className="relative aspect-[4/3] rounded-3xl overflow-hidden border-4 border-zinc-900 dark:border-zinc-800 bg-[#FFB800]">
           {course.image && !isTemplateCourseImage(course.image) ? (
-            <Image fill priority sizes="(min-width: 1024px) 560px, 100vw" src={course.image} alt={withKursi(courseLabel(course))} className="object-cover" />
+            <Image fill priority sizes="(min-width: 1024px) 560px, 100vw" src={course.image} unoptimized={isMediaUrl(course.image)} alt={withKursi(courseLabel(course))} className="object-cover" />
           ) : (
             <CourseCover course={course} />
           )}
         </div>
 
-        <div className="flex flex-col">
+        <div data-reveal="right" className="flex flex-col">
           {titles.label && <p className="text-xs uppercase tracking-widest font-extrabold text-zinc-500 mb-2">{titles.label}</p>}
           <h1 className="text-[clamp(2rem,8vw,3.25rem)] font-black bw-text uppercase tracking-tighter leading-none mb-4">{titles.heading}</h1>
 
@@ -115,7 +115,7 @@ export default function CourseDetail({
             {course.chegirma && <p className="mt-3 text-sm font-semibold text-yellow-700 dark:text-yellow-400">{t(course.chegirma)}</p>}
           </div>
 
-          <Link href={enrollHref} className="w-full py-4 px-6 bw-button-solid font-black flex items-center justify-center gap-2 text-base mb-3">
+          <Link href={enrollHref} data-magnetic className="w-full py-4 px-6 bw-button-solid font-black flex items-center justify-center gap-2 text-base mb-3">
             {t("btnEnroll")}
             <ArrowRight className="w-5 h-5 rtl:rotate-180" />
           </Link>
@@ -128,19 +128,19 @@ export default function CourseDetail({
 
       {/* ABOUT + WHAT YOU LEARN (filled in the admin panel) */}
       {!!(course.description || course.highlights?.length) && (
-        <section className={cn("grid gap-6 mb-16", course.description && course.highlights?.length && "lg:grid-cols-2")}>
+        <section data-reveal-stagger className={cn("grid gap-6 mb-16", course.description && course.highlights?.length && "lg:grid-cols-2")}>
           {course.description && (
-            <div className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-3xl">
+            <div data-reveal data-tilt className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-3xl">
               <h2 className="text-2xl font-black bw-text uppercase tracking-tight mb-4">{t("courseAbout")}</h2>
               <p className="text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line">{course.description}</p>
             </div>
           )}
           {!!course.highlights?.length && (
-            <div className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-3xl">
+            <div data-reveal data-tilt className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-3xl">
               <h2 className="text-2xl font-black bw-text uppercase tracking-tight mb-4">{t("courseLearn")}</h2>
               <ul className="space-y-3">
                 {course.highlights.map((h) => (
-                  <li key={h} className="flex items-start gap-3 font-medium text-zinc-700 dark:text-zinc-300">
+                  <li key={h} className="flex items-start gap-3 font-medium text-zinc-700 dark:text-zinc-300 transition-transform duration-300 hover:translate-x-1 rtl:hover:-translate-x-1">
                     <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500 mt-0.5" />
                     {h}
                   </li>
@@ -154,7 +154,7 @@ export default function CourseDetail({
       {/* RESULTS of this course's students */}
       {results.length > 0 && (
         <section className="mb-16">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div data-reveal className="flex flex-wrap items-end justify-between gap-4 mb-8">
             <h2 className="text-3xl md:text-4xl font-black bw-text uppercase tracking-tighter flex items-center gap-3">
               <Trophy className="w-8 h-8 text-[#FFB800] shrink-0" />
               {t("courseResults")}
@@ -164,7 +164,7 @@ export default function CourseDetail({
               <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+          <div data-reveal-stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
             {results.slice(0, SHOWN_RESULTS).map((item) => (
               <ResultCard key={item.id} item={item} />
             ))}
@@ -174,7 +174,7 @@ export default function CourseDetail({
 
       {/* RATING of the course: summary, ratings, rate it */}
       <section id="rating" className="scroll-mt-24">
-        <h2 className="text-3xl md:text-4xl font-black bw-text uppercase tracking-tighter mb-8 flex items-center gap-3">
+        <h2 data-reveal className="text-3xl md:text-4xl font-black bw-text uppercase tracking-tighter mb-8 flex items-center gap-3">
           <Star className="w-8 h-8 fill-[#FFB800] text-[#FFB800] shrink-0" />
           {t("courseRatingTitle")}
         </h2>

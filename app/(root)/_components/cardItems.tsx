@@ -8,7 +8,7 @@ import { ArrowRight, Clock, Star } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import { courseCardTitles, courseLabel, courseSlug, formatHours, withKursi } from "@/lib/courses";
 import { formatPrice } from "@/lib/numbers";
-import { isTemplateCourseImage } from "@/lib/images";
+import { isMediaUrl, isTemplateCourseImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
 import CourseCover from "./courseCover";
 
@@ -30,14 +30,14 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
     return (
         <div className="mt-12 mb-16">
             {groups.length > 1 && (
-                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10" role="group">
+                <div data-reveal className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10" role="group">
                     {[["all", prices.length] as [string, number], ...groups].map(([g, n]) => (
                         <button
                             key={g}
                             onClick={() => setFilter(g)}
                             aria-pressed={filter === g}
                             className={cn(
-                                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-colors",
+                                "flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-2xl border-2 font-black text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-95",
                                 filter === g
                                     ? "bg-[#FFB800] border-[#FFB800] text-black"
                                     : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-800 bw-text hover:border-[#FFB800]"
@@ -50,23 +50,26 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
+            <div data-reveal-stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
                 {shown.map((price, index) => {
                     const titles = courseCardTitles(price, t);
                     const href = `/courses/${courseSlug(price)}`;
                     const rating = ratings[courseSlug(price)];
                     return (
                     <div
-                        key={price.id ?? index}
-                        className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
+                        key={`${filter}-${price.id ?? index}`}
+                        data-reveal
+                        data-tilt
+                        className="group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden flex flex-col"
                     >
                         {/* Course Image & Hero Area */}
                         <div className="relative aspect-square w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
                             {price.image && !isTemplateCourseImage(price.image) ? <Image
                                 fill
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                                 src={price.image}
+                                unoptimized={isMediaUrl(price.image)}
                                 alt={withKursi(courseLabel(price))}
                             /> : <CourseCover course={price} />}
                         </div>

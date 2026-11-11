@@ -80,6 +80,14 @@ function RootLayout({ children }: ChildProps) {
     <html lang="uz" suppressHydrationWarning>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
+        {/* Hide scroll-reveal elements before the first paint (see
+            components/shared/motion-effects.tsx). If the effects never start
+            (script error, very slow load) everything is shown after 3 s. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.classList.add("motion-ready");setTimeout(function(){if(!d.classList.contains("motion-live"))d.classList.remove("motion-ready")},3000)}catch(e){}})()`,
+          }}
+        />
       </head>
       <body className="overflow-x-hidden">
         <LanguageProvider>
