@@ -1,5 +1,6 @@
 "use client";
 
+import Typewriter from "@/components/shared/typewriter";
 import { useState } from "react";
 import { useTranslation } from "@/context/LanguageContext";
 import { ArrowRight, ChevronDown, HelpCircle, Sparkles } from "lucide-react";
@@ -34,7 +35,7 @@ export default function FAQ() {
           <span>{t("faqBadge")}</span>
         </div>
         <h2 className="text-3xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
-          {t("faqTitle1")} <span className="yellow-accent">{t("faqTitle2")}</span>
+          <Typewriter text={t("faqTitle1")} /> <Typewriter text={t("faqTitle2")} delay={t("faqTitle1").length * 45} className="yellow-accent" />
         </h2>
         <div className="w-20 h-1.5 bg-[#FFB800] mx-auto rounded-full" />
       </div>

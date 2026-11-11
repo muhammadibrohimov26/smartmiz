@@ -321,3 +321,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .review-drop { animation: none; }
 }
+
+/* Typewriter caret (components/shared/typewriter.tsx) */
+@keyframes typewriter-blink {
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+.typewriter-caret {
+  animation: typewriter-blink 1s step-end infinite;
+}

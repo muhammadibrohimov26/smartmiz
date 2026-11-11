@@ -1,5 +1,6 @@
 "use client";
 
+import Typewriter from "@/components/shared/typewriter";
 import { useTranslation } from "@/context/LanguageContext";
 import { Award, Users, BookOpen, Play, CheckCircle2 } from "lucide-react";
 import { Price } from "@/types";
@@ -21,7 +22,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
       {/* HEADER SECTION */}
       <div className="text-center max-w-3xl mx-auto mb-12">
         <h2 className="text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
-          {t("aboutTitle")}
+          <Typewriter text={t("aboutTitle")} />
         </h2>
         <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full"></div>
       </div>

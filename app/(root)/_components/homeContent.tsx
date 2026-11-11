@@ -1,5 +1,6 @@
 "use client";
 
+import Typewriter from "@/components/shared/typewriter";
 import { CourseRating, Price, Review, SiteSettings } from "@/types";
 import CardItems from "./cardItems";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
@@ -13,6 +14,14 @@ import AboutContent from "./aboutContent";
 
 function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; reviews: Review[]; settings: SiteSettings; ratings: Record<string, CourseRating> }) {
   const { t } = useTranslation();
+
+  // Hero types itself out: title line 1 → line 2 → description
+  const TITLE_SPEED = 60;
+  const DESC_SPEED = 14;
+  const title1 = t("heroTitle1");
+  const title2 = t("heroTitle2");
+  const title2Delay = 300 + title1.length * TITLE_SPEED + 150;
+  const descDelay = title2Delay + title2.length * TITLE_SPEED + 250;
 
   const scrollToCourses = () => {
     document.getElementById("courses-section")?.scrollIntoView({ behavior: "smooth" });
@@ -35,13 +44,13 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
             <span>{t("heroTag")}</span>
           </div>
 
-          <h1 className="text-[clamp(1.55rem,7.2vw,2.25rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight bw-text mb-6 max-w-5xl animate-in fade-in zoom-in-95 duration-700 delay-150 uppercase w-full px-2 sm:px-0 leading-[1.1] md:leading-[1.05]">
-            {t("heroTitle1")} <br />
-            <span className="yellow-accent">{t("heroTitle2")}</span>
+          <h1 className="text-[clamp(1.55rem,7.2vw,2.25rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight bw-text mb-6 max-w-5xl uppercase w-full px-2 sm:px-0 leading-[1.1] md:leading-[1.05]">
+            <Typewriter text={title1} delay={300} speed={TITLE_SPEED} /> <br />
+            <Typewriter text={title2} delay={title2Delay} speed={TITLE_SPEED} className="yellow-accent" />
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mb-10 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-300 font-medium">
-            {t("heroDesc")}
+          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mb-10 font-medium">
+            <Typewriter text={t("heroDesc")} delay={descDelay} speed={DESC_SPEED} keepCaret />
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500">
@@ -66,7 +75,7 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
         <div className="py-24" id="courses-section">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black bw-text mb-4 uppercase tracking-tighter">
-              {t("coursesTitle1")} <span className="yellow-accent">{t("coursesTitle2")}</span>
+              <Typewriter text={t("coursesTitle1")} /> <Typewriter text={t("coursesTitle2")} delay={t("coursesTitle1").length * 45} className="yellow-accent" />
             </h2>
             <p className="text-gray-500 dark:text-zinc-400 text-lg font-medium">{t("coursesDesc")}</p>
           </div>
