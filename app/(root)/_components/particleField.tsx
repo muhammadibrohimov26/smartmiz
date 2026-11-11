@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 // Interactive home-page background, inspired by antigravity.google.
-// Shown only on the home page ("/") and only on screens ≥ 768px — on phones
+// Shown only on the home page ("/") and only on screens ≥ 1024px — on phones and tablets
 // it is not mounted at all (no canvas, no animation loop).
 // A fixed, full-viewport canvas behind the page, covered evenly with
 // short dashes that drift in a slow wave. Where the pointer moves over them
@@ -344,8 +344,8 @@ function Field() {
   return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full" />;
 }
 
-// Desktop/tablet only: matches Tailwind's `md` breakpoint
-const DESKTOP_QUERY = "(min-width: 768px)";
+// Desktop only (phones and tablets hidden): matches Tailwind's `lg` breakpoint
+const DESKTOP_QUERY = "(min-width: 1024px)";
 
 export default function ParticleField() {
   const pathname = usePathname();
