@@ -43,6 +43,11 @@ function mix(t: number) {
 const PALETTE = Array.from({ length: COLORS }, (_, i) => mix(i / (COLORS - 1)));
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
+const clamp01 = (t: number) => Math.max(0, Math.min(1, t));
+
+// Dark theme: a calmer, sparser field — one blue, the middle left empty, the
+// dashes forming a wide ring around the pointer (like a night sky)
+const DARK_BLUE = [88, 128, 255];
 
 function Field() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -139,7 +144,11 @@ function Field() {
 
         // fade into the grey dots at the edge
         const edge = smooth(Math.min(1, (1 - t) / 0.25));
-        const alpha = edge * (0.3 + 0.7 * wave) * (0.55 + 0.45 * smooth(Math.min(1, t * 3)));
+        let alpha = edge * (0.3 + 0.7 * wave) * (0.55 + 0.45 * smooth(Math.min(1, t * 3)));
+        if (dark) {
+          // only ~half of the particles become dashes, and only on the ring
+          alpha = d.phase > 3.2 ? 0 : edge * (0.45 + 0.55 * wave) * smooth(clamp01((t - 0.3) / 0.3));
+        }
         if (alpha < 0.05) {
           specks.rect(d.x - 0.7, d.y - 0.7, 1.4, 1.4);
           continue;
@@ -147,19 +156,19 @@ function Field() {
         // short near the centre, longer and thicker towards the edge
         const len = (0.8 + 2.6 * smooth(t)) * (0.6 + 0.5 * wave) * edge + 0.5;
         const wi = Math.min(WIDTHS - 1, Math.floor(t * WIDTHS));
-        const ci = Math.min(COLORS - 1, Math.floor(Math.pow(t, 1.3) * COLORS));
+        const ci = dark ? 0 : Math.min(COLORS - 1, Math.floor(Math.pow(t, 1.3) * COLORS));
         const ai = Math.min(ALPHAS - 1, Math.floor(alpha * ALPHAS));
         const path = dashes[(ci * ALPHAS + ai) * WIDTHS + wi];
         path.moveTo(d.x - ux * len, d.y - uy * len);
         path.lineTo(d.x + ux * len, d.y + uy * len);
       }
 
-      ctx!.fillStyle = dark ? "rgba(148,163,184,0.35)" : "rgba(60,64,67,0.32)";
+      ctx!.fillStyle = dark ? "rgba(148,163,184,0.22)" : "rgba(60,64,67,0.32)";
       ctx!.fill(specks);
 
       ctx!.lineCap = "round";
       for (let ci = 0; ci < COLORS; ci++) {
-        const [r, g, b] = PALETTE[ci];
+        const [r, g, b] = dark ? DARK_BLUE : PALETTE[ci];
         for (let ai = 0; ai < ALPHAS; ai++) {
           ctx!.strokeStyle = `rgba(${r},${g},${b},${((ai + 0.5) / ALPHAS).toFixed(2)})`;
           for (let wi = 0; wi < WIDTHS; wi++) {
