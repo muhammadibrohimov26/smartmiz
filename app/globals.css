@@ -305,8 +305,9 @@ body {
 }
 .blob-1 { top: -20%; left: -20%; }
 .blob-2 { bottom: -20%; right: -20%; }
-.dark .yellow-blob {
-  background: radial-gradient(circle, rgba(255,184,0,0.05) 0%, rgba(255,184,0,0) 70%);
+/* Dark theme: no yellow glow — the background stays pure black */
+.dark .yellow-glow-bg {
+  display: none;
 }
 /* Review cards falling in from above (app/(root)/_components/reviews.tsx) */
 @keyframes review-drop {
