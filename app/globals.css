@@ -2,6 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Public experience: orbital typography, quiet surfaces, responsive motion. */
+html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+.public-site { --neo-accent: #a87910; --neo-line: #18251d1a; --neo-surface: #ffffffd9; --neo-muted: #58645e; font-family: Arial, Helvetica, sans-serif; }
+.dark .public-site { --neo-accent: #e9c774; --neo-line: #e7eee51a; --neo-surface: #121713e8; --neo-muted: #a0aaa3; }
+.public-site ::selection { background: #b6d99b; color: #111b13; }
+.public-site :is(a,button,input,textarea,select):focus-visible { outline: 2px solid #8dbb87; outline-offset: 5px; }
+.public-site .site-nav { inset: 16px 24px auto; max-width: 1240px; margin-inline: auto; border: 1px solid var(--neo-line); border-radius: 24px; background: var(--neo-surface); backdrop-filter: blur(24px); box-shadow: 0 8px 40px #00000008; transition: box-shadow .4s, background .4s; }
+.public-site.has-scrolled .site-nav { box-shadow: 0 10px 50px #00000020; }
+.reading-progress { position: fixed; top: 0; inset-inline: 0; height: 2px; background: linear-gradient(90deg,#a7cf99,#edcb83); transform: scaleX(0); transform-origin: left; z-index: 60; pointer-events: none; }
+.public-site .neo-hero { isolation: isolate; min-height: min(940px,100svh); padding-top: 170px; }
+.public-site .neo-hero > :not(.hero-orbit) { position: relative; z-index: 1; }
+.public-site .hero-title { font-size: clamp(2.6rem,7.2vw,6.6rem); letter-spacing: -.065em; text-wrap: balance; animation: neo-enter 1.1s cubic-bezier(.16,1,.3,1) both; }
+.hero-gradient { background: linear-gradient(110deg,#7a942f 5%,#a16e20 60%,#587d6d); background-clip: text; -webkit-text-fill-color: transparent; }
+.dark .hero-gradient { background-image: linear-gradient(110deg,#c5e2ac 5%,#eed49c 60%,#8fbeb1); }
+.hero-period { color: var(--neo-accent); }
+.public-site .hero-description { color: var(--neo-muted); animation: neo-enter 1.2s .12s both; }
+.hero-orbit { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.orbit-ring { position: absolute; width: 86%; aspect-ratio: 1; border: 1px solid var(--neo-line); border-radius: 50%; left: 7%; top: 2%; transform: rotateX(55deg) rotate(-25deg); }
+.orbit-ring-two { width: 110%; left: -5%; top: -18%; transform: rotateX(52deg) rotate(25deg); border-style: dashed; opacity: .55; }
+.orbit-satellite { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 96px; height: 110px; border-radius: 24px; background: var(--neo-surface); border: 1px solid var(--neo-line); box-shadow: 0 20px 60px #0000000a, inset 0 1px 0 #ffffff18; color: var(--neo-accent); animation: neo-float 8s ease-in-out infinite; }
+.orbit-satellite svg { width: 30px; height: 30px; stroke-width: 1.2; }
+.orbit-satellite span { font: 10px monospace; letter-spacing: .13em; }
+.satellite-one { left: 2%; top: 32%; rotate: -14deg; }
+.satellite-two { right: 2%; top: 51%; rotate: 12deg; animation-delay: -3s; }
+.satellite-three { left: 16%; bottom: 10%; width: 58px; height: 58px; border-radius: 18px; rotate: 12deg; animation-delay: -5s; color: #87a97d; }
+.orbit-spark { width: 7px; height: 7px; border-radius: 50%; background: #9bb78a; position: absolute; box-shadow: 0 0 24px #a1cd8b66; animation: neo-float 5s ease-in-out infinite; }
+.spark-one { right: 19%; top: 22%; }.spark-two { left: 28%; bottom: 13%; background: #d6b675; }
+.public-site .hero-scroll { margin-top: 48px; border: 1px solid var(--neo-line); border-radius: 50%; width: 42px; height: 42px; display: grid; place-items: center; color: var(--neo-muted); animation: neo-float 4s ease-in-out infinite; }
+.subject-ribbon { overflow: hidden; border-block: 1px solid var(--neo-line); padding-block: 23px; mask-image: linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+.subject-ribbon > div { width: max-content; display: flex; animation: neo-marquee 40s linear infinite; }
+.subject-ribbon > div > span { display: flex; }
+.subject-ribbon span span { display: inline-flex; align-items: center; gap: 32px; padding-inline-end: 32px; font-size: 13px; font-weight: 600; letter-spacing: .03em; color: var(--neo-muted); white-space: nowrap; }
+.subject-ribbon .ribbon-star { color: var(--neo-accent); padding: 0; font-size: 23px; }
+.public-site [data-motion-ready] { transition: opacity .8s, translate .8s cubic-bezier(.16,1,.3,1); }
+.public-site [data-motion-ready]:not(.is-visible) { opacity: 0; translate: 0 28px; }
+.public-site .course-card:nth-child(3n + 2) { transition-delay: 60ms; }
+.public-site .course-card:nth-child(3n + 3) { transition-delay: 120ms; }
+.public-site .course-card:hover { border-color: #9cb58c80; box-shadow: 0 20px 70px #849d6d12; }
+.public-site .course-card > :first-child { aspect-ratio: 1.25; }
+.public-site :is(h1,h2) { text-wrap: balance; }
+.public-site h2.bw-text { text-transform: none; letter-spacing: -.045em; }
+.public-site :is(.bw-panel,.course-card,[class*="border-2"][class*="rounded"],[class*="border-4"][class*="rounded"]) { border-width: 1px; border-color: var(--neo-line); box-shadow: 0 10px 45px #00000004; }
+.dark .public-site :is(.bw-panel,.course-card,[class*="bg-zinc-900"][class*="rounded"],[class*="bg-zinc-950"][class*="rounded"]) { background-color: #121713; }
+.public-site :is(.bw-button-solid,.bw-button-outline) { border-radius: 999px; font-size: 14px; padding: 18px 28px; }
+.public-site .bw-button-solid { background: #e9cb87; box-shadow: 0 4px 24px #dab87520; color: #22271b; }
+.public-site .bw-button-solid:hover { background: #f0d99f; box-shadow: 0 10px 35px #dab87530; transform: translateY(-3px); }
+.public-site .bw-button-outline { border: 1px solid var(--neo-line); background: var(--neo-surface); }
+.public-site .bw-button-outline:hover { border-color: #b6cc9d; color: inherit; transform: translateY(-3px); }
+.public-site .yellow-accent { color: var(--neo-accent); }
+.public-site .yellow-glow-bg { display: none; }
+.public-site button { transition: background-color .25s,border-color .25s,box-shadow .25s,transform .25s; }
+.public-site button:active { transform: scale(.97); }
+.public-site input:focus,.public-site textarea:focus { border-color: #9bb78a; box-shadow: 0 0 0 4px #9bb78a15; }
+.public-site .page-heading { padding-top: 35px; }
+.public-site .contact-page { padding-top: 32px; }
+.public-site .contact-page > .grid { gap: 40px; padding: clamp(22px,4vw,56px); border: 1px solid var(--neo-line); border-radius: 32px; background: var(--neo-surface); }
+.public-site .contact-page h1 { font-size: clamp(2rem,4vw,3.3rem); letter-spacing: -.055em; line-height: 1.1; }
+.public-site .site-footer { margin-top: 60px; padding-block: 56px 24px; background: var(--neo-surface); }
+@keyframes neo-enter { from { opacity: 0; transform: translateY(30px); filter: blur(5px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes neo-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -15px; } }
+@keyframes neo-marquee { to { transform: translateX(-50%); } }
+@media(min-width: 768px) { .public-site .neo-hero .hero-title { padding-inline: 80px; } }
+@media(max-width: 767px) { .public-site .site-nav { inset: 10px 10px auto; border-radius: 18px; } .public-site .site-nav > div { padding-inline: 14px; height: 64px; } .public-site .neo-hero { padding-top: 135px; min-height: 760px; min-height: 94svh; } .orbit-satellite { width: 48px; height: 56px; border-radius: 14px; opacity: .6; } .orbit-satellite svg { width: 22px; height: 22px; } .orbit-satellite span { display: none; } .satellite-one { top: 15%; left: 5%; }.satellite-two { top: auto; bottom: 10%; right: 7%; }.satellite-three { display: none; } .orbit-ring { width: 150%; left: -25%; top: 20%; } .public-site .hero-description { font-size: 16px; max-width: 35ch; } .public-site .hero-scroll { margin-top: 30px; } }
+@media(prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .public-site *, .public-site *::before, .public-site *::after { animation: none !important; transition: none !important; } .public-site [data-motion-ready]:not(.is-visible) { opacity: 1; translate: none; } .subject-ribbon > div { transform: none; } }
+
 
 @layer base {
 	:root {
@@ -188,7 +253,7 @@ body {
   color: #111111;
 }
 .dark body {
-  background-color: #0a0a0a;
+  background-color: #0b100d;
   color: #ffffff;
 }
 

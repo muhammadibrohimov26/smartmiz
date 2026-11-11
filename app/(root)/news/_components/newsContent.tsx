@@ -27,7 +27,7 @@ function NewsPage({ news, studentCount }: { news: NewsItem[]; studentCount: numb
     <div className="mt-28 md:mt-32 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
       
       {/* HEADER */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="page-heading text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
           <Sparkles className="w-4 h-4 yellow-accent animate-pulse" />
           <span>{t("newsBadge")}</span>

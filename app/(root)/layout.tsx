@@ -3,13 +3,15 @@ import { CustomerAuthProvider } from "@/components/providers/customer-auth"
 import Navbar from "./_components/navbar"
 import Footer from "./_components/footer"
 import ParticleField from "./_components/particleField"
+import SiteMotion from "./_components/siteMotion"
 
 function Layout({children}: ChildProps) {
   return (
     <CustomerAuthProvider>
     {/* Pointer-following background: home page only, hidden on mobile */}
     <ParticleField />
-    <main className="relative z-10">
+    <main className="public-site relative z-10">
+    <SiteMotion />
     <Navbar/>
 <div className='container'>{children}</div>
     <Footer/>

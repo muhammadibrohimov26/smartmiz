@@ -32,9 +32,9 @@ const Navbar = () => {
     }, []);
  
     return (
-    <div className='h-[10vh] backdrop:blur-sm border-b fixed z-40 inset-0 bg-background'>
-    <div className='container max-w-6xl mx-auto h-[10vh] w-full flex items-center justify-between'>
-       <Link href={'/'}>
+    <header className='site-nav fixed z-40'>
+    <div className='container max-w-6xl mx-auto h-[72px] w-full flex items-center justify-between'>
+       <Link href={'/'} aria-label="Smartmiz">
         {/* <h1 className='text-4xl font-creteRound'>Smartmiz</h1> */}
         <Logo className="h-5 min-[360px]:h-6 sm:h-7 md:h-8 text-zinc-950 dark:text-white" />
        </Link>
@@ -99,7 +99,7 @@ const Navbar = () => {
             </div>
     </div>
 
-    </div>
+    </header>
   )
 }
 

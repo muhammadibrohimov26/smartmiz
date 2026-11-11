@@ -13,7 +13,7 @@ function Footer() {
   const { t } = useTranslation();
 
   return (
-    <div className="w-full py-8 border-t border-gray-200 dark:border-zinc-800 bg-transparent mt-10">
+    <div className="site-footer w-full py-8 border-t border-gray-200 dark:border-zinc-800 bg-transparent mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Contacts */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 mb-6 border-b border-gray-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-400">

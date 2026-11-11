@@ -12,7 +12,7 @@ function ContactContent({ courses }: { courses: Price[] }) {
 	const { t } = useTranslation()
 
 	return (
-		<div className='max-w-6xl mx-auto mb-3 h-[100%] md:mb-36'>
+		<div className='contact-page max-w-6xl mx-auto mb-3 h-[100%] md:mb-36'>
 			<div className='relative min-h-[19vh] flex items-center justify-start flex-col mt-24'>
 				<h2 className='text-center text-4xl section-title font-creteRound mt-2'>
 					<span>{t('contactTitle')}</span>
