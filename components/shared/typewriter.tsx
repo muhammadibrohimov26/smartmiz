@@ -77,7 +77,7 @@ export default function Typewriter({ text, delay = 0, speed = 45, keepCaret = fa
           <span className="typewriter-caret absolute left-[0.04em] top-[0.1em] h-[0.9em] w-[0.07em] rounded-sm bg-current" />
         </span>
       )}
-      <span className="text-transparent">{text.slice(count)}</span>
+      <span className="text-transparent [text-shadow:none]">{text.slice(count)}</span>
     </span>
   );
 }

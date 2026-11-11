@@ -8,6 +8,7 @@ import { translatedCourseLabel, uniqueCourses } from "@/lib/courses";
 import { FOUNDING_YEAR, currentYear } from "@/lib/years";
 import { formatCount } from "@/lib/numbers";
 import { videoPlatform } from "@/lib/video";
+import CountUp from "@/components/shared/count-up";
 
 function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses: Price[]; studentCount: number; videoUrl: string; videoImage: string }) {
   const { t, locale } = useTranslation();
@@ -21,40 +22,40 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
 
       {/* HEADER SECTION */}
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <h2 className="text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
+        <h2 className="title-glow text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter mb-4">
           <Typewriter text={t("aboutTitle")} />
         </h2>
-        <div className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full"></div>
+        <div data-reveal="bar" className="w-24 h-1.5 bg-[#FFB800] mx-auto rounded-full"></div>
       </div>
 
       {/* STATS SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div data-reveal-stagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
         
         {/* Stat 1: Experience */}
-        <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center hover:shadow-[4px_4px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
-          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30">
+        <div data-reveal="zoom" data-tilt className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
+          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[10deg]">
             <Award className="w-6 h-6 text-[#FFB800]" />
           </div>
-          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">{t("aboutStats1")}</h3>
+          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight"><CountUp text={t("aboutStats1")} /></h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats1Label")}</p>
         </div>
 
         {/* Stat 2: Students */}
-        <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center hover:shadow-[4px_4px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
-          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30">
+        <div data-reveal="zoom" data-tilt className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
+          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[10deg]">
             <Users className="w-6 h-6 text-[#FFB800]" />
           </div>
-          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">{t("aboutStats2", vars)}</h3>
+          <h3 className="text-3xl font-black bw-text mb-1 tracking-tight"><CountUp text={t("aboutStats2", vars)} /></h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats2Label")}</p>
         </div>
 
         {/* Stat 3: Courses */}
-        <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center hover:shadow-[4px_4px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
-          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30">
+        <div data-reveal="zoom" data-tilt className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-2xl p-6 text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">
+          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FFB800]/30 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[10deg]">
             <BookOpen className="w-6 h-6 text-[#FFB800]" />
           </div>
           <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">
-            {activeCourses.length}{locale === "uz" ? " ta" : locale === "ko" ? "개" : ""}
+            <CountUp text={`${activeCourses.length}${locale === "uz" ? " ta" : locale === "ko" ? "개" : ""}`} />
           </h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats3Label")}</p>
         </div>
@@ -65,7 +66,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         
         {/* History Paragraph */}
-        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
+        <div data-reveal="left" className="lg:col-span-7 bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.05)]">
           <div>
             <h2 className="text-2xl md:text-3xl font-black bw-text uppercase tracking-tight mb-4">
               SMARTMIZ {FOUNDING_YEAR} - {currentYear()}
@@ -83,6 +84,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
 
         {/* Video Embed Play Teaser Card */}
         <a 
+          data-reveal="right"
           target="_blank" 
           href={videoUrl}
           rel="noopener noreferrer"
