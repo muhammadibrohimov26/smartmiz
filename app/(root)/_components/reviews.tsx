@@ -1,5 +1,6 @@
 "use client";
 
+import Typewriter from "@/components/shared/typewriter";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { CheckCircle2, LogIn, MessageSquareQuote, Pencil, Share2, Star } from "lucide-react";
 import { toast } from "sonner";
@@ -309,7 +310,7 @@ function Reviews({ reviews }: { reviews: Review[] }) {
           <span>{t("reviewsBadge")}</span>
         </div>
         <h2 className="text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter">
-          {t("reviewsTitle1")} <span className="yellow-accent">{t("reviewsTitle2")}</span>
+          <Typewriter text={t("reviewsTitle1")} /> <Typewriter text={t("reviewsTitle2")} delay={t("reviewsTitle1").length * 45} className="yellow-accent" />
         </h2>
       </div>
 
