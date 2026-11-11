@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
-// Site-wide interactive background, inspired by antigravity.google.
-// A fixed, full-viewport canvas behind all public pages, covered evenly with
+// Interactive home-page background, inspired by antigravity.google.
+// Shown only on the home page ("/") and only on screens ≥ 768px — on phones
+// it is not mounted at all (no canvas, no animation loop).
+// A fixed, full-viewport canvas behind the page, covered evenly with
 // short dashes that drift in a slow wave. Where the pointer moves over them
 // they come alive: grow, light up (brand yellow at the cursor → logo green
 // further out), turn to point at the cursor and step aside a little, then
@@ -54,7 +57,7 @@ const hash = (x: number, y: number) => (Math.imul(x, 73856093) ^ Math.imul(y, 19
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
-export default function ParticleField() {
+function Field() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -339,4 +342,23 @@ export default function ParticleField() {
   }, []);
 
   return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full" />;
+}
+
+// Desktop/tablet only: matches Tailwind's `md` breakpoint
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+export default function ParticleField() {
+  const pathname = usePathname();
+  const [desktop, setDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_QUERY);
+    const update = () => setDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  if (pathname !== "/" || !desktop) return null;
+  return <Field />;
 }

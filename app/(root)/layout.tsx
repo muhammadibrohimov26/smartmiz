@@ -7,7 +7,7 @@ import ParticleField from "./_components/particleField"
 function Layout({children}: ChildProps) {
   return (
     <CustomerAuthProvider>
-    {/* Site-wide pointer-following background; content sits above it */}
+    {/* Pointer-following background: home page only, hidden on mobile */}
     <ParticleField />
     <main className="relative z-10">
     <Navbar/>
