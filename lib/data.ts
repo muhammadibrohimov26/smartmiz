@@ -1,3 +1,5 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { CourseRating, Lead, NewsItem, Price, Review, ReviewStatus, SiteSettings, TelegramMediaKind } from "@/types";
 import { DEFAULT_ABOUT_VIDEO_IMAGE, DEFAULT_ABOUT_VIDEO_URL, isValidVideoUrl } from "@/lib/video";
 import { isAllowedImageUrl } from "@/lib/images";
@@ -10,12 +12,36 @@ import localNews from "@/public/news.json";
 // Firebase is loaded lazily: if it is not configured, or fails at runtime,
 // public pages fall back to the bundled JSON files instead of crashing.
 // Admin pages pass { strict: true } so they never show (and edit) stale fallback data.
+//
+// Caching (Firestore free plan: 50 000 reads/day). Public pages read courses,
+// results, reviews and settings through Next's Data Cache: one Firestore read
+// per collection every CACHE_SECONDS at most, shared by every page, render and
+// server instance — not one per visit, page or ISR re-render. Admin panel and
+// bot changes clear it at once with revalidateTag(CACHE_TAGS.x) (see
+// revalidateData below), so the time limit is only a safety net.
+// Failed reads throw inside the cached function, so a fallback is never cached.
+// The admin panel ({ strict: true }) always reads fresh data.
 
 type Options = { strict?: boolean };
 
 async function firestore() {
   const { adminDb, isFirebaseConfigured } = await import("@/lib/firebase/admin");
   return isFirebaseConfigured() ? adminDb() : null;
+}
+
+export const CACHE_SECONDS = 3600;
+
+export const CACHE_TAGS = {
+  courses: "courses",
+  news: "news",
+  reviews: "reviews",
+  settings: "settings",
+} as const;
+
+// Cached on the server for CACHE_SECONDS under `tag`; also deduplicated within
+// one render (React cache), e.g. a course page's metadata + page body.
+function cached<T>(key: string, tag: string, read: () => Promise<T>) {
+  return cache(unstable_cache(read, ["data", key], { revalidate: CACHE_SECONDS, tags: [tag] }));
 }
 
 async function withFallback<T>(read: () => Promise<T | null>, fallback: T, { strict }: Options) {
@@ -30,8 +56,7 @@ async function withFallback<T>(read: () => Promise<T | null>, fallback: T, { str
   return fallback;
 }
 
-export async function getCourses(options: Options = {}): Promise<Price[]> {
-  return withFallback<Price[]>(async () => {
+async function readCourses(): Promise<Price[] | null> {
     const db = await firestore();
     if (!db) return null;
     const snap = await db.collection("courses").orderBy("createdAt", "asc").get();
@@ -50,7 +75,11 @@ export async function getCourses(options: Options = {}): Promise<Price[]> {
         highlights: Array.isArray(d.highlights) ? d.highlights.filter((h: unknown) => typeof h === "string") : [],
       };
     });
-  }, localCourses as Price[], options);
+}
+const cachedCourses = cached("courses", CACHE_TAGS.courses, readCourses);
+
+export async function getCourses(options: Options = {}): Promise<Price[]> {
+  return withFallback<Price[]>(options.strict ? readCourses : cachedCourses, localCourses as Price[], options);
 }
 
 const REVIEW_STATUSES: ReviewStatus[] = ["pending", "approved", "hidden"];
@@ -59,8 +88,7 @@ const MEDIA_KINDS: TelegramMediaKind[] = ["video", "video_note", "voice", "audio
 // Results added in the admin panel have no status (= on the site); results sent
 // through the Telegram bot start "pending" until an admin approves them.
 // The public site gets approved ones only; { all: true } is for the admin panel.
-export async function getNews(options: Options & { all?: boolean } = {}): Promise<NewsItem[]> {
-  return withFallback<NewsItem[]>(async () => {
+async function readNews(): Promise<NewsItem[] | null> {
     const db = await firestore();
     if (!db) return null;
     // Filtered here, not in the query: old results have no status field at all
@@ -83,7 +111,16 @@ export async function getNews(options: Options & { all?: boolean } = {}): Promis
       };
     });
     // Best results first (lib/results.ts), not just the newest
-    items.sort(compareResults);
+    return items.sort(compareResults);
+}
+const cachedNews = cached("news", CACHE_TAGS.news, readNews);
+
+// The whole list (one cached read): /news shows all results and each course
+// page picks its own, so a limit() here would hide results there.
+export async function getNews(options: Options & { all?: boolean } = {}): Promise<NewsItem[]> {
+  return withFallback<NewsItem[]>(async () => {
+    const items = await (options.strict ? readNews : cachedNews)();
+    if (!items) return null;
     return options.all ? items : items.filter((item) => item.status === "approved");
   }, (localNews as Omit<NewsItem, "status">[]).map((item) => ({ ...item, status: "approved" as const })), options);
 }
@@ -113,8 +150,7 @@ export async function getLeads(): Promise<Lead[]> {
 
 export const DEFAULT_STUDENT_COUNT = 18000;
 
-export async function getSiteSettings(options: Options = {}): Promise<SiteSettings> {
-  return withFallback<SiteSettings>(async () => {
+async function readSiteSettings(): Promise<SiteSettings | null> {
     const db = await firestore();
     if (!db) return null;
     const doc = await db.collection("settings").doc("site").get();
@@ -126,7 +162,11 @@ export async function getSiteSettings(options: Options = {}): Promise<SiteSettin
       aboutVideoUrl: isValidVideoUrl(video) ? video : DEFAULT_ABOUT_VIDEO_URL,
       aboutVideoImage: image && isAllowedImageUrl(image) ? image : DEFAULT_ABOUT_VIDEO_IMAGE,
     };
-  }, {
+}
+const cachedSiteSettings = cached("settings", CACHE_TAGS.settings, readSiteSettings);
+
+export async function getSiteSettings(options: Options = {}): Promise<SiteSettings> {
+  return withFallback<SiteSettings>(options.strict ? readSiteSettings : cachedSiteSettings, {
     studentCount: DEFAULT_STUDENT_COUNT,
     aboutVideoUrl: DEFAULT_ABOUT_VIDEO_URL,
     aboutVideoImage: DEFAULT_ABOUT_VIDEO_IMAGE,
@@ -163,21 +203,25 @@ async function readReviews(onlyApproved: boolean): Promise<Review[]> {
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
+// Approved reviews for the public pages: one cached read shared by the home
+// page (centre reviews + course ratings) and every course page
+const cachedApprovedReviews = cached("reviews-approved", CACHE_TAGS.reviews, () => readReviews(true));
+
 // Home page: reviews of the centre (course ratings are on their course pages)
 export async function getApprovedReviews(): Promise<Review[]> {
-  return withFallback<Review[]>(async () => (await readReviews(true)).filter((r) => !r.courseSlug), [], {});
+  return withFallback<Review[]>(async () => (await cachedApprovedReviews()).filter((r) => !r.courseSlug), [], {});
 }
 
 // One course page's approved ratings
 export async function getCourseReviews(slug: string): Promise<Review[]> {
-  return withFallback<Review[]>(async () => (await readReviews(true)).filter((r) => r.courseSlug === slug), [], {});
+  return withFallback<Review[]>(async () => (await cachedApprovedReviews()).filter((r) => r.courseSlug === slug), [], {});
 }
 
 // Average rating per course slug (approved ratings only)
 export async function getCourseRatings(): Promise<Record<string, CourseRating>> {
   return withFallback<Record<string, CourseRating>>(async () => {
     const sums: Record<string, { sum: number; count: number }> = {};
-    for (const r of await readReviews(true)) {
+    for (const r of await cachedApprovedReviews()) {
       if (!r.courseSlug) continue;
       const o = (sums[r.courseSlug] ??= { sum: 0, count: 0 });
       o.sum += r.rating;

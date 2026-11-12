@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { revalidateData } from "@/lib/revalidate";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb } from "@/lib/firebase/admin";
 import { ReviewStatus, TelegramMediaKind } from "@/types";
@@ -24,6 +25,7 @@ const collection = (kind: Kind) => adminDb().collection(kind === "news" ? "news"
 const sitePath = (kind: Kind) => (kind === "news" ? "/news" : "/");
 
 function revalidate(kind: Kind) {
+  revalidateData(kind === "news" ? "news" : "reviews");
   const paths = kind === "news" ? ["/news", "/admin/news", "/admin"] : ["/", "/admin/reviews", "/admin"];
   for (const path of paths) revalidatePath(path);
   if (kind === "news") revalidatePath("/courses/[slug]", "page"); // course pages list their results
