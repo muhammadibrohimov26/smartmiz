@@ -3,7 +3,7 @@
 import Typewriter from "@/components/shared/typewriter";
 import { CourseRating, Price, Review, SiteSettings } from "@/types";
 import CardItems from "./cardItems";
-import { Sparkles, ArrowRight, BookOpen, ArrowDown, Globe2, Code2, GraduationCap } from "lucide-react";
+import { Sparkles, ArrowRight, BookOpen, ArrowDown } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
 import Link from "next/link";
 import CourseQuiz from "./courseQuiz";
@@ -39,13 +39,6 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
         
         {/* HERO SECTION */}
         <div className="neo-hero relative min-h-[90vh] flex flex-col items-center justify-center text-center pt-32 pb-20">
-          <div className="hero-orbit" aria-hidden="true">
-            <div className="orbit-ring orbit-ring-one" /><div className="orbit-ring orbit-ring-two" />
-            <div className="orbit-satellite satellite-one"><Globe2 /><span>EN / KO / AR</span></div>
-            <div className="orbit-satellite satellite-two"><Code2 /><span>&lt; / &gt;</span></div>
-            <div className="orbit-satellite satellite-three"><GraduationCap /></div>
-            <span className="orbit-spark spark-one" /><span className="orbit-spark spark-two" />
-          </div>
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm bw-text font-semibold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <Sparkles className="w-4 h-4 yellow-accent" />
             <span>{t("heroTag")}</span>
