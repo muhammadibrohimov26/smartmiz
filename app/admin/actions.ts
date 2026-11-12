@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateData } from "@/lib/revalidate";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { FieldValue } from "firebase-admin/firestore";
@@ -92,6 +93,7 @@ function str(formData: FormData, key: string) {
 
 // Every public page that shows the course list
 function revalidateCoursePages() {
+  revalidateData("courses");
   for (const path of ["/", "/contact", "/admin/courses"]) revalidatePath(path);
   revalidatePath("/courses/[slug]", "page");
 }
@@ -188,6 +190,7 @@ export async function saveNews(formData: FormData): Promise<ActionResult> {
     }
     else await col.add({ ...data, ...(order ? { order } : {}), createdAt: FieldValue.serverTimestamp() });
 
+    revalidateData("news");
     revalidatePath("/news");
     revalidatePath("/admin/news");
     revalidatePath("/courses/[slug]", "page"); // course pages list their results
@@ -201,6 +204,7 @@ export async function deleteNews(id: string): Promise<ActionResult> {
     const oldImage = (await ref.get()).get("image");
     await ref.delete();
     await deleteMediaUrl(oldImage);
+    revalidateData("news");
     revalidatePath("/news");
     revalidatePath("/admin/news");
     revalidatePath("/courses/[slug]", "page"); // course pages list their results
@@ -254,6 +258,7 @@ export async function saveSettings(formData: FormData): Promise<ActionResult> {
     );
     if (oldImage !== aboutVideoImage) await deleteMediaUrl(oldImage);
 
+    revalidateData("settings");
     for (const path of ["/", "/news", "/admin/settings"]) revalidatePath(path);
   });
 }
@@ -302,6 +307,7 @@ export async function deleteReview(id: string): Promise<ActionResult> {
     const doc = await ref.get();
     await ref.delete();
     await deleteMediaUrl(doc.get("photo")); // Telegram reviewers' photo is stored in media
+    revalidateData("reviews");
     for (const path of ["/", "/admin/reviews", "/admin"]) revalidatePath(path);
     if (doc.get("courseSlug")) revalidatePath(`/courses/${doc.get("courseSlug")}`);
   });
