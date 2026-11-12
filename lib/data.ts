@@ -29,7 +29,7 @@ async function firestore() {
   return isFirebaseConfigured() ? adminDb() : null;
 }
 
-export const CACHE_SECONDS = 600;
+export const CACHE_SECONDS = 3600;
 
 export const CACHE_TAGS = {
   courses: "courses",
