@@ -42,12 +42,17 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
    and a yellow arc; stacked on phones/tablets. */
 .home-hero { --hero-ink: #141414; --hero-muted: #4a4a4a; --hero-bg: #fbf8f1; --chip-bg: #fffdf8; --chip-line: #ece4d2;
   position: relative; width: 100vw; margin-inline: calc(50% - 50vw); margin-top: 88px; background: var(--hero-bg); overflow: hidden; isolation: isolate; }
-.dark .home-hero { --hero-ink: #f6f3ea; --hero-muted: #b4b0a6; --hero-bg: #0f100d; --chip-bg: #171812; --chip-line: #2b2a22; }
+.dark .home-hero { --hero-ink: #f6f3ea; --hero-muted: #c9c3b6; --hero-bg: #0f100d; --chip-bg: #1a160ccc; --chip-line: #3a3220; }
+/* dark: a warm golden glow from the left edge, fading to near-black at the photo */
+.dark .home-hero { background:
+  radial-gradient(ellipse 55% 75% at 0% 55%, #a8720c55 0%, #a8720c22 45%, transparent 75%),
+  radial-gradient(ellipse 40% 60% at 25% 0%, #6b4a0a40 0%, transparent 70%),
+  linear-gradient(95deg, #2a1e07 0%, #1b1508 30%, #121009 50%, #0e0e0c 70%); }
 /* soft curved shapes behind the text */
 .home-hero::before, .home-hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
 .home-hero::before { width: 60vw; height: 60vw; left: -22vw; top: -34vw; background: radial-gradient(closest-side, #f3ead3 0%, transparent 72%); }
 .home-hero::after { width: 46vw; height: 46vw; left: -14vw; bottom: -30vw; border: 1px solid #eadfc4; opacity: .7; }
-.dark .home-hero::before { background: radial-gradient(closest-side, #2a2412 0%, transparent 72%); }
+.dark .home-hero::before { background: radial-gradient(closest-side, #f2b21b14 0%, transparent 72%); }
 .dark .home-hero::after { border-color: #2a271c; }
 .home-hero__inner { display: grid; grid-template-columns: minmax(0, 1fr); }
 .home-hero__text { padding: 44px 20px 36px; display: flex; flex-direction: column; align-items: flex-start; }
