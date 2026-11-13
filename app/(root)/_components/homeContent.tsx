@@ -79,7 +79,6 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
             <div className="home-hero__photo-frame">
               <Image
                 src="/img/hero-students.webp"
-                unoptimized
                 alt={t("heroTitle1") + " " + t("heroTitle2")}
                 fill
                 priority
