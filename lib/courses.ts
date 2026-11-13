@@ -37,7 +37,7 @@ export function uniqueCourses<T extends CourseRef>(courses: T[]) {
 
 // "1.5" → "1,5" for locales that use a decimal comma.
 // (Not Intl: browsers' ICU data formats "uz" with a decimal point.)
-const DECIMAL_COMMA_LOCALES = new Set(["uz", "uzc", "ru", "tr"]);
+const DECIMAL_COMMA_LOCALES = new Set(["uz", "uzn", "uzc", "ru"]);
 
 export function formatHours(value: string, locale: string) {
   const n = Number(value);
