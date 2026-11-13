@@ -18,10 +18,11 @@ export default function SiteMotion() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0, rootMargin: "0px 0px -40px 0px" });
     const discover = () => {
       root.querySelectorAll("[data-reveal], section, .course-card, .page-heading").forEach(node => {
-        if (node.hasAttribute("data-motion-ready")) return;
+        // already shown; others are (re)observed, also after an effect re-run
+        if (node.classList.contains("is-visible")) return;
         node.setAttribute("data-motion-ready", "true");
         if (!reduced.matches) observer.observe(node);
         else node.classList.add("is-visible");

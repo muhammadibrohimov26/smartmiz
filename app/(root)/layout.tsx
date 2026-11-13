@@ -1,4 +1,5 @@
 import { ChildProps } from "@/types"
+import "@fontsource-variable/montserrat"
 import { CustomerAuthProvider } from "@/components/providers/customer-auth"
 import Navbar from "./_components/navbar"
 import Footer from "./_components/footer"
