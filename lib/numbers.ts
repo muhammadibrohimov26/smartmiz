@@ -1,6 +1,6 @@
 // Thousands separators per locale (not Intl: browsers' ICU data for "uz" is inconsistent).
 // A non-breaking space keeps "18 000" on one line.
-const SEPARATORS: Record<string, string> = { uz: " ", uzc: " ", ru: " ", tr: "." };
+const SEPARATORS: Record<string, string> = { uz: " ", uzn: " ", uzc: " ", ru: " " };
 
 export function formatCount(n: number, locale: string) {
   const sep = SEPARATORS[locale] ?? ",";

@@ -54,7 +54,7 @@ function AboutContent({ courses, studentCount, videoUrl, videoImage }: { courses
             <BookOpen className="w-6 h-6 text-[#FFB800]" />
           </div>
           <h3 className="text-3xl font-black bw-text mb-1 tracking-tight">
-            {activeCourses.length}{locale === "uz" ? " ta" : locale === "uzc" ? " та" : locale === "ko" ? "개" : ""}
+            {activeCourses.length}{locale === "uz" || locale === "uzn" ? " ta" : locale === "uzc" ? " та" : ""}
           </h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">{t("aboutStats3Label")}</p>
         </div>

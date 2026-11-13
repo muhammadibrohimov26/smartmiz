@@ -1,10 +1,11 @@
 import { Locale } from "@/lib/dictionaries";
 import { toCyrillic } from "@/lib/translit";
+import { toNewLatin } from "@/lib/newLatin";
 
 // Card title, a one-line description and the icon of each course on the home
 // page course cards, keyed by the course page slug (lib/courses.ts courseSlug).
-// Written in Uzbek, Russian and English; Ўзбекча (uzc) is the Uzbek text in
-// Cyrillic, and Türkçe / 한국어 / العربية show the English text.
+// Written in Uzbek, Russian and English; Özbekça (uzn) and Ўзбекча (uzc) are
+// the Uzbek text in the updated Latin alphabet and in Cyrillic.
 // A course added in the admin panel that is not listed here falls back to its
 // translated name and the first sentence of its admin description.
 
@@ -165,7 +166,7 @@ const SUBJECT_ICONS: Record<string, CourseIcon> = {
 export function pickText(texts: Texts, locale: Locale) {
   if (locale === "uz" || locale === "ru" || locale === "en") return texts[locale];
   if (locale === "uzc") return toCyrillic(texts.uz);
-  return texts.en;
+  return toNewLatin(texts.uz);
 }
 
 export function courseInfo(slug: string, courseName: string) {

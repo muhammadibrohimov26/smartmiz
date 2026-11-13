@@ -69,7 +69,7 @@ function TelegramButton({ onError }: { onError: (key: string) => void }) {
     script.setAttribute("data-telegram-login", bot);
     script.setAttribute("data-size", "large");
     script.setAttribute("data-radius", "12");
-    script.setAttribute("data-lang", locale === "uzc" ? "uz" : locale);
+    script.setAttribute("data-lang", locale === "uzc" || locale === "uzn" ? "uz" : locale);
     script.setAttribute("data-userpic", "false");
     script.setAttribute("data-onauth", "onSmartmizTelegramAuth(user)");
     const target = box.current;

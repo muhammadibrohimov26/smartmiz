@@ -1,6 +1,7 @@
 "use client";
 
 import { toCyrillic } from "@/lib/translit";
+import { toNewLatin } from "@/lib/newLatin";
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/context/LanguageContext";
 import { Gamepad2, CheckCircle2, XCircle, Trophy, RotateCcw, ArrowRight, Sparkles } from "lucide-react";
@@ -13,26 +14,26 @@ interface Question {
 }
 
 const wordBank = [
-  { word: "Apple",        uz: "Olma",       ru: "Яблоко",     tr: "Elma",        ko: "사과" },
-  { word: "Book",         uz: "Kitob",       ru: "Книга",      tr: "Kitap",       ko: "책" },
-  { word: "Water",        uz: "Suv",         ru: "Вода",       tr: "Su",          ko: "물" },
-  { word: "School",       uz: "Maktab",      ru: "Школа",      tr: "Okul",        ko: "학교" },
-  { word: "Teacher",      uz: "O'qituvchi",  ru: "Учитель",    tr: "Öğretmen",    ko: "선생님" },
-  { word: "Family",       uz: "Oila",        ru: "Семья",      tr: "Aile",        ko: "가족" },
-  { word: "Friend",       uz: "Do'st",       ru: "Друг",       tr: "Arkadaş",     ko: "친구" },
-  { word: "House",        uz: "Uy",          ru: "Дом",        tr: "Ev",          ko: "집" },
-  { word: "Money",        uz: "Pul",         ru: "Деньги",     tr: "Para",        ko: "돈" },
-  { word: "Time",         uz: "Vaqt",        ru: "Время",      tr: "Zaman",       ko: "시간" },
-  { word: "City",         uz: "Shahar",      ru: "Город",      tr: "Şehir",       ko: "도시" },
-  { word: "Language",     uz: "Til",         ru: "Язык",       tr: "Dil",         ko: "언어" },
-  { word: "Work",         uz: "Ish",         ru: "Работа",     tr: "İş",          ko: "일" },
-  { word: "Dream",        uz: "Orzu",        ru: "Мечта",      tr: "Rüya",        ko: "꿈" },
-  { word: "Travel",       uz: "Sayohat",     ru: "Путешествие",tr: "Seyahat",     ko: "여행" },
-  { word: "Beautiful",    uz: "Chiroyli",    ru: "Красивый",   tr: "Güzel",       ko: "아름다운" },
-  { word: "Important",    uz: "Muhim",       ru: "Важный",     tr: "Önemli",      ko: "중요한" },
-  { word: "Knowledge",    uz: "Bilim",       ru: "Знание",     tr: "Bilgi",       ko: "지식" },
-  { word: "Future",       uz: "Kelajak",     ru: "Будущее",    tr: "Gelecek",     ko: "미래" },
-  { word: "Success",      uz: "Muvaffaqiyat",ru: "Успех",      tr: "Başarı",      ko: "성공" },
+  { word: "Apple",        uz: "Olma",       ru: "Яблоко" },
+  { word: "Book",         uz: "Kitob",       ru: "Книга" },
+  { word: "Water",        uz: "Suv",         ru: "Вода" },
+  { word: "School",       uz: "Maktab",      ru: "Школа" },
+  { word: "Teacher",      uz: "O'qituvchi",  ru: "Учитель" },
+  { word: "Family",       uz: "Oila",        ru: "Семья" },
+  { word: "Friend",       uz: "Do'st",       ru: "Друг" },
+  { word: "House",        uz: "Uy",          ru: "Дом" },
+  { word: "Money",        uz: "Pul",         ru: "Деньги" },
+  { word: "Time",         uz: "Vaqt",        ru: "Время" },
+  { word: "City",         uz: "Shahar",      ru: "Город" },
+  { word: "Language",     uz: "Til",         ru: "Язык" },
+  { word: "Work",         uz: "Ish",         ru: "Работа" },
+  { word: "Dream",        uz: "Orzu",        ru: "Мечта" },
+  { word: "Travel",       uz: "Sayohat",     ru: "Путешествие" },
+  { word: "Beautiful",    uz: "Chiroyli",    ru: "Красивый" },
+  { word: "Important",    uz: "Muhim",       ru: "Важный" },
+  { word: "Knowledge",    uz: "Bilim",       ru: "Знание" },
+  { word: "Future",       uz: "Kelajak",     ru: "Будущее" },
+  { word: "Success",      uz: "Muvaffaqiyat",ru: "Успех" },
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -59,9 +60,8 @@ export default function VocabGame() {
   const getTranslation = useCallback((item: typeof wordBank[0]) => {
     switch (locale) {
       case "ru": return item.ru;
-      case "tr": return item.tr;
-      case "ko": return item.ko;
       case "uzc": return toCyrillic(item.uz);
+      case "uzn": return toNewLatin(item.uz);
       default:   return item.uz;
     }
   }, [locale]);

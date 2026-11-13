@@ -13,7 +13,6 @@ export function yearsActive() {
 // The word "years" after a number, where the language inflects it.
 const YEAR_WORDS: Record<string, Partial<Record<Intl.LDMLPluralRule, string>>> = {
   ru: { one: "год", few: "года", many: "лет", other: "года" },
-  ar: { zero: "سنة", one: "سنة", two: "سنتان", few: "سنوات", many: "سنة", other: "سنة" },
 };
 
 export function yearsWord(n: number, locale: string) {
