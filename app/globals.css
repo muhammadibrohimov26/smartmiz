@@ -76,7 +76,9 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   .home-hero { min-height: min(680px, calc(100svh - 88px)); }
   .home-hero__inner { grid-template-columns: 48% 52%; min-height: inherit; }
   .home-hero__text { justify-content: center; padding: 56px 40px 56px max(16px, calc((100vw - 1400px) / 2 + 16px)); }
-  .home-hero__title { font-size: clamp(2.6rem, 3.7vw, 4.4rem); }
+  /* sized to the text column (48% minus its left/right padding), so the
+     one-line "Oʻz salohiyatingizni" (≈9.8em wide) never runs under the photo */
+  .home-hero__title { font-size: max(2.4rem, min(4.4rem, calc((48vw - max(16px, (100vw - 1400px) / 2 + 16px) - 40px) / 9.8))); }
   .home-hero__title > span:first-child { white-space: nowrap; }
   .home-hero__lead { font-size: clamp(1.05rem, 1.25vw, 1.3rem); }
   /* photo: right half, from the navbar to the bottom, curved left edge */
