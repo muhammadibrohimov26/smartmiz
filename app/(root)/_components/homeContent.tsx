@@ -1,9 +1,11 @@
 "use client";
 
-import Typewriter from "@/components/shared/typewriter";
 import { CourseRating, Price, Review, SiteSettings } from "@/types";
 import CardItems from "./cardItems";
-import { Sparkles, ArrowRight, BookOpen, ArrowDown } from "lucide-react";
+import { ArrowRight, BookOpen, Laptop } from "lucide-react";
+import Image from "next/image";
+import Flag from "@/components/shared/flag";
+import { courseSlug } from "@/lib/courses";
 import { useTranslation } from "@/context/LanguageContext";
 import Link from "next/link";
 import CourseQuiz from "./courseQuiz";
@@ -15,74 +17,87 @@ import AboutContent from "./aboutContent";
 function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; reviews: Review[]; settings: SiteSettings; ratings: Record<string, CourseRating> }) {
   const { t } = useTranslation();
 
-  // Hero types itself out: title line 1 → line 2 → description
-  const TITLE_SPEED = 60;
-  const DESC_SPEED = 14;
-  const title1 = t("heroTitle1");
-  const title2 = t("heroTitle2");
-  const title2Delay = 300 + title1.length * TITLE_SPEED + 150;
-  const descDelay = title2Delay + title2.length * TITLE_SPEED + 250;
+  // The hero's short line: the first sentence of the description
+  const heroLead = t("heroDesc").match(/^.*?[.!?。](?=\s|$)/)?.[0] ?? t("heroDesc");
+
+  // Quick links under the hero buttons: a course page when there is one
+  const chips: { key: string; label?: string; icon: React.ReactNode }[] = [
+    { key: "Ingliz tili", icon: <Flag code="gb" className="w-6 h-4 rounded-[3px] shadow-sm" /> },
+    { key: "Koreys tili", icon: <Flag code="kr" className="w-6 h-4 rounded-[3px] shadow-sm ring-1 ring-black/5" /> },
+    { key: "Rus tili", icon: <Flag code="ru" className="w-6 h-4 rounded-[3px] shadow-sm ring-1 ring-black/5" /> },
+    { key: "Kompyuter kursi", label: "heroChipComputer", icon: <Laptop className="w-5 h-5 text-[#3fae2a]" /> },
+  ];
+  const chipHref = (name: string) => {
+    const course = prices.find((p) => p.courseName === name);
+    return course ? `/courses/${courseSlug(course)}` : "#courses-section";
+  };
 
   const scrollToCourses = () => {
     document.getElementById("courses-section")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   };
 
   return (
-    <div className="relative w-full overflow-hidden min-h-screen">
-      {/* Yellow Glowing Background Elements */}
-      <div className="yellow-glow-bg">
-        <div className="yellow-blob blob-1"></div>
-        <div className="yellow-blob blob-2"></div>
+    <div className="relative w-full min-h-screen">
+      {/* HERO: text on the left, the photo with a curved edge on the right */}
+      <div className="home-hero">
+        <div className="home-hero__inner">
+          <div className="home-hero__text">
+            <h1 className="home-hero__title">
+              <span className="block">{t("heroTitle1")}</span>
+              <span className="home-hero__accent">
+                {t("heroTitle2")}.
+                <svg className="home-hero__swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M3 14 C 50 4, 120 1, 197 9" />
+                </svg>
+              </span>
+            </h1>
+
+            <p className="home-hero__lead">{heroLead}</p>
+
+            <div className="home-hero__actions">
+              <button onClick={scrollToCourses} className="home-btn home-btn--solid group">
+                {t("btnCourses")}
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+              </button>
+              <Link href="/contact" className="home-btn home-btn--outline">
+                <BookOpen className="w-5 h-5 text-[#e0a106]" />
+                {t("btnTrial")}
+              </Link>
+            </div>
+
+            <div className="home-hero__chips">
+              {chips.map((c) => (
+                <Link key={c.key} href={chipHref(c.key)} className="home-chip">
+                  {c.icon}
+                  <span>{t(c.label ?? c.key)}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="home-hero__photo">
+            <div className="home-hero__photo-frame">
+              <Image
+                src="/img/hero-students.webp"
+                alt={t("heroTitle1") + " " + t("heroTitle2")}
+                fill
+                priority
+                sizes="(min-width: 1024px) 55vw, 100vw"
+                className="object-cover object-[60%_center]"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      {/* the rest lines up with the hero text and the navbar (the site container) */}
+      <div className="relative z-10">
         
-        {/* HERO SECTION */}
-        <div className="neo-hero relative min-h-[90vh] flex flex-col items-center justify-center text-center pt-32 pb-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm bw-text font-semibold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <Sparkles className="w-4 h-4 yellow-accent" />
-            <span>{t("heroTag")}</span>
-          </div>
-
-          <h1 className="hero-title font-black tracking-tight bw-text mb-8 max-w-5xl w-full px-2 leading-[1.04]">
-            <Typewriter text={title1} delay={300} speed={TITLE_SPEED} /> <br />
-            <Typewriter text={title2} delay={title2Delay} speed={TITLE_SPEED} className="hero-gradient" /><span className="hero-period">.</span>
-          </h1>
-
-          <p className="hero-description text-lg md:text-xl text-gray-500 max-w-xl mb-10 font-medium leading-relaxed">
-            <Typewriter text={t("heroDesc")} delay={descDelay} speed={DESC_SPEED} keepCaret />
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500">
-            <button 
-              onClick={scrollToCourses}
-              className="px-8 py-4 bw-button-solid font-bold text-lg flex items-center justify-center gap-2 group"
-            >
-              {t("btnCourses")}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 transition-transform" />
-            </button>
-            <Link 
-              href="/contact" 
-              className="px-8 py-4 bw-button-outline font-bold text-lg flex items-center justify-center gap-2"
-            >
-              <BookOpen className="w-5 h-5 yellow-accent" />
-              {t("btnTrial")}
-            </Link>
-          </div>
-          <button className="hero-scroll" onClick={scrollToCourses} aria-label={t("btnCourses")}><ArrowDown className="w-4 h-4" /></button>
-        </div>
-
-        <div className="subject-ribbon" aria-hidden="true">
-          <div>{[0, 1].map(copy => <span key={copy}>{["Ingliz tili", "Koreys tili", "Kompyuter kursi", "Arab tili", "Rus tili", "Turk tili"].map(subject => <span key={subject}><span className="ribbon-star">✳</span>{t(subject)}</span>)}</span>)}</div>
-        </div>
-
         {/* COURSES SECTION */}
-        <section className="py-24" id="courses-section">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black bw-text mb-4 uppercase tracking-tighter">
-              <Typewriter text={t("coursesTitle1")} /> <Typewriter text={t("coursesTitle2")} delay={t("coursesTitle1").length * 45} className="yellow-accent" />
-            </h2>
-            <p className="text-gray-500 dark:text-zinc-400 text-lg font-medium">{t("coursesDesc")}</p>
+        <section className="pt-16 md:pt-20 pb-24 scroll-mt-28" id="courses-section">
+          <div className="courses-head">
+            <h2 className="courses-head__title">{t("coursesHeading")}</h2>
+            <p className="courses-head__lead">{t("coursesLead")}</p>
           </div>
 
           <div className="flex flex-col space-y-24">
