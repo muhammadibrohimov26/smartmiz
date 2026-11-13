@@ -97,7 +97,7 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
         <section className="pt-16 md:pt-20 pb-24 scroll-mt-28" id="courses-section">
           <div className="courses-head">
             <h2 className="courses-head__title">{t("coursesHeading")}</h2>
-            <p className="courses-head__lead">{t("coursesLead")}</p>
+            <p className="courses-head__lead">{t("coursesDesc")}</p>
           </div>
 
           <div className="flex flex-col space-y-24">
