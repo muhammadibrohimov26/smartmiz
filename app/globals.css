@@ -17,7 +17,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .public-site .course-card:nth-child(3n + 2) { transition-delay: 60ms; }
 .public-site .course-card:nth-child(3n + 3) { transition-delay: 120ms; }
 .public-site .course-card:hover { border-color: #9cb58c80; box-shadow: 0 20px 70px #849d6d12; }
-.public-site .course-card > :first-child { aspect-ratio: 1.25; }
+.public-site .course-card > :first-child { aspect-ratio: 1.53; }
 .public-site :is(h1,h2) { text-wrap: balance; }
 .public-site h2.bw-text { text-transform: none; letter-spacing: -.045em; }
 .public-site :is(.bw-panel,.course-card,[class*="border-2"][class*="rounded"],[class*="border-4"][class*="rounded"]) { border-width: 1px; border-color: var(--neo-line); box-shadow: 0 10px 45px #00000004; }
@@ -93,11 +93,27 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 @keyframes hero-photo { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
 
 /* ── Section heading: yellow bar, title, a lead on the side ── */
-.courses-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 40px; margin-bottom: 40px; }
+.courses-head { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
 .courses-head__title { position: relative; padding-inline-start: 28px; font-weight: 800; font-size: clamp(2.2rem, 4.4vw, 3.6rem); letter-spacing: -.035em; line-height: 1.05; color: #141414; }
 .dark .courses-head__title { color: #f6f3ea; }
 .courses-head__title::before { content: ""; position: absolute; inset-inline-start: 0; top: 8%; bottom: 8%; width: 9px; border-radius: 9px; background: linear-gradient(180deg, #ffcd38, #f0ad0a); }
-.courses-head__lead { max-width: 30em; color: #4a4a4a; font-size: 1.05rem; font-weight: 500; line-height: 1.55; }
+.courses-head__lead { padding-inline-start: 28px; max-width: 34em; color: #555; font-size: clamp(1.05rem, 1.6vw, 1.45rem); font-weight: 500; line-height: 1.45; }
+
+/* Course filter (cardItems.tsx): pills with a flag/icon, the rest under "Boshqa kurslar" */
+.course-filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+.course-filter { display: inline-flex; align-items: center; gap: 10px; padding: 11px 20px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #161616; font-weight: 600; font-size: .95rem; white-space: nowrap; box-shadow: 0 2px 10px #0000000a; transition: transform .2s, border-color .2s, box-shadow .2s, background-color .2s; }
+.course-filter:hover { transform: translateY(-2px); border-color: #f1c241; box-shadow: 0 8px 20px -10px #e6a50a80; }
+.course-filter.is-active { background: linear-gradient(180deg, #ffcd38, #f5b50f); border-color: #f5b50f; color: #161308; font-weight: 800; padding-inline: 30px; box-shadow: 0 10px 22px -12px #e6a50acc; }
+.dark .course-filter { background: #16170f; border-color: #2b2a22; color: #f1eee6; }
+.dark .course-filter.is-active { background: linear-gradient(180deg, #ffcd38, #f5b50f); color: #161308; border-color: #f5b50f; }
+.course-filter-menu { position: absolute; z-index: 30; top: calc(100% + 8px); inset-inline-end: 0; min-width: 230px; padding: 6px; border-radius: 18px; background: #fff; border: 1px solid #e7e2d6; box-shadow: 0 20px 40px -18px #00000040; display: flex; flex-direction: column; }
+.dark .course-filter-menu { background: #16170f; border-color: #2b2a22; }
+.course-filter-menu__item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; font-weight: 600; font-size: .95rem; text-align: start; color: #161616; }
+.dark .course-filter-menu__item { color: #f1eee6; }
+.course-filter-menu__item:hover { background: #fff6db; }
+.dark .course-filter-menu__item:hover { background: #2a2310; }
+.course-filter-menu__item.is-active { background: #ffe8a3; color: #161308; }
+@media (max-width: 767px) { .course-filters { gap: 8px; } .course-filter { padding: 9px 14px; font-size: .9rem; } .course-filter.is-active { padding-inline: 20px; } .course-filter-menu { inset-inline-end: auto; inset-inline-start: 0; } }
 .dark .courses-head__lead { color: #b4b0a6; }
 
 @keyframes neo-enter { from { opacity: 0; transform: translateY(30px); filter: blur(5px); } to { opacity: 1; transform: none; filter: blur(0); } }

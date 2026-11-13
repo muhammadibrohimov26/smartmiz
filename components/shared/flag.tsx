@@ -2,7 +2,7 @@ import { useId } from "react";
 
 // SVG flags — Windows does not render flag emojis (shows "GB", "KR" instead).
 
-type FlagCode = "gb" | "kr" | "ru";
+type FlagCode = "gb" | "kr" | "ru" | "tr";
 
 function Flag({ code, className }: { code: FlagCode; className?: string }) {
   const id = useId();
@@ -19,6 +19,17 @@ function Flag({ code, className }: { code: FlagCode; className?: string }) {
           <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
           <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
         </g>
+      </svg>
+    );
+  }
+
+  if (code === "tr") {
+    return (
+      <svg viewBox="0 0 30 20" className={className} role="img" aria-label="Türkiye">
+        <rect width="30" height="20" fill="#E30A17" />
+        <circle cx="11" cy="10" r="5" fill="#fff" />
+        <circle cx="12.25" cy="10" r="4" fill="#E30A17" />
+        <polygon points="18.00,7.53 18.05,9.38 19.80,10.00 18.05,10.62 18.00,12.47 16.88,11.00 15.10,11.53 16.15,10.00 15.10,8.47 16.88,9.00" fill="#fff" />
       </svg>
     );
   }
