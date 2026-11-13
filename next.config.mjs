@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
+        // Images are served as they are, not through the image optimizer: on
+        // Vercel the optimizer answered 404 for the uploaded /media/<id>
+        // images and did not deliver /public ones either (the hero photo
+        // only showed once it skipped the optimizer). Uploads are already
+        // shrunk in the admin panel (≤ 900 KB).
+        unoptimized: true,
         // Keep in sync with IMAGE_HOSTS in lib/images.ts
         remotePatterns: [
             { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
