@@ -9,7 +9,7 @@ import { Menu, Globe, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
-import { Locale } from "@/lib/dictionaries";
+import { LANGUAGES, Locale, localeShort } from "@/lib/dictionaries";
 import ModeToogle from "@/components/shared/mode-toggle";
 import Logo from "@/components/shared/logo";
 
@@ -75,21 +75,14 @@ const Mobile = () => {
             >
               <div className="flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 yellow-accent animate-pulse" />
-                <span>Language: <span className="uppercase font-black text-yellow-500">{locale}</span></span>
+                <span>Language: <span className="uppercase font-black text-yellow-500">{localeShort(locale)}</span></span>
               </div>
               <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-300", langOpen && "rotate-180")} />
             </button>
 
             {langOpen && (
               <div className="grid grid-cols-2 gap-1 border-t border-zinc-200 dark:border-zinc-800 p-2 bg-zinc-50/50 dark:bg-zinc-950/50 animate-in fade-in slide-in-from-top-1 duration-200">
-                {[
-                  { code: "uz", name: "O'zbek" },
-                  { code: "ru", name: "Русский" },
-                  { code: "en", name: "English" },
-                  { code: "tr", name: "Türkçe" },
-                  { code: "ko", name: "한국어" },
-                  { code: "ar", name: "العربية" }
-                ].map((lang) => (
+                {LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => {

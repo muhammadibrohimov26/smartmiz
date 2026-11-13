@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { dictionaries, Locale } from "@/lib/dictionaries";
+import { dictionaries, DictLocale, Locale } from "@/lib/dictionaries";
+import { toCyrillic } from "@/lib/translit";
 import { yearVars } from "@/lib/years";
 import { usePathname } from "next/navigation";
 
@@ -10,6 +11,10 @@ interface LanguageContextType {
   setLocale: (locale: Locale) => void;
   t: (key: keyof typeof dictionaries["uz"] | string, vars?: Record<string, string | number>) => string;
 }
+
+// Ўзбекча (uzc) uses the Uzbek dictionary, converted to Cyrillic
+const dictFor = (locale: Locale) => dictionaries[(locale === "uzc" ? "uz" : locale) as DictLocale] as Record<string, string>;
+const isLocale = (value: string | null): value is Locale => !!value && (value === "uzc" || value in dictionaries);
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -25,15 +30,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   // Local Storage to persist language
   useEffect(() => {
-    const savedLocale = localStorage.getItem("app-locale") as Locale;
-    if (savedLocale && dictionaries[savedLocale]) {
+    const savedLocale = localStorage.getItem("app-locale");
+    if (isLocale(savedLocale)) {
       setLocaleState(savedLocale);
     }
   }, []);
 
   // Sync <html lang/dir> with the active locale (Arabic is right-to-left)
   useEffect(() => {
-    document.documentElement.lang = locale;
+    document.documentElement.lang = locale === "uzc" ? "uz-Cyrl" : locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
   }, [locale]);
 
@@ -42,8 +47,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   useEffect(() => {
     const key = PAGE_TITLE_KEYS[pathname];
-    const title = key && (dictionaries[locale] as Record<string, string>)[key];
-    if (title) document.title = title;
+    const title = key && dictFor(locale)[key];
+    if (title) document.title = locale === "uzc" ? toCyrillic(title) : title;
   }, [locale, pathname]);
 
   const setLocale = (newLocale: Locale) => {
@@ -52,9 +57,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string, extra?: Record<string, string | number>): string => {
-    const dict = dictionaries[locale] as Record<string, string>;
+    const dict = dictFor(locale);
     // Data (e.g. Firestore) may use ‘ ’ ʻ ʼ where the dictionary keys use '
-    const text = dict[key] || dict[key.replace(/[‘’ʻʼ`]/g, "'")] || key; // fallback: the key itself
+    const found = dict[key] || dict[key.replace(/[‘’ʻʼ`]/g, "'")] || key; // fallback: the key itself
+    // Ўзбекча: everything Uzbek (dictionary and admin data passed through t) in Cyrillic
+    const text = locale === "uzc" ? toCyrillic(found) : found;
     // Fill {years}, {yearsWord}, {foundedYear}, {currentYear} and extra vars (e.g. {students})
     const vars: Record<string, string | number> = { ...yearVars(locale), ...extra };
     return text.replace(/\{(\w+)\}/g, (match, name) => String(vars[name] ?? match));

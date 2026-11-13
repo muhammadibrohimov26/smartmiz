@@ -1,4 +1,19 @@
-export type Locale = "uz" | "ru" | "en" | "tr" | "ko" | "ar";
+export type DictLocale = "uz" | "ru" | "en" | "tr" | "ko" | "ar";
+// "uzc" (Ўзбекча, Cyrillic) has no dictionary of its own: it shows the Uzbek
+// texts converted to Cyrillic on the fly (lib/translit.ts, LanguageContext)
+export type Locale = DictLocale | "uzc";
+
+// The language switcher (navbar and mobile menu); `short` is shown on the button
+export const LANGUAGES: { code: Locale; name: string; short: string }[] = [
+  { code: "uz", name: "Oʻzbekcha", short: "UZ" },
+  { code: "uzc", name: "Ўзбекча", short: "ЎЗ" },
+  { code: "ru", name: "Русский", short: "RU" },
+  { code: "en", name: "English", short: "EN" },
+  { code: "tr", name: "Türkçe", short: "TR" },
+  { code: "ko", name: "한국어", short: "KO" },
+  { code: "ar", name: "العربية", short: "AR" },
+];
+export const localeShort = (locale: Locale) => LANGUAGES.find((l) => l.code === locale)?.short ?? locale.toUpperCase();
 
 export const dictionaries = {
   uz: {

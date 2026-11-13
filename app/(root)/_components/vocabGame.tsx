@@ -1,5 +1,6 @@
 "use client";
 
+import { toCyrillic } from "@/lib/translit";
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "@/context/LanguageContext";
 import { Gamepad2, CheckCircle2, XCircle, Trophy, RotateCcw, ArrowRight, Sparkles } from "lucide-react";
@@ -60,6 +61,7 @@ export default function VocabGame() {
       case "ru": return item.ru;
       case "tr": return item.tr;
       case "ko": return item.ko;
+      case "uzc": return toCyrillic(item.uz);
       default:   return item.uz;
     }
   }, [locale]);

@@ -17,7 +17,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .public-site .course-card:nth-child(3n + 2) { transition-delay: 60ms; }
 .public-site .course-card:nth-child(3n + 3) { transition-delay: 120ms; }
 .public-site .course-card:hover { border-color: #9cb58c80; box-shadow: 0 20px 70px #849d6d12; }
-.public-site .course-card > :first-child { aspect-ratio: 1.53; }
 .public-site :is(h1,h2) { text-wrap: balance; }
 .public-site h2.bw-text { text-transform: none; letter-spacing: -.045em; }
 .public-site :is(.bw-panel,.course-card,[class*="border-2"][class*="rounded"],[class*="border-4"][class*="rounded"]) { border-width: 1px; border-color: var(--neo-line); box-shadow: 0 10px 45px #00000004; }
@@ -113,6 +112,28 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .course-filter-menu__item:hover { background: #fff6db; }
 .dark .course-filter-menu__item:hover { background: #2a2310; }
 .course-filter-menu__item.is-active { background: #ffe8a3; color: #161308; }
+/* Compact course card (cardItems.tsx) */
+.public-site .course-tile, .course-tile { position: relative; display: flex; flex-direction: column; padding: 26px 24px 24px; border-radius: 28px; background: #f6f6f4; border: 1px solid #ecebe6 !important; transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s, border-color .3s, translate .8s cubic-bezier(.16,1,.3,1), opacity .8s; }
+.course-tile:hover { transform: translateY(-4px); border-color: #f1c241 !important; box-shadow: 0 24px 50px -28px #e6a50a80; }
+.dark .public-site .course-tile, .dark .course-tile { background: #15160f; border-color: #2a2a21 !important; }
+.course-tile__head { display: flex; align-items: center; gap: 18px; padding-inline-end: 0; }
+.course-tile__badge { flex-shrink: 0; display: grid; place-items: center; width: 62px; height: 62px; border-radius: 22px 26px 24px 20px; background: linear-gradient(160deg, #ffd23f, #f5b50f); color: #1b1606; box-shadow: 0 10px 22px -12px #e6a50aaa; transform: rotate(-4deg); transition: transform .35s cubic-bezier(.16,1,.3,1); }
+.course-tile:hover .course-tile__badge { transform: rotate(4deg) scale(1.05); }
+.course-tile__title { font-weight: 800; font-size: 1.45rem; line-height: 1.2; letter-spacing: -.02em; color: #141414; }
+.dark .course-tile__title { color: #f6f3ea; }
+.course-tile:hover .course-tile__title { color: #c48700; }
+.dark .course-tile:hover .course-tile__title { color: #ffc93a; }
+.course-tile__rating { position: absolute; z-index: 2; top: 14px; inset-inline-end: 14px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: #fff; border: 1px solid #ecebe6; font-size: 12px; font-weight: 800; color: #141414; }
+.dark .course-tile__rating { background: #1d1e16; border-color: #2a2a21; color: #f6f3ea; }
+.course-tile__summary { margin-top: 18px; min-height: 4.65em; color: #3f3f3f; font-size: 1.02rem; line-height: 1.55; }
+.dark .course-tile__summary { color: #c4c0b5; }
+.course-tile__price { margin-top: auto; padding-top: 22px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.course-tile__hours { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: #fdeeb8; color: #2a2108; font-weight: 700; font-size: .92rem; white-space: nowrap; }
+.dark .course-tile__hours { background: #3a2f0e; color: #ffe59a; }
+.course-tile__enroll { position: relative; z-index: 2; margin-top: 22px; display: flex; align-items: center; justify-content: center; padding: 15px 20px; border-radius: 18px; background: linear-gradient(180deg, #ffcd38, #f8bd16); color: #161308; font-weight: 800; font-size: 1.08rem; box-shadow: 0 12px 24px -14px #e6a50acc; transition: transform .2s, filter .2s; }
+.course-tile__enroll:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.course-tile__enroll:active { transform: scale(.98); }
+@media (max-width: 639px) { .course-tile__summary { min-height: 0; } }
 @media (max-width: 767px) { .course-filters { gap: 8px; } .course-filter { padding: 9px 14px; font-size: .9rem; } .course-filter.is-active { padding-inline: 20px; } .course-filter-menu { inset-inline-end: auto; inset-inline-start: 0; } }
 .dark .courses-head__lead { color: #b4b0a6; }
 
