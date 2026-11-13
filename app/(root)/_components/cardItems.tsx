@@ -3,15 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { CourseRating, Price } from "@/types"
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, BookOpen, Bot, Brain, ChevronDown, Clock, Laptop, MoonStar, MoreHorizontal, Star, Tag } from "lucide-react";
+import { BookOpen, Bot, Brain, BriefcaseBusiness, ChevronDown, Clock, FileBadge, GraduationCap, Laptop, Layers, MessagesSquare, Monitor, MoonStar, MoreHorizontal, Star } from "lucide-react";
 import Flag from "@/components/shared/flag";
 import { useTranslation } from "@/context/LanguageContext";
-import { courseCardTitles, courseLabel, courseSlug, formatHours, withKursi } from "@/lib/courses";
+import { courseCardTitles, courseLabel, courseSlug, formatHours } from "@/lib/courses";
+import { CourseIcon, courseInfo, firstSentence, pickText } from "@/lib/courseInfo";
 import { formatPrice } from "@/lib/numbers";
-import { isTemplateCourseImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
-import CourseCover from "./courseCover";
 
 interface PricesItemProps{
     prices: Price[]
@@ -19,7 +17,28 @@ interface PricesItemProps{
     ratings?: Record<string, CourseRating>
 }
 
-const PRIMARY = ["Koreys tili", "Kompyuter kursi", "Ingliz tili", "Rus tili", "Arab tili", "Turk tili"];
+const PRIMARY = ["Ingliz tili", "Rus tili", "Koreys tili", "Arab tili", "Turk tili", "Kompyuter kursi"];
+// Short chip labels where the subject name is long
+const CHIP_LABELS: Record<string, string> = { "Kompyuter kursi": "heroChipComputer" };
+
+const ICONS = {
+    book: BookOpen,
+    certificate: FileBadge,
+    layers: Layers,
+    chat: MessagesSquare,
+    graduation: GraduationCap,
+    briefcase: BriefcaseBusiness,
+    monitor: Monitor,
+    robot: Bot,
+    brain: Brain,
+};
+
+// The yellow badge at the top of a course card: an icon or a few letters
+function CourseIconBadge({ icon }: { icon: CourseIcon }) {
+    if ("glyph" in icon) return <span className="course-tile__badge text-[1.35rem] font-extrabold" aria-hidden="true">{icon.glyph}</span>;
+    const Icon = ICONS[icon.icon];
+    return <span className="course-tile__badge" aria-hidden="true"><Icon className="w-7 h-7" strokeWidth={1.8} /></span>;
+}
 
 const FLAGS: Record<string, "gb" | "kr" | "ru" | "tr"> = {
     "Ingliz tili": "gb",
@@ -76,7 +95,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                     {primary.map((g) => (
                         <button key={g} onClick={() => setFilter(g)} aria-pressed={filter === g} className={cn("course-filter", filter === g && "is-active")}>
                             <GroupIcon name={g} />
-                            {t(g)}
+                            {t(CHIP_LABELS[g] ?? g)}
                         </button>
                     ))}
                     {others.length > 0 && (
@@ -110,101 +129,64 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {shown.map((price, index) => {
-                    const titles = courseCardTitles(price, t);
-                    const href = `/courses/${courseSlug(price)}`;
-                    const rating = ratings[courseSlug(price)];
+                    const slug = courseSlug(price);
+                    const href = `/courses/${slug}`;
+                    const rating = ratings[slug];
+                    const { info, icon } = courseInfo(slug, price.courseName);
+                    const title = info ? pickText(info.title, locale) : courseCardTitles(price, t).heading;
+                    const fallback = firstSentence(price.description);
+                    const summary = info ? pickText(info.summary, locale) : fallback ? t(fallback) : "";
                     return (
-                    <div
-                        key={price.id ?? index}
-                        className="course-card group relative w-full bg-white dark:bg-zinc-950 border border-gray-100 dark:border-zinc-900/80 rounded-[32px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/5 hover:-translate-y-2 flex flex-col"
-                    >
-                        {/* Course Image & Hero Area */}
-                        <div className="relative aspect-[1.53] w-full overflow-hidden border-b border-gray-100 dark:border-zinc-900/50 bg-[#FFB800]">
-                            {price.image && !isTemplateCourseImage(price.image) ? <Image
-                                fill
-                                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                src={price.image}
-                                alt={withKursi(courseLabel(price))}
-                            /> : <CourseCover course={price} />}
-                        </div>
-
-                        {/* Card Body */}
-                        <div className="p-5 sm:p-8 flex flex-col flex-grow">
-                            {/* Category & Title — the title links to the course page and,
-                                stretched over the card, makes the whole card clickable */}
-                            <span className="block min-h-[1rem] mb-3 text-xs uppercase tracking-widest font-extrabold text-gray-400 dark:text-zinc-500">
-                                {titles.label}
-                            </span>
-
-                            {/* Name, and the course rating on its right (goes to the rating
-                                part of the course page) */}
-                            <div className="flex items-start justify-between gap-3 mb-6">
-                                <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-300">
-                                    <Link href={href} className="after:absolute after:inset-0 after:content-['']">
-                                        {titles.heading}
-                                    </Link>
-                                </h2>
-                                <Link
-                                    href={`${href}#rating`}
-                                    aria-label={rating ? `${rating.average.toFixed(1)} / 5` : t("courseRateShort")}
-                                    className="relative z-10 shrink-0 mt-1 flex items-center gap-1 px-2.5 py-1 rounded-full border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-xs font-black text-gray-900 dark:text-white hover:border-[#FFB800] transition-colors"
-                                >
-                                    <Star className={cn("w-3.5 h-3.5", rating ? "fill-[#FFB800] text-[#FFB800]" : "text-gray-400 dark:text-zinc-500")} />
-                                    {rating ? (
-                                        <>
-                                            {rating.average.toFixed(1)}
-                                            <span className="font-bold text-gray-400 dark:text-zinc-500">({rating.count})</span>
-                                        </>
-                                    ) : (
-                                        <span className="font-bold text-gray-500 dark:text-zinc-400">{t("courseRateShort")}</span>
-                                    )}
+                    <article key={`${filter}-${price.id ?? index}`} className="course-card course-tile group">
+                        {/* Icon + title; the title link is stretched over the whole card */}
+                        <div className={cn("course-tile__head", rating && "pe-14")}>
+                            <CourseIconBadge icon={icon} />
+                            <h3 className="course-tile__title">
+                                <Link href={href} className="after:absolute after:inset-0 after:content-['']">
+                                    {title}
                                 </Link>
-                            </div>
+                            </h3>
+                        </div>
+                        {rating && (
+                            <Link
+                                href={`${href}#rating`}
+                                aria-label={`${rating.average.toFixed(1)} / 5`}
+                                className="course-tile__rating"
+                            >
+                                <Star className="w-3.5 h-3.5 fill-[#FFB800] text-[#FFB800]" />
+                                {rating.average.toFixed(1)}
+                                <span className="text-zinc-400">({rating.count})</span>
+                            </Link>
+                        )}
 
-                            {/* Pricing Section */}
-                            <div className="flex justify-between items-center mb-6 rounded-2xl bg-gray-50 dark:bg-zinc-900/30 p-4 border border-gray-100 dark:border-zinc-900/50">
-                                <div>
-                                    <p className="text-2xl font-black text-gray-900 dark:text-white">
-                                        {formatPrice(price.courseChegirma, locale)} <span className="text-xs font-medium text-gray-400">{t("courseCurrency")}</span>
+                        <p className="course-tile__summary">{summary}</p>
+
+                        <div className="course-tile__price">
+                            <div>
+                                <p className="text-[1.65rem] leading-tight font-extrabold text-zinc-900 dark:text-white whitespace-nowrap">
+                                    {formatPrice(price.courseChegirma, locale)} <span className="text-sm font-semibold text-zinc-500">{t("courseCurrency")}</span>
+                                </p>
+                                {price.coursePrice > price.courseChegirma && (
+                                    <p className="text-sm font-medium line-through text-zinc-400 dark:text-zinc-500" title={price.chegirma ? t(price.chegirma) : undefined}>
+                                        {formatPrice(price.coursePrice, locale)} {t("courseCurrency")}
                                     </p>
-                                    {price.coursePrice > price.courseChegirma && (
-                                        <p className="text-xs font-bold line-through text-gray-400 dark:text-zinc-500 mt-0.5">
-                                            {formatPrice(price.coursePrice, locale)} {t("courseCurrency")}
-                                        </p>
-                                    )}
-                                </div>
-                                <div className="flex items-center gap-1.5 text-xs bg-yellow-500 text-black font-extrabold px-3.5 py-2 rounded-xl shadow-md shadow-yellow-500/10">
-                                    <Clock className="w-3.5 h-3.5" />
-                                    <span>{formatHours(price.courseTime, locale)} {t("courseTime")}</span>
-                                </div>
+                                )}
                             </div>
-
-                            {/* Promotion Banner */}
-                            {price.chegirma && (
-                                <div className="mb-6 flex items-start gap-2.5 text-xs font-semibold text-yellow-700 dark:text-yellow-400 bg-yellow-500/5 p-3.5 rounded-2xl border border-yellow-500/15 leading-relaxed">
-                                    <Tag className="w-4 h-4 shrink-0 mt-px" />
-                                    <span>{t(price.chegirma)}</span>
-                                </div>
+                            {price.courseTime && (
+                                <span className="course-tile__hours">
+                                    <Clock className="w-4 h-4" />
+                                    {formatHours(price.courseTime, locale)} {t("courseTime")}
+                                </span>
                             )}
-
-                            {/* Enroll Button (above the stretched link, so it keeps its own target) */}
-                            <div className="mt-auto relative z-10 flex flex-col gap-3">
-                                <Link
-                                    className="w-full py-3.5 px-6 bg-gradient-to-b from-[#ffcd38] to-[#f5b50f] text-[#161308] hover:brightness-105 hover:-translate-y-0.5 font-extrabold text-base flex items-center justify-center gap-2 rounded-full transition-all duration-300 shadow-[0_12px_24px_-12px_rgba(230,165,10,0.7)] active:scale-[0.98]"
-                                    href={`/contact?course=${encodeURIComponent(courseLabel(price))}`}
-                                >
-                                    {t("btnEnroll")}
-                                </Link>
-                                <Link href={href} className="flex items-center justify-center gap-1.5 text-sm font-bold text-zinc-500 hover:text-zinc-950 dark:hover:text-white">
-                                    {t("courseDetails")}
-                                    <ArrowRight className="w-4 h-4 rtl:rotate-180" />
-                                </Link>
-                            </div>
                         </div>
-                    </div>
+
+                        {/* Enroll (above the stretched link, so it keeps its own target) */}
+                        <Link href={`/contact?course=${encodeURIComponent(courseLabel(price))}`} className="course-tile__enroll">
+                            {t("btnEnroll")}
+                        </Link>
+                    </article>
                     );
                 })}
             </div>

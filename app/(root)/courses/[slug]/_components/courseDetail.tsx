@@ -132,7 +132,7 @@ export default function CourseDetail({
           {course.description && (
             <div className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-800 rounded-3xl">
               <h2 className="text-2xl font-black bw-text uppercase tracking-tight mb-4">{t("courseAbout")}</h2>
-              <p className="text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line">{course.description}</p>
+              <p className="text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed whitespace-pre-line">{t(course.description)}</p>
             </div>
           )}
           {!!course.highlights?.length && (
@@ -142,7 +142,7 @@ export default function CourseDetail({
                 {course.highlights.map((h) => (
                   <li key={h} className="flex items-start gap-3 font-medium text-zinc-700 dark:text-zinc-300">
                     <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500 mt-0.5" />
-                    {h}
+                    {t(h)}
                   </li>
                 ))}
               </ul>

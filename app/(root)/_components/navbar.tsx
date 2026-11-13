@@ -6,7 +6,7 @@ import { navLink } from "../../../constants"
 import Mobile from "./mobile"
 import { useTranslation } from "@/context/LanguageContext"
 import { Globe, ChevronDown } from "lucide-react"
-import { Locale } from "@/lib/dictionaries"
+import { LANGUAGES, Locale, localeShort } from "@/lib/dictionaries"
 import { useState, useEffect, useRef } from "react"
 import ModeToogle from "@/components/shared/mode-toggle"
 import Logo from "@/components/shared/logo"
@@ -59,20 +59,13 @@ const Navbar = () => {
                   className="flex items-center gap-1.5 px-3 h-10 border border-zinc-200 dark:border-zinc-800 rounded-full text-xs font-black bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer shadow-[1px_1px_0px_rgba(255,184,0,1)] hover:shadow-[2px_2px_0px_rgba(255,184,0,1)] transition-all uppercase tracking-wider text-zinc-900 dark:text-white"
                 >
                   <Globe className="w-3.5 h-3.5 yellow-accent" />
-                  <span>{locale}</span>
+                  <span>{localeShort(locale)}</span>
                   <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-300", langOpen && "rotate-180")} />
                 </button>
 
                 {langOpen && (
                   <div className="absolute top-11 right-0 w-36 bg-white dark:bg-zinc-950 border border-zinc-900 dark:border-zinc-800 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.1)] py-1.5 z-50 flex flex-col overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                    {[
-                      { code: "uz", name: "O'zbekcha" },
-                      { code: "ru", name: "Русский" },
-                      { code: "en", name: "English" },
-                      { code: "tr", name: "Türkçe" },
-                      { code: "ko", name: "한국어" },
-                      { code: "ar", name: "العربية" }
-                    ].map((lang) => (
+                    {LANGUAGES.map((lang) => (
                       <button
                         key={lang.code}
                         onClick={() => {
@@ -85,7 +78,7 @@ const Navbar = () => {
                         )}
                       >
                         <span>{lang.name}</span>
-                        <span className="text-[10px] text-zinc-400 uppercase">{lang.code}</span>
+                        <span className="text-[10px] text-zinc-400 uppercase">{lang.short}</span>
                       </button>
                     ))}
                   </div>
