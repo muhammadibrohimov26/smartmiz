@@ -11,7 +11,7 @@ import { NewsItem } from "@/types";
 
 // "15.10.2026" from "2026-10-15" — not Intl: server and browsers format "uz"
 // dates differently, which breaks hydration
-function formatDate(date: string) {
+export function formatDate(date: string) {
   const m = date.match(/^(\d{4})-(\d{2})-(\d{2})/);
   return m ? `${m[3]}.${m[2]}.${m[1]}` : date;
 }
@@ -30,7 +30,7 @@ export const languageColor = (language: string) => languageColors[language] ?? "
 // The certificate full screen, so visitors can read it themselves. Rendered
 // into <body> through a portal: inside the card, the card's hover transform
 // would make "fixed" relative to the card (the viewer opened inside it).
-function CertificateViewer({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+export function CertificateViewer({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   const { t } = useTranslation();
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -101,11 +101,11 @@ export default function ResultCard({ item }: { item: NewsItem }) {
   );
 
   return (
-    <article className="group bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-[6px_6px_0px_0px_rgba(255,184,0,1)] transition-all duration-300 hover:-translate-y-1 flex flex-col">
+    <article className="result-card group flex flex-col">
       {item.image ? (
         <button
           onClick={() => setOpen(true)}
-          className="relative block aspect-[4/3] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 text-left"
+          className="relative block aspect-[16/11] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 text-left"
           aria-label={`${t("newsViewCert")}: ${alt}`}
         >
           <Image
@@ -125,13 +125,13 @@ export default function ResultCard({ item }: { item: NewsItem }) {
         </button>
       ) : (
         score && (
-          <div className="flex items-center justify-center py-10 bg-zinc-50 dark:bg-zinc-950 border-b-4 border-zinc-900 dark:border-zinc-800">
+          <div className="flex items-center justify-center py-10 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800">
             {scoreBadge}
           </div>
         )
       )}
 
-      <div className="p-6 flex-1 flex flex-col gap-4">
+      <div className="p-5 flex-1 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3 className="font-black text-lg bw-text leading-tight">{item.name}</h3>

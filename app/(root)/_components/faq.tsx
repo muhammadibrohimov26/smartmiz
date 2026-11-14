@@ -26,7 +26,7 @@ export default function FAQ() {
   ];
 
   return (
-    <section className="faq-row">
+    <section id="faq" className="faq-row scroll-mt-28">
       <h2 className="sec-head__title faq-row__title">{t("faqHeading")}</h2>
 
       {/* Accordion */}
