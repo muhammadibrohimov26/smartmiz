@@ -8,8 +8,6 @@ import Flag from "@/components/shared/flag";
 import { courseSlug } from "@/lib/courses";
 import { useTranslation } from "@/context/LanguageContext";
 import Link from "next/link";
-import CourseQuiz from "./courseQuiz";
-import VocabGame from "./vocabGame";
 import FAQ from "./faq";
 import Reviews from "./reviews";
 import AboutContent from "./aboutContent";
@@ -94,10 +92,10 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
       <div className="relative z-10">
         
         {/* COURSES SECTION */}
-        <section className="pt-16 md:pt-20 pb-24 scroll-mt-28" id="courses-section">
-          <div className="courses-head">
-            <h2 className="courses-head__title">{t("coursesHeading")}</h2>
-            <p className="courses-head__lead">{t("coursesDesc")}</p>
+        <section className="pt-16 md:pt-20 pb-10 scroll-mt-28" id="courses-section">
+          <div className="sec-head">
+            <h2 className="sec-head__title">{t("coursesHeading")}</h2>
+            <p className="sec-head__lead">{t("coursesLead")}</p>
           </div>
 
           <div className="flex flex-col space-y-24">
@@ -105,32 +103,14 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
           </div>
         </section>
 
-        {/* INTERACTIVE COURSE recommendation QUIZ */}
-        <div data-reveal className="py-24 border-t-2 border-zinc-100 dark:border-zinc-800">
-          <div className="p-5 sm:p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
-            <CourseQuiz courses={prices} />
-          </div>
-        </div>
-
-        {/* VOCABULARY GAME */}
-        <div data-reveal className="py-24 border-t-2 border-zinc-100 dark:border-zinc-800">
-          <div className="p-5 sm:p-8 md:p-12 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl bg-zinc-50 dark:bg-zinc-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,184,0,0.25)] max-w-3xl mx-auto">
-            <VocabGame />
-          </div>
-        </div>
-
         {/* CUSTOMER REVIEWS */}
-        <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
-          <Reviews reviews={reviews} />
-        </div>
+        <Reviews reviews={reviews} />
 
         {/* FAQ ACCORDION */}
-        <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
-          <FAQ />
-        </div>
+        <FAQ />
 
-        {/* ABOUT (history, stats, video) */}
-        <div className="border-t-2 border-zinc-100 dark:border-zinc-800">
+        {/* ABOUT (photo, text, branches) */}
+        <div>
           <AboutContent
             courses={prices}
             studentCount={settings.studentCount}

@@ -1,8 +1,7 @@
 "use client";
 
-import Typewriter from "@/components/shared/typewriter";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { CheckCircle2, LogIn, MessageSquareQuote, Pencil, Share2, Star } from "lucide-react";
+import { CheckCircle2, LogIn, Pencil, Share2, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "@/context/LanguageContext";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
@@ -303,15 +302,10 @@ function Reviews({ reviews }: { reviews: Review[] }) {
   const { t } = useTranslation();
 
   return (
-    <div id="reviews" className="py-24 scroll-mt-24">
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bw-panel text-sm font-bold bw-text mb-6">
-          <MessageSquareQuote className="w-4 h-4 yellow-accent" />
-          <span>{t("reviewsBadge")}</span>
-        </div>
-        <h2 className="text-4xl md:text-5xl font-black bw-text uppercase tracking-tighter">
-          <Typewriter text={t("reviewsTitle1")} /> <Typewriter text={t("reviewsTitle2")} delay={t("reviewsTitle1").length * 45} className="yellow-accent" />
-        </h2>
+    <div id="reviews" className="pt-20 pb-16 scroll-mt-24">
+      <div className="sec-head mb-10">
+        <h2 className="sec-head__title">{t("reviewsHeading")}</h2>
+        <p className="sec-head__lead">{t("reviewsLead")}</p>
       </div>
 
       {reviews.length === 0 ? (

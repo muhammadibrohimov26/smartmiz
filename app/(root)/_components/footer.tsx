@@ -1,73 +1,75 @@
 "use client";
 
-import { Clock, MapPin, Phone } from "lucide-react";
+import Link from "next/link";
+import { Clock, Instagram, MapPin, Phone, Send, Youtube } from "lucide-react";
 import { useTranslation } from "@/context/LanguageContext";
-import { branches } from "@/constants";
+import { branches, navLink } from "@/constants";
+import Logo from "@/components/shared/logo";
 
 const phones = [
   { href: "tel:+998732441333", label: "+998 73 244 13 33" },
   { href: "tel:+998732440099", label: "+998 73 244 00 99" },
 ];
 
+const socials = [
+  { href: "https://t.me/Smartmiz", label: "Telegram", Icon: Send },
+  { href: "https://www.instagram.com/smartmiz_fergana", label: "Instagram", Icon: Instagram },
+  { href: "https://www.youtube.com/@smartmizoquvmarkazi7835", label: "YouTube", Icon: Youtube },
+];
+
+// Logo and tagline · menu · contacts · social links, on a soft green wave
 function Footer() {
   const { t } = useTranslation();
+  const houses = branches.map((b) => b.house);
+  const allHouses = houses.length > 1 ? `${houses.slice(0, -1).join(", ")} ${t("andWord")} ${houses[houses.length - 1]}` : houses[0];
 
   return (
-    <div className="site-footer w-full py-8 border-t border-gray-200 dark:border-zinc-800 bg-transparent mt-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Contacts */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 mb-6 border-b border-gray-200 dark:border-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-          <div className="flex items-start gap-2.5">
-            <Phone className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
-            <div className="flex flex-col">
-              {phones.map((p) => (
-                <a key={p.href} href={p.href} dir="ltr" className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors">
-                  {p.label}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-start gap-2.5">
-            <MapPin className="w-4 h-4 mt-3 shrink-0 yellow-accent" />
-            <div className="flex flex-col">
-              {branches.map((b, i) => (
-                <a
-                  key={b.house}
-                  href={b.mapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block py-2.5 hover:text-zinc-950 dark:hover:text-white transition-colors"
-                >
-                  <span className="font-bold">{t("branchLabel", { n: i + 1 })}:</span> {t("footerAddress", { house: b.house })}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-start gap-2.5">
-            <Clock className="w-4 h-4 mt-0.5 shrink-0 yellow-accent" />
-            <span>{t("footerHours")}</span>
-          </div>
+    <footer className="site-footer site-footer--new">
+      <div className="site-footer__inner">
+        <div className="site-footer__brand">
+          <Link href="/" aria-label="Smartmiz">
+            <Logo className="h-8 text-zinc-950 dark:text-white" />
+          </Link>
+          <p>{t("footerTagline")}</p>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="font-bold bw-text uppercase tracking-widest text-sm text-gray-500 dark:text-gray-400">
-            <p>© {new Date().getFullYear()} {t("footerRights")}</p>
-          </div>
-          <div className="flex gap-2">
-            <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/smartmiz_fergana" aria-label="Instagram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/instagram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
+        <nav className="site-footer__nav" aria-label="Footer">
+          {navLink.map((n) => (
+            <Link key={n.route} href={n.route}>{t(n.translationKey || n.name)}</Link>
+          ))}
+        </nav>
+
+        <div className="site-footer__contact">
+          <p className="site-footer__heading">{t("footerContactTitle")}</p>
+          <a href={branches[0].mapUrl} target="_blank" rel="noopener noreferrer" className="site-footer__line">
+            <MapPin className="w-4 h-4 shrink-0" />
+            <span>{t("footerAddressAll", { houses: allHouses })}</span>
+          </a>
+          <p className="site-footer__line">
+            <Phone className="w-4 h-4 shrink-0" />
+            <span className="flex flex-wrap gap-x-3">
+              {phones.map((p) => (
+                <a key={p.href} href={p.href} dir="ltr" className="whitespace-nowrap hover:underline">{p.label}</a>
+              ))}
+            </span>
+          </p>
+          <p className="site-footer__line">
+            <Clock className="w-4 h-4 shrink-0" />
+            <span>{t("footerHours")}</span>
+          </p>
+        </div>
+
+        <div className="site-footer__social">
+          {socials.map(({ href, label, Icon }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="site-footer__icon">
+              <Icon className="w-5 h-5" />
             </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://t.me/Smartmiz" aria-label="Telegram" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/telegram.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
-            </a>
-            <a target='_blank' rel="noopener noreferrer" href="https://www.youtube.com/@smartmizoquvmarkazi7835" aria-label="YouTube" className="p-2 hover:scale-110 hover:brightness-110 transition-transform">
-              <img src="/img/youtube.png" alt="" className="w-6 h-6 grayscale hover:grayscale-0" />
-            </a>
-          </div>
+          ))}
         </div>
       </div>
-    </div>
-  )
+      <p className="site-footer__copy">© {new Date().getFullYear()} {t("footerRights")}</p>
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;
