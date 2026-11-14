@@ -54,10 +54,22 @@ const youngChildAlternatives: Record<string, string[]> = {
   "Robototexnika":     ["Mental arifmetika", "Ingliz tili"],
 };
 
-export default function CourseQuiz({ courses }: { courses: Price[] }) {
+// `start` (from the home page's quiz card): the direction, and maybe the goal,
+// are already chosen, so the quiz opens on the age question
+export interface QuizStart {
+  direction: "language" | "computer" | "children";
+  goal?: "abroad" | "certificate" | "career";
+}
+
+export default function CourseQuiz({ courses, start }: { courses: Price[]; start?: QuizStart }) {
   const { t } = useTranslation();
-  const [step, setStep] = useState(0); // 0=intro, 1,2,3=questions, 4=result
-  const [answers, setAnswers] = useState<Record<number, Answer>>({});
+  const [step, setStep] = useState(start ? 2 : 0); // 0=intro, 1,2,3=questions, 4=result
+  const [answers, setAnswers] = useState<Record<number, Answer>>(() => {
+    const preset: Record<number, Answer> = {};
+    if (start) preset[1] = start.direction;
+    if (start?.goal) preset[3] = start.goal;
+    return preset;
+  });
   const [selected, setSelected] = useState<Answer>(null);
 
   const questions = [
@@ -118,7 +130,8 @@ export default function CourseQuiz({ courses }: { courses: Price[] }) {
     if (!selected) return;
     setAnswers(prev => ({ ...prev, [step]: selected }));
     setSelected(null);
-    setStep(prev => prev + 1);
+    // skip a question that the quiz card already answered
+    setStep(prev => (prev + 1 === 3 && answers[3] ? 4 : prev + 1));
   };
 
   const handleReset = () => {

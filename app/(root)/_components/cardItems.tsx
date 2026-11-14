@@ -17,6 +17,8 @@ interface PricesItemProps{
     ratings?: Record<string, CourseRating>
 }
 
+const INITIAL_CARDS = 8;
+
 const PRIMARY = ["Ingliz tili", "Rus tili", "Koreys tili", "Arab tili", "Turk tili", "Kompyuter kursi"];
 // Short chip labels where the subject name is long
 const CHIP_LABELS: Record<string, string> = { "Kompyuter kursi": "heroChipComputer" };
@@ -65,7 +67,10 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
     const groups = Array.from(
         prices.reduce((m, p) => m.set(p.courseName, (m.get(p.courseName) ?? 0) + 1), new Map<string, number>())
     );
-    const shown = filter === "all" ? prices : prices.filter((p) => p.courseName === filter);
+    const filtered = filter === "all" ? prices : prices.filter((p) => p.courseName === filter);
+    // "Hammasi" starts with two rows (8 cards); the rest behind "Barcha kurslarni koʻrsatish"
+    const [showAll, setShowAll] = useState(false);
+    const shown = filter === "all" && !showAll ? filtered.slice(0, INITIAL_CARDS) : filtered;
     // The main subjects get their own chip (in this order), the rest go under "Boshqa kurslar"
     const names = groups.map(([g]) => g);
     const primary = PRIMARY.filter((g) => names.includes(g));
@@ -86,7 +91,7 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
     }, [moreOpen]);
 
     return (
-        <div className="mt-6 mb-16">
+        <div className="mt-6">
             {groups.length > 1 && (
                 <div className="course-filters" role="group">
                     <button onClick={() => setFilter("all")} aria-pressed={filter === "all"} className={cn("course-filter", filter === "all" && "is-active")}>
@@ -183,13 +188,27 @@ const CardItems: React.FC<PricesItemProps> = ({ prices, ratings = {} }) => {
                         </div>
 
                         {/* Enroll (above the stretched link, so it keeps its own target) */}
-                        <Link href={`/contact?course=${encodeURIComponent(courseLabel(price))}`} className="course-tile__enroll">
-                            {t("btnEnroll")}
-                        </Link>
+                        <div className="course-tile__actions">
+                            <Link href={`/contact?course=${encodeURIComponent(courseLabel(price))}`} className="course-tile__enroll">
+                                {t("btnEnroll")}
+                            </Link>
+                            <Link href={href} className="course-tile__more">
+                                {t("courseDetails")}
+                            </Link>
+                        </div>
                     </article>
                     );
                 })}
             </div>
+
+            {shown.length < filtered.length && (
+                <div className="mt-8 flex justify-center">
+                    <button onClick={() => setShowAll(true)} className="course-show-all group">
+                        {t("courseShowAll")} <span className="text-zinc-500">({filtered.length})</span>
+                        <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

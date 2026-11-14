@@ -48,7 +48,7 @@ function getLevelLabel(score: number): { key: string; color: string } {
   return { key: "levelA1", color: "text-red-500" };
 }
 
-export default function VocabGame() {
+export default function VocabGame({ autoStart = false }: { autoStart?: boolean }) {
   const { t, locale } = useTranslation();
   const [gameState, setGameState] = useState<"idle" | "playing" | "feedback" | "done">("idle");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -91,6 +91,12 @@ export default function VocabGame() {
     setIsCorrect(null);
     setGameState("playing");
   };
+
+  // opened from the home page's game card: skip the intro screen
+  useEffect(() => {
+    if (autoStart) startGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAnswer = (opt: string) => {
     if (gameState !== "playing") return;
