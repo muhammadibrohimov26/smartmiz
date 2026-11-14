@@ -212,6 +212,20 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 .site-footer__copy { max-width: 1400px; margin: 28px auto 0; padding: 16px 16px 0; border-top: 1px solid #e3eed8; color: #6b6b6b; font-size: .85rem; }
 .dark .site-footer__copy { border-color: #20291a; color: #8d897f; }
 
+/* ── Light theme background: white with soft green leaf shapes (from the design) ──
+   Top-right on every public page, mirrored at the bottom-left of the hero,
+   and next to the "Kurslarimiz" heading. Dark theme keeps its own background. */
+:root {
+  --leaf-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 420'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='1' y1='0' x2='0.3' y2='1'%3E%3Cstop offset='0' stop-color='%23cfe4bb' stop-opacity='.42'/%3E%3Cstop offset='1' stop-color='%23e6f1da' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='1' y1='0' x2='0.4' y2='1'%3E%3Cstop offset='0' stop-color='%23d9ecc8' stop-opacity='.32'/%3E%3Cstop offset='1' stop-color='%23eef6e6' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M600 0H505C415 62 330 180 300 420H385C410 250 485 120 600 52Z' fill='url%28%23a%29'/%3E%3Cpath d='M600 92C525 150 470 255 462 420H520C530 285 565 185 600 140Z' fill='url%28%23b%29'/%3E%3C/svg%3E");
+  --leaf-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 420'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='1' y1='0' x2='0.3' y2='1'%3E%3Cstop offset='0' stop-color='%23cfe4bb' stop-opacity='.42'/%3E%3Cstop offset='1' stop-color='%23e6f1da' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='1' y1='0' x2='0.4' y2='1'%3E%3Cstop offset='0' stop-color='%23d9ecc8' stop-opacity='.32'/%3E%3Cstop offset='1' stop-color='%23eef6e6' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg transform='translate%28600 420%29 rotate%28180%29'%3E%3Cpath d='M600 0H505C415 62 330 180 300 420H385C410 250 485 120 600 52Z' fill='url%28%23a%29'/%3E%3Cpath d='M600 92C525 150 470 255 462 420H520C530 285 565 185 600 140Z' fill='url%28%23b%29'/%3E%3C/g%3E%3C/svg%3E");
+}
+html:not(.dark) body { background-color: #ffffff; background-image: var(--leaf-right); background-repeat: no-repeat; background-position: right -30px top 88px; background-size: min(40vw, 560px) auto; }
+html:not(.dark) .home-hero { --hero-bg: #ffffff; }
+html:not(.dark) .home-hero::before { opacity: .8; width: min(34vw, 480px); height: auto; aspect-ratio: 600 / 420; left: -20px; top: auto; bottom: -10px; border-radius: 0; background: var(--leaf-left) no-repeat center / contain; }
+html:not(.dark) .home-hero::after { display: none; }
+#courses-section { position: relative; }
+html:not(.dark) #courses-section::before { content: ""; position: absolute; z-index: -1; pointer-events: none; top: -10px; right: calc(50% - 50vw); width: min(36vw, 500px); aspect-ratio: 600 / 420; background: var(--leaf-right) no-repeat right top / contain; }
+
 @keyframes neo-enter { from { opacity: 0; transform: translateY(30px); filter: blur(5px); } to { opacity: 1; transform: none; filter: blur(0); } }
 @keyframes neo-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -15px; } }
 @media(max-width: 767px) { .public-site .site-nav { height: 68px; } .public-site .site-nav > div { padding-inline: 16px; } }
