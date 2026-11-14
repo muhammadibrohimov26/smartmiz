@@ -45,7 +45,8 @@ function TranslatedFormMessage() {
 const inputClass =
   "rounded-xl border-gray-200 dark:border-zinc-800 shadow-sm focus-visible:ring-1 focus-visible:ring-[#FFB800] focus-visible:border-[#FFB800] font-medium bg-gray-50 dark:bg-zinc-900 py-6";
 
-function ContactForm({ courses }: { courses: Price[] }) {
+// `bare`: no panel of its own (the contact page puts it inside its own card)
+function ContactForm({ courses, bare = false }: { courses: Price[]; bare?: boolean }) {
   const [isLoading, setIsLoading] = useState(false);
   const trapRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
@@ -96,7 +97,7 @@ function ContactForm({ courses }: { courses: Price[] }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-8 bw-panel" noValidate>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={bare ? "space-y-5" : "space-y-5 p-8 bw-panel"} noValidate>
         {/* Spam trap: hidden from people (and screen readers), bots fill it in */}
         <input
           ref={trapRef}
