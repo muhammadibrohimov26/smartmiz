@@ -147,42 +147,6 @@ html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 @media (max-width: 639px) { .course-tile__summary { min-height: 0; } }
 @media (max-width: 767px) { .course-filters { gap: 8px; } .course-filter { padding: 9px 14px; font-size: .9rem; } .course-filter.is-active { padding-inline: 20px; } .course-filter-menu { inset-inline-end: auto; inset-inline-start: 0; } }
 
-/* ── Course quiz + word game cards (playCards.tsx) ── */
-.play-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; padding-block: 24px 8px; }
-@media (min-width: 1024px) { .play-cards { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); } }
-.play-card { position: relative; overflow: hidden; isolation: isolate; border-radius: 28px; padding: 28px; display: flex; gap: 24px; }
-.play-card--quiz { background: linear-gradient(120deg, #f6faf1 0%, #eef6e6 100%); border: 1px solid #e1edd5; flex-wrap: wrap; align-items: center; }
-.play-card--quiz::after { content: ""; position: absolute; z-index: -1; left: -10%; bottom: -55%; width: 70%; height: 90%; border-radius: 50%; background: radial-gradient(closest-side, #d7eac4, transparent); }
-.play-card--game { background: linear-gradient(120deg, #fffaf0 0%, #fff4d9 100%); border: 1px solid #f6e7bf; align-items: center; justify-content: space-between; }
-.dark .play-card--quiz { background: linear-gradient(120deg, #141a10, #121710); border-color: #26321d; }
-.dark .play-card--quiz::after { background: radial-gradient(closest-side, #22301a, transparent); }
-.dark .play-card--game { background: linear-gradient(120deg, #1a160b, #1c1709); border-color: #3a3018; }
-.play-card__text { flex: 1 1 240px; min-width: 0; }
-.play-card__title { font-weight: 800; font-size: clamp(1.5rem, 2.4vw, 1.95rem); line-height: 1.15; letter-spacing: -.025em; color: #141414; }
-.dark .play-card__title { color: #f6f3ea; }
-.play-card__accent { color: #4f9a2b; }
-.dark .play-card__accent { color: #8fd062; }
-.play-card__desc { margin-top: 10px; color: #4a4a4a; font-size: .98rem; line-height: 1.5; max-width: 26em; }
-.dark .play-card__desc { color: #b4b0a6; }
-.play-card__goals { flex: 1 1 280px; display: flex; flex-direction: column; gap: 10px; }
-.play-goal { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px; background: #fff; border: 1px solid #e6ecdf; font-weight: 600; font-size: .95rem; color: #1b1b1b; box-shadow: 0 4px 14px -10px #0000002e; transition: transform .2s, border-color .2s, box-shadow .2s; }
-.play-goal:hover { transform: translateX(3px); border-color: #a7cf8a; box-shadow: 0 10px 22px -14px #4f9a2b88; }
-.dark .play-goal { background: #1a2015; border-color: #2c3823; color: #eef0e8; }
-.play-goal__icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: #edf6e4; color: #4f9a2b; flex-shrink: 0; }
-.dark .play-goal__icon { background: #24321a; color: #8fd062; }
-.play-card__start { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 999px; background: linear-gradient(180deg, #ffcd38, #f5b50f); color: #161308; font-weight: 800; box-shadow: 0 12px 24px -14px #e6a50acc; transition: transform .2s; }
-.play-card__start:hover { transform: translateY(-2px); }
-.play-tiles { position: relative; flex-shrink: 0; width: 130px; height: 120px; }
-.play-tile { position: absolute; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #fff; border: 2px solid #8fc56a; color: #2f6e14; font-weight: 800; font-size: 1.3rem; box-shadow: 0 8px 16px -10px #2f6e1466; animation: tile-bob 4s ease-in-out infinite; }
-.dark .play-tile { background: #1a2015; color: #a9dc85; border-color: #4f7d35; }
-.play-tile--w { left: 0; top: 22px; rotate: -10deg; }
-.play-tile--o { left: 46px; top: 0; rotate: 6deg; animation-delay: -1s; }
-.play-tile--r { left: 84px; top: 34px; rotate: 14deg; animation-delay: -2s; }
-.play-tile--d { left: 40px; top: 66px; rotate: -6deg; animation-delay: -3s; }
-.play-spark { position: absolute; right: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 40deg, #8fc56a 40deg 50deg, transparent 50deg 130deg, #8fc56a 130deg 140deg, transparent 140deg 220deg, #8fc56a 220deg 230deg, transparent 230deg); }
-@keyframes tile-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
-@media (max-width: 479px) { .play-tiles { display: none; } }
-
 /* ── FAQ: heading on the left, questions on the right (faq.tsx) ── */
 .faq-row__title { font-size: clamp(1.9rem, 3vw, 2.6rem) !important; }
 .course-show-all { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 999px; border: 1.5px solid #e7e2d6; background: #fff; font-weight: 700; color: #161616; box-shadow: 0 6px 18px -12px #0000003a; transition: transform .2s, border-color .2s; }

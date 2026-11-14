@@ -8,7 +8,6 @@ import Flag from "@/components/shared/flag";
 import { courseSlug } from "@/lib/courses";
 import { useTranslation } from "@/context/LanguageContext";
 import Link from "next/link";
-import PlayCards from "./playCards";
 import FAQ from "./faq";
 import Reviews from "./reviews";
 import AboutContent from "./aboutContent";
@@ -103,9 +102,6 @@ function HomeContent({ prices, reviews, settings, ratings }: { prices: Price[]; 
             <CardItems prices={prices} ratings={ratings} />
           </div>
         </section>
-
-        {/* COURSE QUIZ + WORD GAME (compact cards that open a dialog) */}
-        <PlayCards courses={prices} />
 
         {/* CUSTOMER REVIEWS */}
         <Reviews reviews={reviews} />
