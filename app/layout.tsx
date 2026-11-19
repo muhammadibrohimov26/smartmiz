@@ -68,8 +68,10 @@ const organization = {
     contactType: "customer service",
     availableLanguage: ["uz", "ru"],
   })),
+  hasMap: "https://www.google.com/maps?cid=11004743925649963491",
   sameAs: [
     "https://www.instagram.com/smartmiz_fergana",
+    "https://www.facebook.com/profile.php?id=61596506547566",
     "https://t.me/Smartmiz",
     "https://www.youtube.com/@smartmizoquvmarkazi7835",
   ],
