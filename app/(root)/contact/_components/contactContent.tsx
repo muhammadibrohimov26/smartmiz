@@ -4,14 +4,14 @@ import FormContact from '@/components/form/formContact'
 import { Suspense, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Building2, ChevronDown, Clock, ExternalLink, GraduationCap, Headphones, Map as MapIcon, MapPin, MessageSquare, Phone } from 'lucide-react'
-import { branches } from '@/constants'
+import { ArrowRight, Building2, ChevronDown, Clock, ExternalLink, GraduationCap, Headphones, Map as MapIcon, MapPin, MessageSquare, Phone, Star } from 'lucide-react'
+import { branches, googlePlace } from '@/constants'
 import { useTranslation } from '@/context/LanguageContext'
 import { Price } from '@/types'
 
 const PHONE = { href: 'tel:+998732441333', label: '+998 73 244 13 33' }
-const MAP_EMBED = "https://maps.google.com/maps?q=Smartmiz%20O'quv%20Markazi,%20Qomus%20ko'chasi,%20Farg'ona&t=&z=16&ie=UTF8&iwloc=&output=embed"
-const MAP_LINK = "https://maps.google.com/?q=Smartmiz%20O'quv%20Markazi,%20Qomus%20ko'chasi,%20Farg'ona"
+const MAP_EMBED = googlePlace.embedUrl
+const MAP_LINK = googlePlace.mapUrl
 
 // Contact page (design): hero · branches · form + contact list · map · FAQ · features
 function ContactContent({ courses }: { courses: Price[] }) {
@@ -118,9 +118,14 @@ function ContactContent({ courses }: { courses: Price[] }) {
 				<div>
 					<h2 className='sec-head__title' style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)' }}>{t('mapHeading')}</h2>
 					<p className='mt-3 mb-5 text-zinc-600 dark:text-zinc-400 ps-7'>{t('mapLead')}</p>
-					<a href={MAP_LINK} target='_blank' rel='noopener noreferrer' className='contact-map-btn ms-7'>
-						<MapIcon className='w-4 h-4' />{t('mapOpen')}<ExternalLink className='w-4 h-4' />
-					</a>
+					<div className='flex flex-wrap gap-3 ms-7'>
+						<a href={MAP_LINK} target='_blank' rel='noopener noreferrer' className='contact-map-btn'>
+							<MapIcon className='w-4 h-4' />{t('mapOpen')}<ExternalLink className='w-4 h-4' />
+						</a>
+						<a href={googlePlace.reviewUrl} target='_blank' rel='noopener noreferrer' className='contact-map-btn'>
+							<Star className='w-4 h-4' />{t('mapReview')}<ExternalLink className='w-4 h-4' />
+						</a>
+					</div>
 				</div>
 				<div className='contact-map'>
 					<iframe src={MAP_EMBED} width='100%' height='100%' style={{ border: 0 }} allowFullScreen loading='lazy' referrerPolicy='no-referrer-when-downgrade' title={t('mapHeading')} />
