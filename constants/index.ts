@@ -24,6 +24,11 @@ export const yandexPlace = {
     reviewUrl: "https://yandex.uz/maps/org/165309797851/reviews/?add-review=true",
 }
 
+// Smartmiz on Golden Pages (goldenpages.uz business directory). #tab-5 = the reviews tab.
+export const goldenPagesPlace = {
+    reviewUrl: "https://www.goldenpages.uz/uz/company/?Id=121037#tab-5",
+}
+
 // Smartmiz branches (house numbers on Qomus street, Fergana)
 export const branches = [
     { house: "44", mapUrl: googlePlace.mapUrl },
