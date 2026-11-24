@@ -85,7 +85,8 @@ function RootLayout({ children }: ChildProps) {
       </head>
       <body className="overflow-x-hidden">
         <LanguageProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+          {/* Follows the device's light/dark setting until the visitor picks one with the toggle */}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
             <Toaster position="top-center" />
           </ThemeProvider>
