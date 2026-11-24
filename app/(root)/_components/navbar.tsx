@@ -38,11 +38,11 @@ const Navbar = () => {
         {/* <h1 className='text-4xl font-creteRound'>Smartmiz</h1> */}
         <Logo className="h-5 min-[360px]:h-6 sm:h-7 md:h-9 text-zinc-950 dark:text-white" />
        </Link>
-       <div className='gap-3 hidden lg:flex'>
+       <div className='gap-1.5 xl:gap-3 hidden lg:flex'>
        {navLink.map(nav =>(
         <Link key={nav.route} href={nav.route}
         className={cn(
-          'whitespace-nowrap border border-transparent hover:bg-[#FFB800]/15 py-2 px-5 cursor-pointer rounded-full transition-all duration-300 font-bold text-[15px] text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white',
+          'whitespace-nowrap border border-transparent hover:bg-[#FFB800]/15 py-2 px-3.5 xl:px-5 cursor-pointer rounded-full transition-all duration-300 font-bold text-[15px] text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white',
           pathName === nav.route && 'bg-[#FFB800]/20 text-[#c48700] dark:text-[#ffc93a] border-[#FFB800]/40'
         )}>
         {t(nav.translationKey || nav.name)}
