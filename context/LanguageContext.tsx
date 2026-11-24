@@ -18,6 +18,20 @@ const dictFor = (locale: Locale) => dictionaries[(locale === "uzc" || locale ===
 const convert = (locale: Locale, text: string) => (locale === "uzc" ? toCyrillic(text) : locale === "uzn" ? toNewLatin(text) : text);
 const isLocale = (value: string | null): value is Locale => !!value && (value === "uzc" || value === "uzn" || value in dictionaries);
 
+// First of the device's preferred languages that the site has:
+// uz-Cyrl → Ўзбекча, uz / uz-Latn → Oʻzbekcha, ru → Русский, en → English.
+function localeFromDevice(): Locale | null {
+  if (typeof navigator === "undefined") return null;
+  const langs = navigator.languages?.length ? navigator.languages : [navigator.language];
+  for (const raw of langs) {
+    const lang = (raw || "").toLowerCase();
+    if (lang.startsWith("uz")) return lang.includes("cyrl") ? "uzc" : "uz";
+    if (lang.startsWith("ru")) return "ru";
+    if (lang.startsWith("en")) return "en";
+  }
+  return null;
+}
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 const PAGE_TITLE_KEYS: Record<string, string> = {
@@ -30,12 +44,21 @@ const PAGE_TITLE_KEYS: Record<string, string> = {
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("uz");
 
-  // Local Storage to persist language
+  // A language the visitor picked in the switcher (saved) wins; otherwise
+  // open in the device/browser language when the site has it, else Uzbek.
   useEffect(() => {
-    const savedLocale = localStorage.getItem("app-locale");
+    let savedLocale: string | null = null;
+    try {
+      savedLocale = localStorage.getItem("app-locale");
+    } catch {
+      // storage blocked (private mode etc.)
+    }
     if (isLocale(savedLocale)) {
       setLocaleState(savedLocale);
+      return;
     }
+    const deviceLocale = localeFromDevice();
+    if (deviceLocale) setLocaleState(deviceLocale);
   }, []);
 
   // Sync <html lang/dir> with the active locale (Arabic is right-to-left)
@@ -55,7 +78,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem("app-locale", newLocale);
+    try {
+      localStorage.setItem("app-locale", newLocale);
+    } catch {
+      // storage blocked: the choice lasts for this visit only
+    }
   };
 
   const t = (key: string, extra?: Record<string, string | number>): string => {
