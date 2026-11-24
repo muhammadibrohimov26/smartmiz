@@ -3,14 +3,14 @@ import { pageMetadata } from '@/lib/seo'
 import MapsReviewContent from './_components/mapsReviewContent'
 
 export const metadata: Metadata = pageMetadata({
-	title: "Smartmizni baholang — Google va Yandex xaritalari",
+	title: "Smartmizni baholang — Google, Yandex va Golden Pages",
 	description:
-		"Smartmiz oʻquv markazi (Fargʻona) haqida Google yoki Yandex xaritasida baho va sharh qoldiring.",
+		"Smartmiz oʻquv markazi (Fargʻona) haqida Google, Yandex yoki Golden Pagesʼda baho va sharh qoldiring.",
 	path: "/mapssharx",
-	keywords: ["Smartmiz sharh", "Smartmiz baholash", "Smartmiz Google", "Smartmiz Yandex"],
+	keywords: ["Smartmiz sharh", "Smartmiz baholash", "Smartmiz Google", "Smartmiz Yandex", "Smartmiz Golden Pages"],
 })
 
-// Short page for QR codes / Telegram: two buttons to leave a review on Google Maps and Yandex Maps
+// Short page for QR codes / Telegram: buttons to leave a review on Google Maps, Yandex Maps and Golden Pages
 function MapsReviewPage() {
 	return <MapsReviewContent />
 }

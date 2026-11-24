@@ -1,12 +1,12 @@
 "use client";
 
-import { ArrowUpRight, Heart, MapPin, MessageSquareText, MousePointerClick, Star } from "lucide-react";
-import { googlePlace, yandexPlace } from "@/constants";
+import { ArrowUpRight, BookOpen, Heart, MapPin, MessageSquareText, MousePointerClick, Star } from "lucide-react";
+import { goldenPagesPlace, googlePlace, yandexPlace } from "@/constants";
 import { useTranslation } from "@/context/LanguageContext";
 import Logo from "@/components/shared/logo";
 
 // /mapssharx — "rate us" card: one big option card per map, plus a 3-step hint.
-// Icon tiles use each map's colours (our own pin icon, not the brands' logos).
+// Icon tiles use each site's colours (our own icons, not the brands' logos).
 function MapsReviewContent() {
   const { t } = useTranslation();
 
@@ -15,6 +15,7 @@ function MapsReviewContent() {
       href: googlePlace.reviewUrl,
       name: "Google Maps",
       sub: t("mapsPageGoogleSub"),
+      Icon: MapPin,
       tile: "maps-tile--google",
       ring: "hover:border-[#4285F4] focus-visible:border-[#4285F4]",
       glow: "group-hover:shadow-[0_18px_40px_-18px_#4285F4]",
@@ -23,9 +24,19 @@ function MapsReviewContent() {
       href: yandexPlace.reviewUrl,
       name: "Yandex Maps",
       sub: t("mapsPageYandexSub"),
+      Icon: MapPin,
       tile: "maps-tile--yandex",
       ring: "hover:border-[#FC3F1D] focus-visible:border-[#FC3F1D]",
       glow: "group-hover:shadow-[0_18px_40px_-18px_#FC3F1D]",
+    },
+    {
+      href: goldenPagesPlace.reviewUrl,
+      name: "Golden Pages",
+      sub: t("mapsPageGoldenSub"),
+      Icon: BookOpen,
+      tile: "maps-tile--golden",
+      ring: "hover:border-[#E8A317] focus-visible:border-[#E8A317]",
+      glow: "group-hover:shadow-[0_18px_40px_-18px_#E8A317]",
     },
   ];
 
@@ -72,7 +83,7 @@ function MapsReviewContent() {
                 className={`group flex items-center gap-4 rounded-2xl border-2 border-zinc-200 bg-white p-4 outline-none transition-all duration-300 hover:-translate-y-0.5 sm:p-5 dark:border-zinc-800 dark:bg-zinc-950 ${m.ring} ${m.glow}`}
               >
                 <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-white shadow-md ${m.tile}`}>
-                  <MapPin className="h-7 w-7 drop-shadow" strokeWidth={2.4} />
+                  <m.Icon className="h-7 w-7 drop-shadow" strokeWidth={2.4} />
                 </span>
                 <span className="min-w-0 flex-1 text-start">
                   <span className="block text-lg font-black text-zinc-950 dark:text-white">{m.name}</span>
