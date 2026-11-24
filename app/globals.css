@@ -675,3 +675,10 @@ a.contact-info:hover { border-color: #a7cf8a; }
 .dark .news-cta__title { color: #f6f3ea; }
 .news-cta__desc { margin-top: 6px; color: #4a4a4a; }
 .dark .news-cta__desc { color: #b4b0a6; }
+
+/* ── /mapssharx (mapssharx/_components/mapsReviewContent.tsx) ── */
+.maps-tile--google { background: conic-gradient(from 200deg, #4285F4, #34A853, #FBBC05, #EA4335, #4285F4); }
+.maps-tile--yandex { background: linear-gradient(135deg, #FF5A36, #E02E12); }
+.maps-star { animation: maps-star-pop .5s cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes maps-star-pop { from { opacity: 0; transform: scale(.3) rotate(-25deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .maps-star { animation: none; } }
