@@ -93,7 +93,7 @@ function MapsReviewContent() {
                 <li key={label} className="flex flex-col items-center gap-2 text-center">
                   <span className="relative grid h-11 w-11 place-items-center rounded-full bg-[#FFB800]/15 text-[#c98f00] dark:text-[#FFB800]">
                     <Icon className="h-5 w-5" />
-                    <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-zinc-950 text-[10px] font-black text-white dark:bg-white dark:text-zinc-950">
+                    <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-[#FFB800] text-[10px] font-black text-black ring-2 ring-white dark:ring-zinc-900">
                       {i + 1}
                     </span>
                   </span>
