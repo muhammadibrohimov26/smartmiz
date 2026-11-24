@@ -4,8 +4,9 @@ import FormContact from '@/components/form/formContact'
 import { Suspense, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Building2, ChevronDown, Clock, ExternalLink, GraduationCap, Headphones, Map as MapIcon, MapPin, MessageSquare, Phone, Star } from 'lucide-react'
+import { ArrowRight, Building2, ChevronDown, Clock, ExternalLink, GraduationCap, Headphones, Map as MapIcon, MapPin, MessageSquare, Phone } from 'lucide-react'
 import { branches, googlePlace } from '@/constants'
+import MapReviewButtons from '@/components/shared/map-review-buttons'
 import { useTranslation } from '@/context/LanguageContext'
 import { Price } from '@/types'
 
@@ -122,9 +123,7 @@ function ContactContent({ courses }: { courses: Price[] }) {
 						<a href={MAP_LINK} target='_blank' rel='noopener noreferrer' className='contact-map-btn'>
 							<MapIcon className='w-4 h-4' />{t('mapOpen')}<ExternalLink className='w-4 h-4' />
 						</a>
-						<a href={googlePlace.reviewUrl} target='_blank' rel='noopener noreferrer' className='contact-map-btn'>
-							<Star className='w-4 h-4' />{t('mapReview')}<ExternalLink className='w-4 h-4' />
-						</a>
+						<MapReviewButtons className='contents' />
 					</div>
 				</div>
 				<div className='contact-map'>

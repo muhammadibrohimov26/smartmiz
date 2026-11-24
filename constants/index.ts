@@ -18,6 +18,12 @@ export const googlePlace = {
     reviewUrl: "https://g.page/r/CeP5gHRLtLiYEBM/review",
 }
 
+// Smartmiz on Yandex Maps (Qomus 44). reviewUrl opens the "leave a review" form directly.
+export const yandexPlace = {
+    mapUrl: "https://yandex.uz/maps/org/smartmiz/165309797851/",
+    reviewUrl: "https://yandex.uz/maps/org/165309797851/reviews/?add-review=true",
+}
+
 // Smartmiz branches (house numbers on Qomus street, Fergana)
 export const branches = [
     { house: "44", mapUrl: googlePlace.mapUrl },

@@ -7,6 +7,7 @@ import { useTranslation } from "@/context/LanguageContext";
 import { useCustomerAuth } from "@/components/providers/customer-auth";
 import { CustomerAvatar } from "@/components/shared/customer-menu";
 import TelegramMediaLink from "@/components/shared/telegram-media-link";
+import MapReviewButtons from "@/components/shared/map-review-buttons";
 import { getMyReview, submitReview } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 import { Review, ReviewStatus } from "@/types";
@@ -316,6 +317,10 @@ function Reviews({ reviews }: { reviews: Review[] }) {
 
       <div className="max-w-2xl mx-auto">
         <WriteReview />
+        <div className="mt-8 text-center">
+          <p className="font-bold mb-4">{t("reviewsOnMaps")}</p>
+          <MapReviewButtons className="justify-center" />
+        </div>
       </div>
     </div>
   );
